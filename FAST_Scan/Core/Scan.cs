@@ -39,6 +39,8 @@ namespace FAST_Scan.Core
 
         string filePath;
 
+        int digitizerSamples;
+
         int intervalBinStart = 0;
         int intervalBinEnd = 1024;
 
@@ -251,6 +253,25 @@ namespace FAST_Scan.Core
         {
             
         }
+        
+        public ErrorStatus setDigitizerSamplesValue(string value)
+        {
+            if (int.TryParse(value, out digitizerSamples))
+            {
+                if (digitizerSamples > 0) 
+                {
+                    return ErrorStatus.OK;
+                }
+                else
+                {
+                    return ErrorStatus.VALUE_OUT_OF_RANGE;
+                }
+            }
+            else
+            {
+                return ErrorStatus.INVALID_INPUT;
+            }
+        }
 
         public ErrorStatus setPulsePolarity(string input)
         {
@@ -342,9 +363,9 @@ namespace FAST_Scan.Core
                         {
                             //Se o pulso é negativo pega valor minimo, se positivo pega o valor máximo
                             if (polarity == PulsePolarity.NEGATVE)
-                                amplitude = Digitizer.GetAvgMinValueInterval(100, intervalBinStart, intervalBinEnd);
+                                amplitude = Digitizer.GetAvgMinValueInterval(digitizerSamples, intervalBinStart, intervalBinEnd);
                             else if (polarity == PulsePolarity.POSITIVE)
-                                amplitude = Digitizer.GetAvgMaxValueInterval(100, intervalBinStart, intervalBinEnd);
+                                amplitude = Digitizer.GetAvgMaxValueInterval(digitizerSamples, intervalBinStart, intervalBinEnd);
 
                             PositionX = j * stepX;
 

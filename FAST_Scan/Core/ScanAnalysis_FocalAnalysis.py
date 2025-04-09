@@ -7,7 +7,7 @@ from pathlib import Path
 
 def main():
 
-    parser = argparse.ArgumentParser(description="Returns Scan Analysis of .txt file")
+    parser = argparse.ArgumentParser(description="Returns Focal Analysis of .txt file")
     parser.add_argument('--file', type=Path, required=True, help='File path')
 
     args = parser.parse_args()
@@ -19,6 +19,7 @@ def main():
 #abre o arquivo e salva as duas primeiras linhas como strings
     
     try:
+        #LEITURA DO ARQUIVO (a padronizar)
         with open(args.file) as file:
             line1 = file.readline().strip()
             line2 = file.readline().strip()
@@ -34,20 +35,10 @@ def main():
         nX = arr.shape[1]
         nY = arr.shape[0]
 
-        #Reflete o array para imagem ser exibida na direção real do sensor
-        #arr_reflected = arr[:, ::-1]
-
-        #dimensoes da figura
-        fig = plt.figure( figsize=(12,8) )
-        #plot em forma de matriz
-        g = plt.imshow( arr, origin='lower', extent=( 0., stepX*(nX-1), 0., stepY*(nY-1)), cmap="coolwarm" )
-        #g = plt.imshow( arr_reflected, origin='lower', extent=( -stepX*(nX-1), 0., 0., stepY*(nY-1)), cmap="coolwarm" )
-
-        fig.colorbar(g)
-
-        #plot em escala logaritmica
-        # plt.imshow( arr, origin='lower', extent=( 0., stepX*(nX-1), 0., stepY*(nY-1)), cmap="plasma", norm=LogNorm() )
-
+        #ANALISE DOS DADOS
+        
+        
+        #SALVAR IMAGEM
         figOutputPath = args.file.with_suffix('.png')
         plt.savefig( figOutputPath, bbox_inches='tight' )
         print("Figure saved as " + str(figOutputPath) )

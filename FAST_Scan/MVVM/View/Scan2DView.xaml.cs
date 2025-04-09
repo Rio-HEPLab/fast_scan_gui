@@ -45,6 +45,8 @@ namespace FAST_Scan.MVVM.View
             PulsePolarityCB.Items.Add("Positive");
             PulsePolarityCB.SelectedItem = null;
 
+            digitizerSamplesTB.Text = "100";
+
             _statusMessage = new StatusMessage();
             DataContext = _statusMessage;
 
@@ -148,8 +150,15 @@ namespace FAST_Scan.MVVM.View
                     return;
                 }
 
+                //Verifica Erro em Digitizer Samples 
+                errorScan = scan.setDigitizerSamplesValue(digitizerSamplesTB.Text);
+                if (returnErrorConfigStatus(errorScan, "Digitizer Samples") == true)
+                {
+                    return;
+                }
+
                 //Verifica erro no Pulse Polarity Combobox
-                if(PulsePolarityCB.SelectedItem  == null)
+                if (PulsePolarityCB.SelectedItem  == null)
                 {
                     scan.Close();
                     MessageBox.Show("Invalid input on Pulse Polarity Configuration", "ERROR", MessageBoxButton.OK, MessageBoxImage.Error);

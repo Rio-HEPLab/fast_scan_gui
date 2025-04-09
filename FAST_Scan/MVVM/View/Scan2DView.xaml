@@ -51,6 +51,12 @@
                              Width="120"
                              Margin="0,0,0,10"
                              PreviewTextInput="NumbersOnly_PreviewTextInput"/>
+                    <TextBlock Text="Digitizer Samples"
+                               HorizontalAlignment="Center"/>
+                    <TextBox Name="digitizerSamplesTB"
+                             Width="120"
+                             Margin="0,0,0,10"
+                             PreviewTextInput="DigitsOnly_PreviewTextInput"/>
                 </StackPanel>
 
                 <StackPanel Grid.Column="1">
@@ -67,7 +73,14 @@
 
                     <TextBox Name="yStopTB"
                              Width="120"
+                             Margin="0,0,0,10"
                              PreviewTextInput="NumbersOnly_PreviewTextInput"/>
+                    
+                    <TextBlock Text="Pulse Polarity"
+                               HorizontalAlignment="Center"/>
+
+                    <ComboBox Name="PulsePolarityCB"
+  Width="120"/>
 
                 </StackPanel>
 
@@ -89,11 +102,7 @@
                 </StackPanel>
             </Grid>
 
-            <TextBlock Text="Pulse Polarity"
-               HorizontalAlignment="Center"/>
-
-            <ComboBox Name="PulsePolarityCB"
-              Width="120"/>
+            
         </StackPanel>
 
         <Grid Grid.Row="2">
