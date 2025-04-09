@@ -107,7 +107,7 @@
     <Compile Include="Core\HommingStateManager.cs" />
     <Compile Include="Core\ObservebleObject.cs" />
     <Compile Include="Core\RelayCommand.cs" />
-    <Compile Include="Core\ScaAnalysis.cs" />
+    <Compile Include="Core\ScanAnalysis.cs" />
     <Compile Include="Core\Scan.cs" />
     <Compile Include="Core\ScanStateManager.cs" />
     <Compile Include="Core\StatusMessage.cs" />

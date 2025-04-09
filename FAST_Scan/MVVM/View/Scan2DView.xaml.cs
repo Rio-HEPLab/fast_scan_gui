@@ -31,7 +31,7 @@ namespace FAST_Scan.MVVM.View
     {
         Scan scan;
         StatusMessage _statusMessage;
-        ScaAnalysis scanAnalysis;
+        ScanAnalysis scanAnalysis;
 
         public Scan2DView()
         {
@@ -193,7 +193,7 @@ namespace FAST_Scan.MVVM.View
                 {
                     if (GenerateImageCB.IsChecked == true)
                     {
-                        scanAnalysis = new ScaAnalysis(_statusMessage);
+                        scanAnalysis = new ScanAnalysis(_statusMessage);
                         scanAnalysis.Generate2DScanMap(saveFileTB.Text);
                     }
                 }
@@ -308,7 +308,7 @@ namespace FAST_Scan.MVVM.View
         private void ClearTerminalButton_Click(object sender, RoutedEventArgs e)
         {
             StatusTextBox.Text = string.Empty;
-            //scanAnalysis = new ScaAnalysis(_statusMessage);
+            //scanAnalysis = new ScanAnalysis(_statusMessage);
             //scanAnalysis.Generate2DScanMap(saveFileTB.Text);
         }
 

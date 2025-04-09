@@ -3,24 +3,24 @@
   "WorkspaceRootPath": "C:\\Users\\Vin\u00EDcius\\Desktop\\PIBIC\\FAST_Scan\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{78F19A82-BEED-4D0C-8C68-537DDBB1B29C}|FAST_Scan\\FAST_Scan.csproj|C:\\Users\\Vin\u00EDcius\\Desktop\\PIBIC\\FAST_Scan\\fast_scan\\mvvm\\view\\scan2dview.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{78F19A82-BEED-4D0C-8C68-537DDBB1B29C}|FAST_Scan\\FAST_Scan.csproj|c:\\users\\vin\u00EDcius\\desktop\\pibic\\fast_scan\\fast_scan\\mvvm\\view\\scan2dview.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{78F19A82-BEED-4D0C-8C68-537DDBB1B29C}|FAST_Scan\\FAST_Scan.csproj|solutionrelative:fast_scan\\mvvm\\view\\scan2dview.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{78F19A82-BEED-4D0C-8C68-537DDBB1B29C}|FAST_Scan\\FAST_Scan.csproj|c:\\users\\vin\u00EDcius\\desktop\\pibic\\fast_scan\\fast_scan\\core\\scananalysis.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{78F19A82-BEED-4D0C-8C68-537DDBB1B29C}|FAST_Scan\\FAST_Scan.csproj|solutionrelative:fast_scan\\core\\scananalysis.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{78F19A82-BEED-4D0C-8C68-537DDBB1B29C}|FAST_Scan\\FAST_Scan.csproj|C:\\Users\\Vin\u00EDcius\\Desktop\\PIBIC\\FAST_Scan\\fast_scan\\mvvm\\view\\scan2dview.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
       "RelativeMoniker": "D:0:0:{78F19A82-BEED-4D0C-8C68-537DDBB1B29C}|FAST_Scan\\FAST_Scan.csproj|solutionrelative:fast_scan\\mvvm\\view\\scan2dview.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{78F19A82-BEED-4D0C-8C68-537DDBB1B29C}|FAST_Scan\\FAST_Scan.csproj|c:\\users\\vin\u00EDcius\\desktop\\pibic\\fast_scan\\fast_scan\\core\\scan.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{78F19A82-BEED-4D0C-8C68-537DDBB1B29C}|FAST_Scan\\FAST_Scan.csproj|C:\\Users\\Vin\u00EDcius\\Desktop\\PIBIC\\FAST_Scan\\fast_scan\\core\\scan.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{78F19A82-BEED-4D0C-8C68-537DDBB1B29C}|FAST_Scan\\FAST_Scan.csproj|solutionrelative:fast_scan\\core\\scan.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{78F19A82-BEED-4D0C-8C68-537DDBB1B29C}|FAST_Scan\\FAST_Scan.csproj|C:\\Users\\Vin\u00EDcius\\Desktop\\PIBIC\\FAST_Scan\\fast_scan\\mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
       "RelativeMoniker": "D:0:0:{78F19A82-BEED-4D0C-8C68-537DDBB1B29C}|FAST_Scan\\FAST_Scan.csproj|solutionrelative:fast_scan\\mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{78F19A82-BEED-4D0C-8C68-537DDBB1B29C}|FAST_Scan\\FAST_Scan.csproj|C:\\Users\\Vin\u00EDcius\\Desktop\\PIBIC\\FAST_Scan\\fast_scan\\core\\scaanalysis.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{78F19A82-BEED-4D0C-8C68-537DDBB1B29C}|FAST_Scan\\FAST_Scan.csproj|solutionrelative:fast_scan\\core\\scaanalysis.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{78F19A82-BEED-4D0C-8C68-537DDBB1B29C}|FAST_Scan\\FAST_Scan.csproj|C:\\Users\\Vin\u00EDcius\\Desktop\\PIBIC\\FAST_Scan\\fast_scan\\core\\digitizer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -46,15 +46,16 @@
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "ScaAnalysis.cs",
-              "DocumentMoniker": "C:\\Users\\Vin\u00EDcius\\Desktop\\PIBIC\\FAST_Scan\\FAST_Scan\\Core\\ScaAnalysis.cs",
-              "RelativeDocumentMoniker": "FAST_Scan\\Core\\ScaAnalysis.cs",
-              "ToolTip": "C:\\Users\\Vin\u00EDcius\\Desktop\\PIBIC\\FAST_Scan\\FAST_Scan\\Core\\ScaAnalysis.cs",
-              "RelativeToolTip": "FAST_Scan\\Core\\ScaAnalysis.cs",
-              "ViewState": "AQIAAAYAAAAAAAAAAAAAABEAAAAvAAAA",
+              "DocumentIndex": 1,
+              "Title": "ScanAnalysis.cs",
+              "DocumentMoniker": "C:\\Users\\Vin\u00EDcius\\Desktop\\PIBIC\\FAST_Scan\\FAST_Scan\\Core\\ScanAnalysis.cs",
+              "RelativeDocumentMoniker": "FAST_Scan\\Core\\ScanAnalysis.cs",
+              "ToolTip": "C:\\Users\\Vin\u00EDcius\\Desktop\\PIBIC\\FAST_Scan\\FAST_Scan\\Core\\ScanAnalysis.cs",
+              "RelativeToolTip": "FAST_Scan\\Core\\ScanAnalysis.cs",
+              "ViewState": "AQIAABMAAAAAAAAAAAAQwBIAAAA8AAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-08T15:48:25.987Z"
+              "WhenOpened": "2025-04-08T15:48:25.987Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
@@ -94,7 +95,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 3,
               "Title": "Scan.cs",
               "DocumentMoniker": "C:\\Users\\Vin\u00EDcius\\Desktop\\PIBIC\\FAST_Scan\\FAST_Scan\\Core\\Scan.cs",
               "RelativeDocumentMoniker": "FAST_Scan\\Core\\Scan.cs",
@@ -102,8 +103,7 @@
               "RelativeToolTip": "FAST_Scan\\Core\\Scan.cs",
               "ViewState": "AQIAAGQBAAAAAAAAAAAkwNYAAAAJAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-31T19:00:52.527Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-03-31T19:00:52.527Z"
             },
             {
               "$type": "Document",
@@ -113,14 +113,14 @@
               "RelativeDocumentMoniker": "FAST_Scan\\MVVM\\View\\Scan2DView.xaml.cs",
               "ToolTip": "C:\\Users\\Vin\u00EDcius\\Desktop\\PIBIC\\FAST_Scan\\FAST_Scan\\MVVM\\View\\Scan2DView.xaml.cs",
               "RelativeToolTip": "FAST_Scan\\MVVM\\View\\Scan2DView.xaml.cs",
-              "ViewState": "AQIAACABAAAAAAAAAAAqwDcBAAAOAAAA",
+              "ViewState": "AQIAACwBAAAAAAAAAAAqwDcBAAAOAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-03-31T18:25:08.413Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 2,
               "Title": "Scan2DView.xaml",
               "DocumentMoniker": "C:\\Users\\Vin\u00EDcius\\Desktop\\PIBIC\\FAST_Scan\\FAST_Scan\\MVVM\\View\\Scan2DView.xaml",
               "RelativeDocumentMoniker": "FAST_Scan\\MVVM\\View\\Scan2DView.xaml",
@@ -132,14 +132,15 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 4,
               "Title": "MainWindow.xaml",
               "DocumentMoniker": "C:\\Users\\Vin\u00EDcius\\Desktop\\PIBIC\\FAST_Scan\\FAST_Scan\\MainWindow.xaml",
               "RelativeDocumentMoniker": "FAST_Scan\\MainWindow.xaml",
               "ToolTip": "C:\\Users\\Vin\u00EDcius\\Desktop\\PIBIC\\FAST_Scan\\FAST_Scan\\MainWindow.xaml",
               "RelativeToolTip": "FAST_Scan\\MainWindow.xaml",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2025-03-18T21:20:39.265Z"
+              "WhenOpened": "2025-03-18T21:20:39.265Z",
+              "EditorCaption": ""
             }
           ]
         }

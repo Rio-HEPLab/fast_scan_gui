@@ -8,12 +8,12 @@ using System.Threading.Tasks;
 
 namespace FAST_Scan.Core
 {
-    internal class ScaAnalysis
+    internal class ScanAnalysis
     {
         StatusMessage statusMessage;
         string baseDir;
         string corePath;
-        public ScaAnalysis(StatusMessage statusMessage)
+        public ScanAnalysis(StatusMessage statusMessage)
         {
             this.statusMessage = statusMessage;
             baseDir = AppDomain.CurrentDomain.BaseDirectory;
