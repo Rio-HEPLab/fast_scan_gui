@@ -17,9 +17,12 @@ namespace FAST_Scan.Core
     {
         string serialNo_ServoY = "27261089";
         string serialNo_ServoX = "27261487";
+        string serialNo_ServoZ = "27269670";
+
 
         KCubeDCServo ServoY = null;
         KCubeDCServo ServoX = null;
+        KCubeDCServo ServoZ = null;
 
         //Constants
         const decimal stepInferiorLimit = 0.001m;
