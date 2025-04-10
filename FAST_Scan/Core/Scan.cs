@@ -77,6 +77,13 @@ namespace FAST_Scan.Core
             FOCAL_ANALYSIS
         };
 
+        public enum Axis
+        {
+            X,
+            Y,
+            Z
+        };
+
         StatusMessage statusMessage;
         //Construtor
         public Scan(StatusMessage statusMessage, ScanType type, out ErrorStatus error)

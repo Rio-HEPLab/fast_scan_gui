@@ -5,9 +5,247 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:FAST_Scan.MVVM.View"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
-        <TextBlock Text="Scan 1D"
-                   FontSize="25"/>
+             d:DesignHeight="580" d:DesignWidth="600">
+    
+    <Grid Background="White">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="45"/>
+            <RowDefinition Height="3.3*"/>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="4.3*"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Text="Configure 1D Scan"
+                 Grid.Row="0"
+                 FontSize="25"
+                 HorizontalAlignment="Center"
+                 FontFamily="Bahnschrift Bold"
+                 Foreground="#4053A0"
+                 VerticalAlignment="Center"/>
+
+        <StackPanel Grid.Row="1"
+                    Margin="5"
+                    VerticalAlignment="Center">
+            
+            <StackPanel Orientation="Horizontal"
+                        HorizontalAlignment="Center"
+                        Margin="0,0,0,10">
+                <Label Content="Select Scan Axis: "
+                       HorizontalAlignment="Center"/>
+
+                <RadioButton Content="X"
+                             Name="xRB"
+                             VerticalAlignment="Center"
+                             Margin="10,0,10,0"
+                             Checked="xRB_Checked"/>
+                <RadioButton Content="Y"
+                             Name="yRB"
+                             VerticalAlignment="Center"
+                             Margin="10,0,10,0"
+                             Checked="yRB_Checked"/>
+                <RadioButton Content="Z"
+                             Name="zRB"
+                             VerticalAlignment="Center"
+                             Margin="10,0,10,0"
+                             Checked="zRB_Checked"/>
+
+            </StackPanel>
+
+
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel>
+                    <TextBlock Text="Initial Position (mm)"
+                             HorizontalAlignment="Center"/>
+
+                    <TextBox Name="StartTB"
+                           Width="120"
+                           Margin="0,0,0,10"
+                           PreviewTextInput="NumbersOnly_PreviewTextInput"/>
+
+                    <TextBlock Text="X  Position (mm)"
+                             HorizontalAlignment="Center"/>
+
+                    <TextBox Name="xPositionTB"
+                           Width="120"
+                           Margin="0,0,0,3"
+                           PreviewTextInput="NumbersOnly_PreviewTextInput"
+                           IsEnabled="{Binding IsChecked, ElementName=xSetCB}"/>
+
+                    <CheckBox Name="xSetCB"
+                              Content="Set X Position"
+                              Margin="0,0,0,10"
+                              HorizontalAlignment="Center"/>
+
+                    <TextBlock Text="Digitizer Samples"
+                             HorizontalAlignment="Center"/>
+                    <TextBox Name="digitizerSamplesTB"
+                           Width="120"
+                           Margin="0,0,0,10"
+                           PreviewTextInput="DigitsOnly_PreviewTextInput"/>
+                </StackPanel>
+
+                <StackPanel Grid.Column="1">
+                    <TextBlock Text="Final Position (mm)"
+                              HorizontalAlignment="Center"/>
+
+                    <TextBox Name="StopTB"
+                           Width="120"
+                           Margin="0,0,0,10"
+                           PreviewTextInput="NumbersOnly_PreviewTextInput"/>
+                    
+                    <TextBlock Text="Y Potition (mm)"
+                                HorizontalAlignment="Center"/>
+
+                    <TextBox Name="yPositionTB"
+                             Width="120"
+                             Margin="0,0,0,3"
+                             PreviewTextInput="NumbersOnly_PreviewTextInput"
+                             IsEnabled="{Binding IsChecked, ElementName=ySetCB}"/>
+
+                    <CheckBox Name="ySetCB"
+                              Content="Set Y Position"
+                              Margin="0,0,0,10"
+                              HorizontalAlignment="Center"/>
+                    
+                    <TextBlock Text="Pulse Polarity"
+                             HorizontalAlignment="Center"/>
+
+                    <ComboBox Name="PulsePolarityCB"
+                              Width="120"/>
+
+                </StackPanel>
+
+                <StackPanel Grid.Column="2">
+                    <TextBlock Text="Number of Steps"
+                             HorizontalAlignment="Center"/>
+
+                    <TextBox Name="StepsTB"
+                           Width="120"
+                           Margin="0,0,0,10"
+                           PreviewTextInput="DigitsOnly_PreviewTextInput"/>
+
+                    <TextBlock Text="Z Position (mm)"
+                             HorizontalAlignment="Center"/>
+
+                    <TextBox Name="zPositionTB"
+                           Width="120"
+                           Margin="0,0,0,3"
+                           PreviewTextInput="DigitsOnly_PreviewTextInput"
+                           IsEnabled="{Binding IsChecked, ElementName=zSetCB}"/>
+
+                    <CheckBox Name="zSetCB"
+                              Content="Set Z Position"
+                              Margin="0,0,0,10"
+                              HorizontalAlignment="Center"/>
+                </StackPanel>
+            </Grid>
+
+
+        </StackPanel>
+
+        <Grid Grid.Row="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="3*"/>
+                <RowDefinition Height="2*"/>
+            </Grid.RowDefinitions>
+
+            <StackPanel Grid.Row="0"
+                      Orientation="Horizontal"
+                      HorizontalAlignment="Center"
+                      VerticalAlignment="Bottom">
+                <TextBlock Text="Save File as"
+                         Margin="0,0,5,0"
+                         VerticalAlignment="Center"/>
+                <TextBox Name="saveFileTB"
+                       Width="300" Height="20"
+                       Margin="0,0,5,0"
+                      VerticalAlignment="Center"/>
+                <Button Name="BrowseButton"
+                      Content="Browse"
+                      Width="70"
+                      Height="20"
+                      Margin="0,0,5,0"
+                      Click="Browse_Click"
+                      VerticalAlignment="Top"/>
+            </StackPanel>
+            <CheckBox Name="GenerateImageCB"
+                    Grid.Row="1"
+                    HorizontalAlignment="Center"
+                    Margin="5"
+                    Content="Generate image after scan is completed"/>
+        </Grid>
+
+
+
+        <StackPanel Grid.Row="3"
+                  VerticalAlignment="Center">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+
+                <Button Name="HomeButton"
+                      Width="80"
+                      Content="Home" 
+                      Margin="10,0,0,0"
+                      HorizontalAlignment="Left"
+                      Click="HomeButton_Click"/>
+
+                <StackPanel Orientation="Horizontal"
+                          HorizontalAlignment="Right"
+                          Grid.Column="1">
+                    <Button Name="StartScanButton"
+                          Width="80"
+                          Content="Start Scan" 
+                          Margin="10,0,10,0"
+                          Click="StartScanButton_Click"/>
+                    <Button Name="StopScanButton"
+                          Width="80"
+                          Content="Stop Scan" 
+                          Margin="10,0,10,0"
+                          Click="StopScanButton_Click"/>
+                </StackPanel>
+            </Grid>
+
+
+            <TextBox Name="StatusTextBox" 
+                   Text="{Binding Log, Mode=OneWay}"
+                   IsReadOnly="True" 
+                   TextWrapping="Wrap" 
+                   VerticalScrollBarVisibility="Auto"
+                   Height="150"
+                   Margin="10"
+                   Background="Black"
+                   Foreground="White"/>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Button Name="ClearTerminalButton"
+                          Content="Clear Terminal"
+                          Width="80"
+                          Click="ClearTerminalButton_Click"
+                          HorizontalAlignment="Left"
+                          Margin="10,0,10,0"
+                          Grid.Column="0"/>
+                <Button Name="ClearParametersButton"
+                          Content="Clear Input Parameters"
+                          Width="180"
+                          Click="ClearParametersButton_Click"
+                          HorizontalAlignment="Right"
+                          Margin="10,0,10,0"
+                          Grid.Column="1"/>
+            </Grid>
+
+        </StackPanel>
+
     </Grid>
 </UserControl>

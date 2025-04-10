@@ -30,7 +30,7 @@ namespace FAST_Scan.MVVM.View
     public partial class Scan2DView : UserControl
     {
         Scan scan;
-        StatusMessage _statusMessage;
+        StatusMessage statusMessage;
         ScanAnalysis scanAnalysis;
 
         public Scan2DView()
@@ -47,11 +47,11 @@ namespace FAST_Scan.MVVM.View
 
             digitizerSamplesTB.Text = "100";
 
-            _statusMessage = new StatusMessage();
-            DataContext = _statusMessage;
+            statusMessage = new StatusMessage();
+            DataContext = statusMessage;
 
             // Escutar alterações na propriedade "Log"
-            _statusMessage.PropertyChanged += StatusMessage_PropertyChanged;
+            statusMessage.PropertyChanged += StatusMessage_PropertyChanged;
 
             StopScanButton.IsEnabled = false;
         }
@@ -69,7 +69,7 @@ namespace FAST_Scan.MVVM.View
         {
             Scan.ErrorStatus configError;
             Scan.ErrorStatus homeError;
-            scan = new Scan(_statusMessage, Scan.ScanType.SCAN_2D, out configError);
+            scan = new Scan(statusMessage, Scan.ScanType.SCAN_2D, out configError);
             if (configError == Scan.ErrorStatus.CONFIGURE_DIGITIZER_FAIL)
             {
                 MessageBox.Show("Unable to configure digitizer.", "ERROR", MessageBoxButton.OK, MessageBoxImage.Error);
@@ -118,18 +118,18 @@ namespace FAST_Scan.MVVM.View
                 if(messageBoxResult == MessageBoxResult.Yes)
                 {
                     HommingStateManager.SetIsHomed(HommingStateManager.Servo.X, true);
-                    _statusMessage.CreateStatusMessage("ServoX Homming Status Updated: HOMED");
+                    statusMessage.CreateStatusMessage("ServoX Homming Status Updated: HOMED");
                     HommingStateManager.SetIsHomed(HommingStateManager.Servo.Y, true);
-                    _statusMessage.CreateStatusMessage("ServoY Homming Status Updated: HOMED");
+                    statusMessage.CreateStatusMessage("ServoY Homming Status Updated: HOMED");
                 }
                 else if (messageBoxResult == MessageBoxResult.No)
                 {
-                    _statusMessage.CreateStatusMessage("Make sure devices are Homed before Scan starts!");
+                    statusMessage.CreateStatusMessage("Make sure devices are Homed before Scan starts!");
                     return;
                 }
             }
 
-            scan = new Scan( _statusMessage, Scan.ScanType.SCAN_2D, out configError);
+            scan = new Scan( statusMessage, Scan.ScanType.SCAN_2D, out configError);
             if (configError == Scan.ErrorStatus.CONFIGURE_DIGITIZER_FAIL)
             {
                 MessageBox.Show("Unable to configure digitizer.", "ERROR", MessageBoxButton.OK, MessageBoxImage.Error);
@@ -263,13 +263,13 @@ namespace FAST_Scan.MVVM.View
                 {
                     if (GenerateImageCB.IsChecked == true)
                     {
-                        scanAnalysis = new ScanAnalysis(_statusMessage);
+                        scanAnalysis = new ScanAnalysis(statusMessage);
                         scanAnalysis.Generate2DScanMap(saveFileTB.Text);
                     }
                 }
                 catch
                 {
-                    _statusMessage.CreateStatusMessage("Unable to run python script to generate Image");
+                    statusMessage.CreateStatusMessage("Unable to run python script to generate Image");
                 }
                 
             }
@@ -379,7 +379,7 @@ namespace FAST_Scan.MVVM.View
         private void ClearTerminalButton_Click(object sender, RoutedEventArgs e)
         {
             StatusTextBox.Text = string.Empty;
-            //scanAnalysis = new ScanAnalysis(_statusMessage);
+            //scanAnalysis = new ScanAnalysis(statusMessage);
             //scanAnalysis.Generate2DScanMap(saveFileTB.Text);
         }
 

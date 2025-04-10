@@ -5,11 +5,11 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:FAST_Scan.MVVM.View"
              mc:Ignorable="d" 
-             d:DesignHeight="530" d:DesignWidth="600">
+             d:DesignHeight="580" d:DesignWidth="600">
 
     <Grid Background="White">
         <Grid.RowDefinitions>
-            <RowDefinition Height="1*"/>
+            <RowDefinition Height="40"/>
             <RowDefinition Height="2.5*"/>
             <RowDefinition Height="1.5*"/>
             <RowDefinition Height="4*"/>
@@ -18,7 +18,6 @@
         <TextBlock Text="Configure 2D Scan"
                    Grid.Row="0"
                    FontSize="25"
-                   Margin="0,0,0,10"
                    HorizontalAlignment="Center"
                    FontFamily="Bahnschrift Bold"
                    Foreground="#4053A0"
