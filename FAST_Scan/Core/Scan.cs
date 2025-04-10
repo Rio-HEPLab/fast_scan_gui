@@ -31,14 +31,19 @@ namespace FAST_Scan.Core
         //Scan variables
         decimal initialPositionX = 0;
         decimal initialPositionY = 0;
+        decimal initialPositionZ = 0;
         decimal finalPositionX = 0;
         decimal finalPositionY = 0;
+        decimal finalPositionZ = 0;
         decimal stepX = 0;
         decimal stepY = 0;
+        decimal stepZ = 0;
         int numStepsX = 0;
         int numStepsY = 0;
+        int numStepsZ = 0;
 
         PulsePolarity polarity;
+        ScanType scanType;
 
         string filePath;
 
@@ -47,16 +52,16 @@ namespace FAST_Scan.Core
         int intervalBinStart = 0;
         int intervalBinEnd = 1024;
 
-        bool stop;
         bool isStopped = true;
         public enum ErrorStatus
         {
+            NULL,
             OK,
             VALUE_OUT_OF_RANGE,
             INVALID_INPUT,
             CONFIGURE_DIGITIZER_FAIL,
             CONFIGURE_SERVO_FAIL,
-            NULL
+            UNABLE_TO_HOME
         };
         
         enum PulsePolarity
@@ -65,18 +70,26 @@ namespace FAST_Scan.Core
             POSITIVE
         };
 
+        public enum ScanType
+        {
+            SCAN_2D,
+            SCAN_1D,
+            FOCAL_ANALYSIS
+        };
+
         StatusMessage statusMessage;
         //Construtor
-        public Scan(StatusMessage statusMessage, out ErrorStatus error)
+        public Scan(StatusMessage statusMessage, ScanType type, out ErrorStatus error)
         {
             this.statusMessage = statusMessage;
+            scanType = type;
             error = ErrorStatus.NULL;
 
             // Configure digitizer
             if (Convert.ToBoolean(Digitizer.Configure()))
             {
                 error = ErrorStatus.CONFIGURE_DIGITIZER_FAIL;
-                statusMessage.CreateStatusMessage("Unable to configure digitizer");
+                statusMessage.CreateStatusMessage("Unable to configure Digitizer");
                 return;
             }
             else
@@ -84,31 +97,63 @@ namespace FAST_Scan.Core
                 statusMessage.CreateStatusMessage("Digitizer configured");
             }
 
-            DeviceManagerCLI.BuildDeviceList();
+            ServosInit(out error);
+        }
 
-            try
+        public ErrorStatus Home()
+        {   
+            bool error = false;
+
+            if(HommingStateManager.ServoXHomed == false)
             {
-                ServoY = KCubeDCServo.CreateKCubeDCServo(serialNo_ServoY);
-                ServoX = KCubeDCServo.CreateKCubeDCServo(serialNo_ServoX);
-                statusMessage.CreateStatusMessage("Devices Configured.");
-
-                // We tell the user that we are opening connection to the device.
-                statusMessage.CreateStatusMessage("Opening devices " + serialNo_ServoY + " and " + serialNo_ServoX);
-
-                // This connects to the device.
-                ServoX.Connect(serialNo_ServoX);
-                ServoY.Connect(serialNo_ServoY);
+                try
+                {
+                    statusMessage.CreateStatusMessage("Actuator X is Homing...");
+                    ServoX.Home(60000);
+                    HommingStateManager.SetIsHomed(HommingStateManager.Servo.X, true);
+                }
+                catch
+                {
+                    statusMessage.CreateStatusMessage("Unable to Home ServoX");
+                    error = true;
+                }
             }
-            catch
+            if (HommingStateManager.ServoYHomed == false)
             {
-                error = ErrorStatus.CONFIGURE_SERVO_FAIL;
-                statusMessage.CreateStatusMessage("Unable to configure devices");
-                Digitizer.Close();
-                return;
+                try
+                {
+                    statusMessage.CreateStatusMessage("Actuator Y is Homing...");
+                    ServoY.Home(60000);
+                    HommingStateManager.SetIsHomed(HommingStateManager.Servo.Y, true);
+                }
+                catch
+                {
+                    statusMessage.CreateStatusMessage("Unable to Home ServoY");
+                    error = true;
+                }
             }
-
-            ServosInit(ServoX, ServoY, serialNo_ServoX, serialNo_ServoY);
-            error = ErrorStatus.OK;
+            if (HommingStateManager.ServoZHomed == false && scanType != ScanType.SCAN_2D) //não faz homming em Z se for Scan2D
+            {
+                try
+                {
+                    statusMessage.CreateStatusMessage("Actuator Z is Homing...");
+                    ServoZ.Home(60000);
+                    HommingStateManager.SetIsHomed(HommingStateManager.Servo.Z, true);
+                }
+                catch
+                {
+                    statusMessage.CreateStatusMessage("Unable to Home ServoZ");
+                    error = true;
+                }
+            }
+            if (error == false)
+            {
+                return ErrorStatus.OK;
+            }
+            else
+            {
+                return ErrorStatus.UNABLE_TO_HOME;
+            }
         }
 
         public ErrorStatus setInitialX(string input)  //pede posição inicial de X
@@ -151,6 +196,26 @@ namespace FAST_Scan.Core
             }
         }
 
+        public ErrorStatus setInitialZ(string input)  //pede posição inicial de Z
+        {
+            if (decimal.TryParse(input, out initialPositionZ))
+            {
+                if (initialPositionZ < positionLimit) //limite de segurança para posição
+                {
+                    return ErrorStatus.OK;
+                }
+                else
+                {
+                    return ErrorStatus.VALUE_OUT_OF_RANGE;
+                }
+
+            }
+            else
+            {
+                return ErrorStatus.INVALID_INPUT;
+            }
+        }
+
         public ErrorStatus setFinalX(string input)    //pede posição final de X
         {
             if (decimal.TryParse(input, out finalPositionX))
@@ -175,6 +240,25 @@ namespace FAST_Scan.Core
             if (decimal.TryParse(input, out finalPositionY))
             {
                 if (finalPositionY < positionLimit && finalPositionY > initialPositionY)
+                {
+                    return ErrorStatus.OK;
+                }
+                else
+                {
+                    return ErrorStatus.VALUE_OUT_OF_RANGE;
+                }
+            }
+            else
+            {
+                return ErrorStatus.INVALID_INPUT;
+            }
+        }
+
+        public ErrorStatus setFinalZ(string input)    //pede posição final de Z
+        {
+            if (decimal.TryParse(input, out finalPositionZ))
+            {
+                if (finalPositionZ < positionLimit && finalPositionZ > initialPositionZ)
                 {
                     return ErrorStatus.OK;
                 }
@@ -247,6 +331,34 @@ namespace FAST_Scan.Core
             }
         }
 
+        public ErrorStatus setPaceZ(string numberOfSteps)     //determina o passo em Z
+        {
+            if (int.TryParse(numberOfSteps, out numStepsZ))
+            {   //calcula o step
+                if (numStepsZ == 0)
+                {
+                    stepZ = 0;
+                }
+                else
+                {
+                    stepZ = (finalPositionZ - initialPositionZ) / numStepsZ;
+                }
+                //verifica erros
+                if (stepZ > stepInferiorLimit)
+                {
+                    return ErrorStatus.OK;
+                }
+                else
+                {
+                    return ErrorStatus.VALUE_OUT_OF_RANGE;
+                }
+            }
+            else
+            {
+                return ErrorStatus.INVALID_INPUT;
+            }
+        }
+
         private void setAcquisitionIntervalInit()
         {
             
@@ -299,46 +411,120 @@ namespace FAST_Scan.Core
             filePath = path;
         }
 
-        private void ServosInit(KCubeDCServo ServoX, KCubeDCServo ServoY, string serialNo_ServoX, string serialNo_ServoY)
+        private void ServosInit(out ErrorStatus error)
         {
-            
-            // Wait for the device settings to initialize. We ask the device to
-            // throw an exception if this takes more than 5000ms (5s) to complete.
-            ServoX.WaitForSettingsInitialized(5000);
-            ServoY.WaitForSettingsInitialized(5000);
-            // This calls LoadMotorConfiguration on the device to initialize the DeviceUnitConverter object required for real world unit parameters.
-            MotorConfiguration motorSettings_ServoX = ServoX.LoadMotorConfiguration(serialNo_ServoX, DeviceConfiguration.DeviceSettingsUseOptionType.UseFileSettings);
-            MotorConfiguration motorSettings_ServoY = ServoY.LoadMotorConfiguration(serialNo_ServoY, DeviceConfiguration.DeviceSettingsUseOptionType.UseFileSettings);
-            // This starts polling the device at intervals of 250ms (0.25s).
-            ServoX.StartPolling(250);
-            ServoY.StartPolling(250);
-            // We are now able to Enable the device otherwise any move is ignored. You should see a physical response from your controller.
-            ServoX.EnableDevice();
-            ServoY.EnableDevice();
-            statusMessage.CreateStatusMessage("Servo Motors Enabled");
-            // Needs a delay to give time for the device to be enabled.
-            Thread.Sleep(500);
+            DeviceManagerCLI.BuildDeviceList();
+
+            //configure ServoX
+            try
+            {
+                ServoX = KCubeDCServo.CreateKCubeDCServo(serialNo_ServoX);
+                statusMessage.CreateStatusMessage("ServoZ Configured.");
+                ServoX.Connect(serialNo_ServoX);
+                statusMessage.CreateStatusMessage("ServoZ Connected.");
+                // Wait for the device settings to initialize. We ask the device to
+                // throw an exception if this takes more than 5000ms (5s) to complete.
+                ServoX.WaitForSettingsInitialized(5000);
+                // This calls LoadMotorConfiguration on the device to initialize the DeviceUnitConverter object required for real world unit parameters.
+                MotorConfiguration motorSettings_ServoX = ServoX.LoadMotorConfiguration(serialNo_ServoX, DeviceConfiguration.DeviceSettingsUseOptionType.UseFileSettings);
+                // This starts polling the device at intervals of 250ms (0.25s).
+                ServoX.StartPolling(250);
+                // We are now able to Enable the device otherwise any move is ignored. You should see a physical response from your controller.
+                ServoX.EnableDevice();
+                statusMessage.CreateStatusMessage("Servo X Enabled");
+                // Needs a delay to give time for the device to be enabled.
+                Thread.Sleep(500);
+            }
+            catch
+            {
+                error = ErrorStatus.CONFIGURE_SERVO_FAIL;
+                statusMessage.CreateStatusMessage("Unable to configure ServoX");
+                if (true)     //não permite continuar caso X seja necessario
+                {
+                    Digitizer.Close();
+                    return;
+                }
+            }
+            //configure ServoY
+            try
+            {
+                ServoY = KCubeDCServo.CreateKCubeDCServo(serialNo_ServoY);
+                statusMessage.CreateStatusMessage("ServoY Configured.");
+                ServoY.Connect(serialNo_ServoY);
+                statusMessage.CreateStatusMessage("ServoY Connected.");
+                ServoY.WaitForSettingsInitialized(5000);
+                MotorConfiguration motorSettings_ServoY = ServoY.LoadMotorConfiguration(serialNo_ServoY, DeviceConfiguration.DeviceSettingsUseOptionType.UseFileSettings);
+                ServoY.StartPolling(250);
+                ServoY.EnableDevice();
+                Thread.Sleep(500);
+            }
+            catch
+            {
+                error = ErrorStatus.CONFIGURE_SERVO_FAIL;
+                statusMessage.CreateStatusMessage("Unable to configure ServoY");
+                if (true)     //não permite continuar caso Y seja necessario
+                {
+                    Digitizer.Close();
+                    return;
+                }
+            }
+            //configure ServoZ
+            try
+            {
+                ServoZ = KCubeDCServo.CreateKCubeDCServo(serialNo_ServoZ);
+                statusMessage.CreateStatusMessage("ServoZ Configured.");
+                ServoZ.Connect(serialNo_ServoZ);
+                statusMessage.CreateStatusMessage("ServoZ Connected.");
+                ServoZ.WaitForSettingsInitialized(5000);
+                MotorConfiguration motorSettings_ServoZ = ServoZ.LoadMotorConfiguration(serialNo_ServoZ, DeviceConfiguration.DeviceSettingsUseOptionType.UseFileSettings);
+                ServoZ.StartPolling(250);
+                ServoZ.EnableDevice();
+                Thread.Sleep(500);
+            }
+            catch
+            {
+                error = ErrorStatus.CONFIGURE_SERVO_FAIL;
+                statusMessage.CreateStatusMessage("Unable to configure ServoZ");
+                if (scanType == ScanType.FOCAL_ANALYSIS)     //não permite continuar caso Z seja necessario
+                {
+                    Digitizer.Close();
+                    return;
+                }
+            }
+            error = ErrorStatus.OK;
         }
 
         public void Execute()
         {
-            stop = false;
             isStopped = false;
-
             statusMessage.CreateStatusMessage("Scan initiated");
+
+            switch (scanType)
+            {
+                case ScanType.SCAN_2D:
+                    {
+                        Scan_2D_exe();
+                        break;
+                    }
+                case ScanType.SCAN_1D:
+                    {
+                        Scan_1D_exe();
+                        break;
+                    }
+                case ScanType.FOCAL_ANALYSIS:
+                    {
+                        Scan_Focal_exe();
+                        break;
+                    }
+            }
+            isStopped = true;
+            statusMessage.CreateStatusMessage("Scan Finished");
+        }
+        private void Scan_2D_exe()
+        {
             decimal PositionX;
             decimal PositionY;
             int amplitude=0;
-
-            if (HommingStateManager.ScanHomed == false)
-            //if (false)
-            {
-                statusMessage.CreateStatusMessage("Actuator X is Homing...");
-                ServoX.Home(60000);
-                statusMessage.CreateStatusMessage("Actuator Y is Homing...");
-                ServoY.Home(60000);
-                HommingStateManager.SetIsHomed(true);
-            }
 
             //Move os servos para a posição inicial
             statusMessage.CreateStatusMessage("Moving to initial position...");
@@ -405,9 +591,16 @@ namespace FAST_Scan.Core
                     }
                 }
             }
+        }
 
-            isStopped = true;
-            statusMessage.CreateStatusMessage("Scan Finished");
+        private void Scan_1D_exe()
+        {
+
+        }
+
+        private void Scan_Focal_exe()
+        {
+
         }
 
         public void Close()

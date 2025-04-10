@@ -141,21 +141,35 @@
 
         <StackPanel Grid.Row="3"
                     VerticalAlignment="Center">
-            <StackPanel Orientation="Horizontal"
-                        HorizontalAlignment="Center">
-                <Button Name="StartScanButton"
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+
+                <Button Name="HomeButton"
                         Width="80"
-                        Content="Start Scan" 
-                        Margin="0,0,50,0"
-                        Click="StartScanButton_Click"/>
-                <Button Name="StopScanButton"
-                        Width="80"
-                        Content="Stop Scan" 
-                        Margin="0,0,50,0"
-                        Click="StopScanButton_Click"
-                        />
-                
-            </StackPanel>
+                        Content="Home" 
+                        Margin="10,0,0,0"
+                        HorizontalAlignment="Left"
+                        Click="HomeButton_Click"/>
+
+                <StackPanel Orientation="Horizontal"
+                            HorizontalAlignment="Right"
+                            Grid.Column="1">
+                    <Button Name="StartScanButton"
+                            Width="80"
+                            Content="Start Scan" 
+                            Margin="10,0,10,0"
+                            Click="StartScanButton_Click"/>
+                    <Button Name="StopScanButton"
+                            Width="80"
+                            Content="Stop Scan" 
+                            Margin="10,0,10,0"
+                            Click="StopScanButton_Click"/>
+                </StackPanel>
+            </Grid>
+            
 
             <TextBox Name="StatusTextBox" 
                      Text="{Binding Log, Mode=OneWay}"
@@ -180,7 +194,7 @@
                             Grid.Column="0"/>
                     <Button Name="ClearParametersButton"
                             Content="Clear Input Parameters"
-                            Width="160"
+                            Width="180"
                             Click="ClearParametersButton_Click"
                             HorizontalAlignment="Right"
                             Margin="10,0,10,0"

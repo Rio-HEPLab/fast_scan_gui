@@ -65,22 +65,81 @@ namespace FAST_Scan.MVVM.View
             }
         }
 
+        private async void HomeButton_Click(object sender, RoutedEventArgs e)
+        {
+            Scan.ErrorStatus configError;
+            Scan.ErrorStatus homeError;
+            scan = new Scan(_statusMessage, Scan.ScanType.SCAN_2D, out configError);
+            if (configError == Scan.ErrorStatus.CONFIGURE_DIGITIZER_FAIL)
+            {
+                MessageBox.Show("Unable to configure digitizer.", "ERROR", MessageBoxButton.OK, MessageBoxImage.Error);
+                scan = null;
+                return;
+            }
+            else if (configError == Scan.ErrorStatus.CONFIGURE_SERVO_FAIL)
+            {
+                MessageBox.Show("Unable to configure Servo(s).", "ERROR", MessageBoxButton.OK, MessageBoxImage.Error);
+                scan = null;
+                return;
+            }
+            else if (configError == Scan.ErrorStatus.OK)
+            {
+                StartScanButton.IsEnabled = false;
+                StopScanButton.IsEnabled = false;
+
+                homeError = await Task.Run(() =>  scan.Home());
+
+                if(homeError == Scan.ErrorStatus.OK)
+                {
+                    scan.Close();
+                    scan = null;
+                }
+                else if (homeError == Scan.ErrorStatus.UNABLE_TO_HOME)
+                {
+                    MessageBox.Show("Unable to Home Servo(s). ", "ERROR", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+                
+        }
+
         //buttons
         private async void StartScanButton_Click(object sender, RoutedEventArgs e)
         {
             Scan.ErrorStatus errorScan;
             Scan.ErrorStatus configError;
+
+            MessageBoxResult messageBoxResult;
             string dir;
 
-            scan = new Scan( _statusMessage,out configError);
+            //verifica status de homing
+            if(HommingStateManager.ServoXHomed == false || HommingStateManager.ServoYHomed == false)
+            {
+                messageBoxResult = MessageBox.Show("DO NOT START SCAN IF SERVO MOTORS ARE NOT HOMED!!!\nCurrent Homming Status: NOT HOMED.\nDo you want to change Homing Status to: HOMED?", "ERROR", MessageBoxButton.YesNo, MessageBoxImage.Exclamation);
+                if(messageBoxResult == MessageBoxResult.Yes)
+                {
+                    HommingStateManager.SetIsHomed(HommingStateManager.Servo.X, true);
+                    _statusMessage.CreateStatusMessage("ServoX Homming Status Updated: HOMED");
+                    HommingStateManager.SetIsHomed(HommingStateManager.Servo.Y, true);
+                    _statusMessage.CreateStatusMessage("ServoY Homming Status Updated: HOMED");
+                }
+                else if (messageBoxResult == MessageBoxResult.No)
+                {
+                    _statusMessage.CreateStatusMessage("Make sure devices are Homed before Scan starts!");
+                    return;
+                }
+            }
+
+            scan = new Scan( _statusMessage, Scan.ScanType.SCAN_2D, out configError);
             if (configError == Scan.ErrorStatus.CONFIGURE_DIGITIZER_FAIL)
             {
                 MessageBox.Show("Unable to configure digitizer.", "ERROR", MessageBoxButton.OK, MessageBoxImage.Error);
+                scan = null;
                 return;
             }
             else if (configError == Scan.ErrorStatus.CONFIGURE_SERVO_FAIL)
             {
-                MessageBox.Show("Unable to configure Servos.", "ERROR", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Unable to configure Servo(s).", "ERROR", MessageBoxButton.OK, MessageBoxImage.Error);
+                scan = null;
                 return;
             }
             else if (configError == Scan.ErrorStatus.OK)
@@ -97,6 +156,7 @@ namespace FAST_Scan.MVVM.View
                     {
                         MessageBox.Show("Save path invalid.", "ERROR", MessageBoxButton.OK, MessageBoxImage.Error);
                         scan.Close();
+                        scan = null;
                         return;
                     }
                 }
@@ -104,6 +164,7 @@ namespace FAST_Scan.MVVM.View
                 {
                     MessageBox.Show("Save path invalid.", "ERROR", MessageBoxButton.OK, MessageBoxImage.Error);
                     scan.Close ();
+                    scan = null;
                     return;
                 }
 
@@ -283,6 +344,7 @@ namespace FAST_Scan.MVVM.View
                 MessageBox.Show("Error on " + str_errorPlace, "ERROR", MessageBoxButton.OK, MessageBoxImage.Error);
             }
             scan.Close();
+            scan = null;
             return true;
         }
 

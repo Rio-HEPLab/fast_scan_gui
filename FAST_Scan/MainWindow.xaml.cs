@@ -24,7 +24,9 @@ namespace FAST_Scan
         public MainWindow()
         {
             InitializeComponent();
-            HommingStateManager.SetIsHomed(false);
+            HommingStateManager.SetIsHomed(HommingStateManager.Servo.X, false);
+            HommingStateManager.SetIsHomed(HommingStateManager.Servo.Y, false);
+            HommingStateManager.SetIsHomed(HommingStateManager.Servo.Z, false);
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
