@@ -79,9 +79,13 @@ namespace FAST_Scan.Core
 
         public enum Axis
         {
-            X,
-            Y,
-            Z
+            X   = 1,
+            Y   = 2,
+            XY  = 3,
+            Z   = 4,
+            XZ  = 5,
+            YZ  = 6,
+            XYZ = 7,
         };
 
         StatusMessage statusMessage;
@@ -107,11 +111,14 @@ namespace FAST_Scan.Core
             ServosInit(out error);
         }
 
-        public ErrorStatus Home()
+        public ErrorStatus Home(Axis axis)
         {   
+            bool homeX = (axis == Axis.X) || (axis == Axis.XY) || (axis == Axis.XZ) || (axis == Axis.XYZ);
+            bool homeY = (axis == Axis.Y) || (axis == Axis.XY) || (axis == Axis.YZ) || (axis == Axis.XYZ);
+            bool homeZ = (axis == Axis.Z) || (axis == Axis.XZ) || (axis == Axis.YZ) || (axis == Axis.XYZ);
             bool error = false;
 
-            if(HommingStateManager.ServoXHomed == false)
+            if (HommingStateManager.ServoXHomed == false && homeX == true)
             {
                 try
                 {
@@ -125,7 +132,7 @@ namespace FAST_Scan.Core
                     error = true;
                 }
             }
-            if (HommingStateManager.ServoYHomed == false)
+            if (HommingStateManager.ServoYHomed == false && homeY == true)
             {
                 try
                 {
@@ -139,7 +146,7 @@ namespace FAST_Scan.Core
                     error = true;
                 }
             }
-            if (HommingStateManager.ServoZHomed == false && scanType != ScanType.SCAN_2D) //não faz homming em Z se for Scan2D
+            if (HommingStateManager.ServoZHomed == false && homeZ == true)
             {
                 try
                 {

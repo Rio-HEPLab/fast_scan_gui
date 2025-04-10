@@ -69,7 +69,9 @@ namespace FAST_Scan.MVVM.View
         {
             Scan.ErrorStatus configError;
             Scan.ErrorStatus homeError;
+
             scan = new Scan(statusMessage, Scan.ScanType.SCAN_2D, out configError);
+
             if (configError == Scan.ErrorStatus.CONFIGURE_DIGITIZER_FAIL)
             {
                 MessageBox.Show("Unable to configure digitizer.", "ERROR", MessageBoxButton.OK, MessageBoxImage.Error);
@@ -87,7 +89,7 @@ namespace FAST_Scan.MVVM.View
                 StartScanButton.IsEnabled = false;
                 StopScanButton.IsEnabled = false;
 
-                homeError = await Task.Run(() =>  scan.Home());
+                homeError = await Task.Run(() =>  scan.Home(Scan.Axis.XY));
 
                 if(homeError == Scan.ErrorStatus.OK)
                 {
@@ -96,6 +98,8 @@ namespace FAST_Scan.MVVM.View
                 }
                 else if (homeError == Scan.ErrorStatus.UNABLE_TO_HOME)
                 {
+                    scan.Close();
+                    scan = null;
                     MessageBox.Show("Unable to Home Servo(s). ", "ERROR", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }

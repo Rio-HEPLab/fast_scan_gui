@@ -17,6 +17,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using static FAST_Scan.Core.Scan;
 
 namespace FAST_Scan.MVVM.View
 {
@@ -29,7 +30,7 @@ namespace FAST_Scan.MVVM.View
         Scan scan;
         StatusMessage statusMessage;
         ScanAnalysis scanAnalysis;
-        Scan.Axis axis;
+        Scan.Axis axis; //guarda qual o eixo será realizado o scan
 
         public Scan1DView()
         {
@@ -67,6 +68,15 @@ namespace FAST_Scan.MVVM.View
         {
             Scan.ErrorStatus configError;
             Scan.ErrorStatus homeError;
+            Scan.Axis homeAxis;
+            int homeAxisValue = 0;
+
+            if (xRB.IsChecked == true || xSetCB.IsChecked == true) { homeAxisValue += (int)Scan.Axis.X; }
+            if (yRB.IsChecked == true || ySetCB.IsChecked == true) { homeAxisValue += (int)Scan.Axis.Y; }
+            if (zRB.IsChecked == true || zSetCB.IsChecked == true) { homeAxisValue += (int)Scan.Axis.Z; }
+
+            homeAxis = (Scan.Axis)homeAxisValue;
+
             scan = new Scan(statusMessage, Scan.ScanType.SCAN_2D, out configError);
             if (configError == Scan.ErrorStatus.CONFIGURE_DIGITIZER_FAIL)
             {
@@ -85,7 +95,7 @@ namespace FAST_Scan.MVVM.View
                 StartScanButton.IsEnabled = false;
                 StopScanButton.IsEnabled = false;
 
-                homeError = await Task.Run(() => scan.Home());
+                homeError = await Task.Run(() => scan.Home(homeAxis));
 
                 if (homeError == Scan.ErrorStatus.OK)
                 {
@@ -94,6 +104,8 @@ namespace FAST_Scan.MVVM.View
                 }
                 else if (homeError == Scan.ErrorStatus.UNABLE_TO_HOME)
                 {
+                    scan.Close();
+                    scan = null;
                     MessageBox.Show("Unable to Home Servo(s). ", "ERROR", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
