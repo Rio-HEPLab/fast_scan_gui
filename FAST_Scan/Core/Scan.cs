@@ -42,6 +42,10 @@ namespace FAST_Scan.Core
         int numStepsY = 0;
         int numStepsZ = 0;
 
+        bool positionIsSetX = false;
+        bool positionIsSetY = false;
+        bool positionIsSetZ = false;
+
         PulsePolarity polarity;
         ScanType scanType;
 
@@ -53,6 +57,9 @@ namespace FAST_Scan.Core
         int intervalBinEnd = 1024;
 
         bool isStopped = true;
+
+        Axis axis_1D;
+
         public enum ErrorStatus
         {
             NULL,
@@ -176,6 +183,7 @@ namespace FAST_Scan.Core
             {
                 if (initialPositionX < positionLimit) //limite de segurança para posição
                 {
+                    positionIsSetX = true;
                     return ErrorStatus.OK;
                 }
                 else
@@ -196,6 +204,7 @@ namespace FAST_Scan.Core
             {
                 if (initialPositionY < positionLimit) //limite de segurança para posição
                 {
+                    positionIsSetY = true;
                     return ErrorStatus.OK;
                 }
                 else
@@ -216,6 +225,7 @@ namespace FAST_Scan.Core
             {
                 if (initialPositionZ < positionLimit) //limite de segurança para posição
                 {
+                    positionIsSetZ = true;
                     return ErrorStatus.OK;
                 }
                 else
@@ -534,6 +544,7 @@ namespace FAST_Scan.Core
             isStopped = true;
             statusMessage.CreateStatusMessage("Scan Finished");
         }
+
         private void Scan_2D_exe()
         {
             decimal PositionX;
@@ -609,7 +620,136 @@ namespace FAST_Scan.Core
 
         private void Scan_1D_exe()
         {
+            decimal Position;
+            int amplitude = 0;
 
+            int numSteps = 0;
+            decimal step=0;
+
+            switch (axis_1D)
+            {
+                case Axis.X:
+                    {
+                        numSteps = numStepsX; step = stepX; break;
+                    }
+                case Axis.Y:
+                    {
+                        numSteps = numStepsY; step = stepY; break;
+                    }
+                case Axis.Z:
+                    {
+                        numSteps = numStepsZ; step = stepZ; break;
+                    }
+            }
+
+            //Move os servos para a posição inicial
+            statusMessage.CreateStatusMessage("Moving to initial position...");
+
+            if (positionIsSetX)
+            {
+                ServoX.MoveTo(initialPositionX, 60000);
+            }
+            if (positionIsSetY)
+            {
+                ServoY.MoveTo(initialPositionY, 60000);
+            }
+            if (positionIsSetZ)
+            {
+                ServoZ.MoveTo(initialPositionZ, 60000);
+            }
+
+            statusMessage.CreateStatusMessage("Scan in execution...");
+
+            StreamWriter sw = null;
+
+            using (sw = new StreamWriter(new FileStream(filePath, FileMode.Create, FileAccess.Write, FileShare.Read)))
+            {
+                //escreve cabecalho no outputFile
+                sw.WriteLine("Scan Type: " + scanType.ToString() + "\tScan Axis: " + axis_1D.ToString());
+                sw.WriteLine("Initial Position:\tX = " + initialPositionX.ToString() + "\tY = " + initialPositionY.ToString() + "\tY = " + initialPositionZ.ToString());
+                sw.WriteLine("Final Position:\tX = " + finalPositionX.ToString() + "\tY = " + finalPositionY.ToString() + "\tY = " + finalPositionZ.ToString());
+                sw.WriteLine("Step = " + step.ToString());
+
+                for (int j = 0; j <= numSteps; j++)
+                {
+                    if (ScanStateManager.ScanRunning == true)
+                    {
+                        //Se o pulso é negativo pega valor minimo, se positivo pega o valor máximo
+                        if (polarity == PulsePolarity.NEGATVE)
+                            amplitude = Digitizer.GetAvgMinValueInterval(digitizerSamples, intervalBinStart, intervalBinEnd);
+                        else if (polarity == PulsePolarity.POSITIVE)
+                            amplitude = Digitizer.GetAvgMaxValueInterval(digitizerSamples, intervalBinStart, intervalBinEnd);
+
+                        Position = j * step;
+
+                        statusMessage.CreateStatusMessage("Amplitude: " + amplitude.ToString() + "\tPosition: " + Position.ToString());
+
+                        //escreve amplitude no outputFile
+                        sw.Write(amplitude.ToString());
+
+                        if (j != numStepsX)
+                        {
+                            sw.Write('\t');
+                            ServoX.MoveRelative(MotorDirection.Forward, stepX, 60000);
+                        }
+                    }
+                    else
+                    {
+                        isStopped = true;
+                        return;
+                    }
+                }               
+            }
+        }
+
+        public void Set_1D_Axis(Axis axis)
+        {
+            axis_1D = axis;
+        }
+
+        public ErrorStatus set_1D_Initial_Position(string input)
+        {
+            switch(axis_1D)
+            {
+                case Axis.X:
+                    return setInitialX(input);
+                case Axis.Y:
+                    return setInitialY(input);
+                case Axis.Z:
+                    return setInitialZ(input);
+                default:
+                    return ErrorStatus.NULL;
+            }
+        }
+
+        public ErrorStatus set_1D_Final_Position(string input)
+        {
+            switch (axis_1D)
+            {
+                case Axis.X:
+                    return setFinalX(input);
+                case Axis.Y:
+                    return setFinalY(input);
+                case Axis.Z:
+                    return setFinalZ(input);
+                default:
+                    return ErrorStatus.NULL;
+            }
+        }
+
+        public ErrorStatus set_1D_Pace(string input)
+        {
+            switch (axis_1D)
+            {
+                case Axis.X:
+                    return setPaceX(input);
+                case Axis.Y:
+                    return setPaceY(input);
+                case Axis.Z:
+                    return setPaceZ(input);
+                default:
+                    return ErrorStatus.NULL;
+            }
         }
 
         private void Scan_Focal_exe()

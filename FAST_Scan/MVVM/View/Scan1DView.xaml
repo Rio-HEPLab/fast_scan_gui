@@ -136,7 +136,7 @@
                     <TextBox Name="zPositionTB"
                            Width="120"
                            Margin="0,0,0,3"
-                           PreviewTextInput="DigitsOnly_PreviewTextInput"
+                           PreviewTextInput="NumbersOnly_PreviewTextInput"
                            IsEnabled="{Binding IsChecked, ElementName=zSetCB}"/>
 
                     <CheckBox Name="zSetCB"

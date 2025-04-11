@@ -178,6 +178,54 @@ namespace FAST_Scan.MVVM.View
                     return;
                 }
 
+                //configura eixo do scan
+                scan.Set_1D_Axis(axis);
+
+                //se for o caso, configurar posição de X
+                if (xSetCB.IsChecked == true) errorScan = scan.setInitialX(xPositionTB.Text);
+                else errorScan = ErrorStatus.OK;
+                if (returnErrorConfigStatus(errorScan, "X Position") == true)
+                {
+                    return;
+                }
+
+                //se for o caso, configurar posição de Y
+                if (xSetCB.IsChecked == true) errorScan = scan.setInitialX(xPositionTB.Text);
+                else errorScan = ErrorStatus.OK;
+                if (returnErrorConfigStatus(errorScan, "Y Position") == true)
+                {
+                    return;
+                }
+
+                //se for o caso, configurar posição de Z
+                if (xSetCB.IsChecked == true) errorScan = scan.setInitialX(xPositionTB.Text);
+                else errorScan = ErrorStatus.OK;
+                if (returnErrorConfigStatus(errorScan, "Z Position") == true)
+                {
+                    return;
+                }
+
+                //Verifica Erro em initial Position
+                errorScan = scan.set_1D_Initial_Position(StartTB.Text);
+                if (returnErrorConfigStatus(errorScan, "Initial Position") == true)
+                {
+                    return;
+                }
+
+                //Verifica Erro em initial Position
+                errorScan = scan.set_1D_Final_Position(StartTB.Text);
+                if (returnErrorConfigStatus(errorScan, "Final Position") == true)
+                {
+                    return;
+                }
+
+                //Verifica Erro em initial Position
+                errorScan = scan.set_1D_Pace(StartTB.Text);
+                if (returnErrorConfigStatus(errorScan, "Number of Steps") == true)
+                {
+                    return;
+                }
+
                 //Verifica Erro em Digitizer Samples 
                 errorScan = scan.setDigitizerSamplesValue(digitizerSamplesTB.Text);
                 if (returnErrorConfigStatus(errorScan, "Digitizer Samples") == true)
@@ -234,7 +282,7 @@ namespace FAST_Scan.MVVM.View
                     if (GenerateImageCB.IsChecked == true)
                     {
                         scanAnalysis = new ScanAnalysis(statusMessage);
-                        scanAnalysis.Generate2DScanMap(saveFileTB.Text);
+                        scanAnalysis.Generate1DScanMap(saveFileTB.Text);
                     }
                 }
                 catch

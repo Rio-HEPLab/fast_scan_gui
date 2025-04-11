@@ -40,6 +40,12 @@ namespace FAST_Scan.Core
             process.BeginOutputReadLine();
         }
 
+        public void Generate1DScanMap(string filePath)
+        {
+
+        }
+
+
         private void Process_OutputDataReceived(object sender, DataReceivedEventArgs e)
         {
             if (e.Data != null)
