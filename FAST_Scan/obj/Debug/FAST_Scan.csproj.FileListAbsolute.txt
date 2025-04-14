@@ -21,3 +21,5 @@ C:\Users\Vinícius\Desktop\PIBIC\FAST_Scan\FAST_Scan\obj\Debug\MVVM\View\Scan2DV
 C:\Users\Vinícius\Desktop\PIBIC\FAST_Scan\FAST_Scan\obj\Debug\MVVM\View\Scan1DView.g.cs
 C:\Users\Vinícius\Desktop\PIBIC\FAST_Scan\FAST_Scan\obj\Debug\MVVM\View\Scan1DView.baml
 C:\Users\Vinícius\Desktop\PIBIC\FAST_Scan\FAST_Scan\obj\Debug\FAST_Scan.csproj.Up2Date
+C:\Users\Vinícius\Desktop\PIBIC\FAST_Scan\FAST_Scan\bin\Debug\Thorlabs.MotionControl.PrivateInternal.dll
+C:\Users\Vinícius\Desktop\PIBIC\FAST_Scan\FAST_Scan\bin\Debug\Thorlabs.MotionControl.Tools.WPF.dll

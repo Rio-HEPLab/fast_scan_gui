@@ -44,7 +44,7 @@ namespace FAST_Scan.MVVM.View
             PulsePolarityCB.Items.Add("Positive");
             PulsePolarityCB.SelectedItem = null;
 
-            digitizerSamplesTB.Text = "100";
+            digitizerSamplesTB.Text = "1000";
 
             statusMessage = new StatusMessage();
             DataContext = statusMessage;
@@ -77,7 +77,7 @@ namespace FAST_Scan.MVVM.View
 
             homeAxis = (Scan.Axis)homeAxisValue;
 
-            scan = new Scan(statusMessage, Scan.ScanType.SCAN_2D, out configError);
+            scan = new Scan(statusMessage, Scan.ScanType.SCAN_1D, out configError);
             if (configError == Scan.ErrorStatus.CONFIGURE_DIGITIZER_FAIL)
             {
                 MessageBox.Show("Unable to configure digitizer.", "ERROR", MessageBoxButton.OK, MessageBoxImage.Error);
@@ -108,6 +108,8 @@ namespace FAST_Scan.MVVM.View
                     scan = null;
                     MessageBox.Show("Unable to Home Servo(s). ", "ERROR", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
+                StartScanButton.IsEnabled = true;
+                StopScanButton.IsEnabled = true;
             }
 
         }
@@ -139,7 +141,7 @@ namespace FAST_Scan.MVVM.View
                 }
             }
 
-            scan = new Scan(statusMessage, Scan.ScanType.SCAN_2D, out configError);
+            scan = new Scan(statusMessage, Scan.ScanType.SCAN_1D, out configError);
             if (configError == Scan.ErrorStatus.CONFIGURE_DIGITIZER_FAIL)
             {
                 MessageBox.Show("Unable to configure digitizer.", "ERROR", MessageBoxButton.OK, MessageBoxImage.Error);
@@ -182,28 +184,26 @@ namespace FAST_Scan.MVVM.View
                 scan.Set_1D_Axis(axis);
 
                 //se for o caso, configurar posição de X
-                if (xSetCB.IsChecked == true) errorScan = scan.setInitialX(xPositionTB.Text);
-                else errorScan = ErrorStatus.OK;
-                if (returnErrorConfigStatus(errorScan, "X Position") == true)
+                if (xSetCB.IsChecked == true)
                 {
-                    return;
+                    errorScan = scan.setInitialX(xPositionTB.Text);
+                    if (returnErrorConfigStatus(errorScan, "X Position") == true) return;
                 }
 
                 //se for o caso, configurar posição de Y
-                if (xSetCB.IsChecked == true) errorScan = scan.setInitialX(xPositionTB.Text);
-                else errorScan = ErrorStatus.OK;
-                if (returnErrorConfigStatus(errorScan, "Y Position") == true)
+                if (ySetCB.IsChecked == true)
                 {
-                    return;
+                    errorScan = scan.setInitialY(yPositionTB.Text);
+                    if (returnErrorConfigStatus(errorScan, "Y Position") == true) return;
                 }
 
                 //se for o caso, configurar posição de Z
-                if (xSetCB.IsChecked == true) errorScan = scan.setInitialX(xPositionTB.Text);
-                else errorScan = ErrorStatus.OK;
-                if (returnErrorConfigStatus(errorScan, "Z Position") == true)
+                if (zSetCB.IsChecked == true)
                 {
-                    return;
+                    errorScan = scan.setInitialZ(zPositionTB.Text);
+                    if (returnErrorConfigStatus(errorScan, "Z Position") == true) return;
                 }
+                    
 
                 //Verifica Erro em initial Position
                 errorScan = scan.set_1D_Initial_Position(StartTB.Text);
@@ -213,14 +213,14 @@ namespace FAST_Scan.MVVM.View
                 }
 
                 //Verifica Erro em initial Position
-                errorScan = scan.set_1D_Final_Position(StartTB.Text);
+                errorScan = scan.set_1D_Final_Position(StopTB.Text);
                 if (returnErrorConfigStatus(errorScan, "Final Position") == true)
                 {
                     return;
                 }
 
                 //Verifica Erro em initial Position
-                errorScan = scan.set_1D_Pace(StartTB.Text);
+                errorScan = scan.set_1D_Pace(StepsTB.Text);
                 if (returnErrorConfigStatus(errorScan, "Number of Steps") == true)
                 {
                     return;
@@ -282,7 +282,7 @@ namespace FAST_Scan.MVVM.View
                     if (GenerateImageCB.IsChecked == true)
                     {
                         scanAnalysis = new ScanAnalysis(statusMessage);
-                        scanAnalysis.Generate1DScanMap(saveFileTB.Text);
+                        scanAnalysis.Generate1DScanMap(saveFileTB.Text, false);
                     }
                 }
                 catch
@@ -366,14 +366,14 @@ namespace FAST_Scan.MVVM.View
             return true;
         }
 
-        private void FinishScan()
+        private async void FinishScan()
         {
             StatusTextBox.AppendText("Scan parado.\n");
 
-            scan.Close();
-
             //notifica globalmente que o scan parou
             ScanStateManager.SetScanRunning(false);
+
+            await Task.Run(() => scan.Close());
 
             StopScanButton.IsEnabled = false;
             StartScanButton.IsEnabled = true;
@@ -387,19 +387,26 @@ namespace FAST_Scan.MVVM.View
             if(axis != Scan.Axis.X)
             {
                 xSetCB.IsEnabled = true;
+                if (xSetCB.IsChecked == true)
+                    xPositionTB.IsEnabled = true;
             }
             if (axis != Scan.Axis.Y)
             {
                 ySetCB.IsEnabled = true;
+                if (ySetCB.IsChecked == true)
+                    yPositionTB.IsEnabled = true;
             }
             if (axis != Scan.Axis.Z)
             {
                 ySetCB.IsEnabled = true;
+                if (zSetCB.IsChecked == true)
+                    zPositionTB.IsEnabled = true;
             }
 
             saveFileTB.IsEnabled = true;
             BrowseButton.IsEnabled = true;
             ClearParametersButton.IsEnabled = true;
+            saveFileTB.Text = string.Empty;
 
 
             //StatusTextBox.Text = string.Empty;
@@ -443,6 +450,10 @@ namespace FAST_Scan.MVVM.View
             ySetCB.IsEnabled = true;
             zSetCB.IsEnabled = true;
             xSetCB.IsChecked = false;
+            if (ySetCB.IsChecked == true)
+                yPositionTB.IsEnabled = true;
+            if (zSetCB.IsChecked == true)
+                zPositionTB.IsEnabled = true;
         }
 
         private void yRB_Checked(object sender, RoutedEventArgs e)
@@ -452,6 +463,10 @@ namespace FAST_Scan.MVVM.View
             xSetCB.IsEnabled = true;
             zSetCB.IsEnabled = true;
             ySetCB.IsChecked = false;
+            if (xSetCB.IsChecked == true)
+                xPositionTB.IsEnabled = true;
+            if (zSetCB.IsChecked == true)
+                zPositionTB.IsEnabled = true;
         }
 
         private void zRB_Checked(object sender, RoutedEventArgs e)
@@ -461,6 +476,10 @@ namespace FAST_Scan.MVVM.View
             xSetCB.IsEnabled = true;
             ySetCB.IsEnabled = true;
             zSetCB.IsChecked = false;
+            if (xSetCB.IsChecked == true)
+                xPositionTB.IsEnabled = true;
+            if (ySetCB.IsChecked== true)
+                yPositionTB.IsEnabled = true;
         }
     }
 }

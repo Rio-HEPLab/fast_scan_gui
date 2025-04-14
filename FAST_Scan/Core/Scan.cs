@@ -15,8 +15,8 @@ namespace FAST_Scan.Core
 {
     internal class Scan
     {
-        string serialNo_ServoY = "27261089";
         string serialNo_ServoX = "27261487";
+        string serialNo_ServoY = "27261089";
         string serialNo_ServoZ = "27269670";
 
 
@@ -226,6 +226,7 @@ namespace FAST_Scan.Core
                 if (initialPositionZ < positionLimit) //limite de segurança para posição
                 {
                     positionIsSetZ = true;
+                    statusMessage.CreateStatusMessage("Position Z set to: " + initialPositionZ.ToString() + " IsSet: " + positionIsSetZ.ToString());
                     return ErrorStatus.OK;
                 }
                 else
@@ -443,9 +444,9 @@ namespace FAST_Scan.Core
             try
             {
                 ServoX = KCubeDCServo.CreateKCubeDCServo(serialNo_ServoX);
-                statusMessage.CreateStatusMessage("ServoZ Configured.");
+                statusMessage.CreateStatusMessage("ServoX Configured.");
                 ServoX.Connect(serialNo_ServoX);
-                statusMessage.CreateStatusMessage("ServoZ Connected.");
+                statusMessage.CreateStatusMessage("ServoX Connected.");
                 // Wait for the device settings to initialize. We ask the device to
                 // throw an exception if this takes more than 5000ms (5s) to complete.
                 ServoX.WaitForSettingsInitialized(5000);
@@ -480,6 +481,7 @@ namespace FAST_Scan.Core
                 MotorConfiguration motorSettings_ServoY = ServoY.LoadMotorConfiguration(serialNo_ServoY, DeviceConfiguration.DeviceSettingsUseOptionType.UseFileSettings);
                 ServoY.StartPolling(250);
                 ServoY.EnableDevice();
+                statusMessage.CreateStatusMessage("Servo Y Enabled");
                 Thread.Sleep(500);
             }
             catch
@@ -503,6 +505,7 @@ namespace FAST_Scan.Core
                 MotorConfiguration motorSettings_ServoZ = ServoZ.LoadMotorConfiguration(serialNo_ServoZ, DeviceConfiguration.DeviceSettingsUseOptionType.UseFileSettings);
                 ServoZ.StartPolling(250);
                 ServoZ.EnableDevice();
+                statusMessage.CreateStatusMessage("Servo Z Enabled");
                 Thread.Sleep(500);
             }
             catch
@@ -640,23 +643,26 @@ namespace FAST_Scan.Core
                     {
                         numSteps = numStepsZ; step = stepZ; break;
                     }
+                default:
+                    {
+                        statusMessage.CreateStatusMessage("ERROR! Unable to identify scan axis!");
+                        return;
+                    }
             }
 
             //Move os servos para a posição inicial
             statusMessage.CreateStatusMessage("Moving to initial position...");
 
             if (positionIsSetX)
-            {
                 ServoX.MoveTo(initialPositionX, 60000);
-            }
+
             if (positionIsSetY)
-            {
                 ServoY.MoveTo(initialPositionY, 60000);
-            }
+
             if (positionIsSetZ)
-            {
                 ServoZ.MoveTo(initialPositionZ, 60000);
-            }
+
+
 
             statusMessage.CreateStatusMessage("Scan in execution...");
 
@@ -666,8 +672,8 @@ namespace FAST_Scan.Core
             {
                 //escreve cabecalho no outputFile
                 sw.WriteLine("Scan Type: " + scanType.ToString() + "\tScan Axis: " + axis_1D.ToString());
-                sw.WriteLine("Initial Position:\tX = " + initialPositionX.ToString() + "\tY = " + initialPositionY.ToString() + "\tY = " + initialPositionZ.ToString());
-                sw.WriteLine("Final Position:\tX = " + finalPositionX.ToString() + "\tY = " + finalPositionY.ToString() + "\tY = " + finalPositionZ.ToString());
+                sw.WriteLine("Initial Position:\tX = " + initialPositionX.ToString() + "\tY = " + initialPositionY.ToString() + "\tZ = " + initialPositionZ.ToString());
+                sw.WriteLine("Final Position:\t\tX = " + finalPositionX.ToString() + "\tY = " + finalPositionY.ToString() + "\tZ = " + finalPositionZ.ToString());
                 sw.WriteLine("Step = " + step.ToString());
 
                 for (int j = 0; j <= numSteps; j++)
@@ -762,7 +768,7 @@ namespace FAST_Scan.Core
             while (!isStopped)
             {
                 statusMessage.CreateStatusMessage("Waiting for Scan to stop...");
-                Thread.Sleep(100);
+                Thread.Sleep(500);
             }
 
             statusMessage.CreateStatusMessage("Scan Stopped. Closing Devices");
@@ -772,11 +778,17 @@ namespace FAST_Scan.Core
             // Stop polling the device.
             ServoY.StopPolling();
             ServoX.StopPolling();
+            ServoZ.StopPolling();
             // This shuts down the controller. This will use the Disconnect() function to close communications &will then close the used library.
             ServoY.ShutDown();
             ServoX.ShutDown();
+            ServoZ.ShutDown();
 
             statusMessage.CreateStatusMessage("DevicesClosed");
+
+            positionIsSetX = false;
+            positionIsSetY = false;
+            positionIsSetZ = false;
 
         }
 

@@ -40,9 +40,28 @@ namespace FAST_Scan.Core
             process.BeginOutputReadLine();
         }
 
-        public void Generate1DScanMap(string filePath)
+        public void Generate1DScanMap(string filePath, bool executeCurveFit)
         {
+            string scriptPath = Path.Combine(corePath, "ScanAnalysis_1DMap.py");
+            string cmd = scriptPath + " --file " + filePath;
+            if (executeCurveFit)
+            {
+                cmd += " --fit";
+            }
+            Process process = new Process();
+            process.StartInfo.FileName = "python.exe";
+            process.StartInfo.Arguments = cmd;
+            process.StartInfo.RedirectStandardError = true;
+            process.StartInfo.RedirectStandardOutput = true;
+            process.StartInfo.UseShellExecute = false;
+            process.StartInfo.CreateNoWindow = true;
 
+            process.ErrorDataReceived += Process_ErrorDataReceived;
+            process.OutputDataReceived += Process_OutputDataReceived;
+
+            process.Start();
+            process.BeginErrorReadLine();
+            process.BeginOutputReadLine();
         }
 
 

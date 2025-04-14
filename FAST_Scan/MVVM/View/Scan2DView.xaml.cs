@@ -45,7 +45,7 @@ namespace FAST_Scan.MVVM.View
             PulsePolarityCB.Items.Add("Positive");
             PulsePolarityCB.SelectedItem = null;
 
-            digitizerSamplesTB.Text = "100";
+            digitizerSamplesTB.Text = "1000";
 
             statusMessage = new StatusMessage();
             DataContext = statusMessage;
@@ -89,6 +89,8 @@ namespace FAST_Scan.MVVM.View
                 StartScanButton.IsEnabled = false;
                 StopScanButton.IsEnabled = false;
 
+                ScanStateManager.SetScanRunning(true);
+
                 homeError = await Task.Run(() =>  scan.Home(Scan.Axis.XY));
 
                 if(homeError == Scan.ErrorStatus.OK)
@@ -102,7 +104,11 @@ namespace FAST_Scan.MVVM.View
                     scan = null;
                     MessageBox.Show("Unable to Home Servo(s). ", "ERROR", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
+                ScanStateManager.SetScanRunning(false);
+                StartScanButton.IsEnabled = true;
+                StopScanButton.IsEnabled = true;
             }
+
                 
         }
 
@@ -352,14 +358,14 @@ namespace FAST_Scan.MVVM.View
             return true;
         }
 
-        private void FinishScan()
+        private async void FinishScan()
         {
             StatusTextBox.AppendText("Scan parado.\n");
 
-            scan.Close();
-
             //notifica globalmente que o scan parou
             ScanStateManager.SetScanRunning(false);
+
+            await Task.Run(() => scan.Close()); 
 
             StopScanButton.IsEnabled = false;
             StartScanButton.IsEnabled = true;
