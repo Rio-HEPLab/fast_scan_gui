@@ -37,11 +37,14 @@ def main():
         #Reflete o array para imagem ser exibida na direção real do sensor
         #arr_reflected = arr[:, ::-1]
 
+        #arr_log = 10*np.log10(arr)
+
         #dimensoes da figura
         fig = plt.figure( figsize=(12,8) )
         #plot em forma de matriz
         g = plt.imshow( arr, origin='lower', extent=( 0., stepX*(nX-1), 0., stepY*(nY-1)), cmap="coolwarm" )
         #g = plt.imshow( arr_reflected, origin='lower', extent=( -stepX*(nX-1), 0., 0., stepY*(nY-1)), cmap="coolwarm" )
+        #g = plt.imshow( arr_log, origin='lower', extent=( 0., stepX*(nX-1), 0., stepY*(nY-1)), cmap="coolwarm" )
 
         fig.colorbar(g)
 
