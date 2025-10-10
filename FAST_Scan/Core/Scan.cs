@@ -464,7 +464,7 @@ namespace FAST_Scan.Core
             {
                 error = ErrorStatus.CONFIGURE_SERVO_FAIL;
                 statusMessage.CreateStatusMessage("Unable to configure ServoX");
-                if (true)     //não permite continuar caso X seja necessario
+                if (positionIsSetX)     //não permite continuar caso X seja necessario
                 {
                     Digitizer.Close();
                     return;
@@ -488,7 +488,7 @@ namespace FAST_Scan.Core
             {
                 error = ErrorStatus.CONFIGURE_SERVO_FAIL;
                 statusMessage.CreateStatusMessage("Unable to configure ServoY");
-                if (true)     //não permite continuar caso Y seja necessario
+                if (positionIsSetY)     //não permite continuar caso Y seja necessario
                 {
                     Digitizer.Close();
                     return;
@@ -512,7 +512,7 @@ namespace FAST_Scan.Core
             {
                 error = ErrorStatus.CONFIGURE_SERVO_FAIL;
                 statusMessage.CreateStatusMessage("Unable to configure ServoZ");
-                if (scanType == ScanType.FOCAL_ANALYSIS)     //não permite continuar caso Z seja necessario
+                if (positionIsSetZ)     //não permite continuar caso Z seja necessario
                 {
                     Digitizer.Close();
                     return;
@@ -558,6 +558,12 @@ namespace FAST_Scan.Core
             statusMessage.CreateStatusMessage("Moving to initial position...");
             ServoX.MoveTo(initialPositionX, 60000);
             ServoY.MoveTo(initialPositionY, 60000);
+
+            //Caso a posição de Z seja configurada, move o servo Z
+            if(positionIsSetZ == true)
+            {
+                ServoZ.MoveTo(initialPositionZ, 60000);
+            }
 
             //Move relativo a posição inicial
             statusMessage.CreateStatusMessage("Scan in execution...");

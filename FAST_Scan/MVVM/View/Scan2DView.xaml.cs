@@ -244,6 +244,13 @@ namespace FAST_Scan.MVVM.View
                     return;
                 }
 
+                //se for o caso, configurar posição de Z
+                if (zSetCB.IsChecked == true)
+                {
+                    errorScan = scan.setInitialZ(zPositionTB.Text);
+                    if (returnErrorConfigStatus(errorScan, "Z Position") == true) return;
+                }
+
                 StopScanButton.IsEnabled = true;
                 StartScanButton.IsEnabled = false;
 
@@ -258,6 +265,8 @@ namespace FAST_Scan.MVVM.View
                 saveFileTB.IsEnabled = false;
                 BrowseButton.IsEnabled = false;
                 ClearParametersButton.IsEnabled = false;
+                zSetCB.IsEnabled = false;
+                zPositionTB.IsEnabled = false;
 
                 //notifica globalmente que o scan está rodando
                 ScanStateManager.SetScanRunning(true);
@@ -381,6 +390,8 @@ namespace FAST_Scan.MVVM.View
             saveFileTB.IsEnabled = true;
             BrowseButton.IsEnabled = true;
             ClearParametersButton.IsEnabled = true;
+            zPositionTB.IsEnabled = true;
+            zSetCB.IsEnabled = true;
 
 
             //StatusTextBox.Text = string.Empty;

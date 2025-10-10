@@ -95,6 +95,8 @@ namespace FAST_Scan.MVVM.View
                 StartScanButton.IsEnabled = false;
                 StopScanButton.IsEnabled = false;
 
+                ScanStateManager.SetScanRunning(true);
+
                 homeError = await Task.Run(() => scan.Home(homeAxis));
 
                 if (homeError == Scan.ErrorStatus.OK)
@@ -108,6 +110,9 @@ namespace FAST_Scan.MVVM.View
                     scan = null;
                     MessageBox.Show("Unable to Home Servo(s). ", "ERROR", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
+
+                ScanStateManager.SetScanRunning(false);
+
                 StartScanButton.IsEnabled = true;
                 StopScanButton.IsEnabled = true;
             }

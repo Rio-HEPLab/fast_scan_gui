@@ -9,7 +9,7 @@
 
     <Grid Background="White">
         <Grid.RowDefinitions>
-            <RowDefinition Height="40"/>
+            <RowDefinition Height="70"/>
             <RowDefinition Height="2.5*"/>
             <RowDefinition Height="1.5*"/>
             <RowDefinition Height="4*"/>
@@ -79,7 +79,7 @@
                                HorizontalAlignment="Center"/>
 
                     <ComboBox Name="PulsePolarityCB"
-  Width="120"/>
+                                Width="120"/>
 
                 </StackPanel>
 
@@ -97,7 +97,20 @@
 
                     <TextBox Name="yStepsTB"
                              Width="120"
+                             Margin="0,0,0,10"
                              PreviewTextInput="DigitsOnly_PreviewTextInput"/>
+
+                    <TextBlock Text="Z Position (mm)"
+                                HorizontalAlignment="Center"/>
+                    <TextBox Name="zPositionTB"
+                                Width="120"
+                                Margin="0,0,0,10"
+                                PreviewTextInput="DigitsOnly_PreviewTextInput"
+                                IsEnabled="{Binding IsChecked, ElementName=zSetCB}"/>
+                    <CheckBox Name="zSetCB"
+                              Content="Set Z Position"
+                              Margin="0,0,0,5"
+                              HorizontalAlignment="Center"/>
                 </StackPanel>
             </Grid>
 
