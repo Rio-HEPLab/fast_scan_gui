@@ -30,6 +30,12 @@ namespace FAST_Scan.Core
             Log = _messages.ToString(); // Atualiza o binding
         }
 
+        public void ClearStatusMessage()
+        {
+            _messages.Clear();
+            Log = _messages.ToString();
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         protected void OnPropertyChanged([CallerMemberName] string propName = null)

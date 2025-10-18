@@ -124,7 +124,7 @@ namespace FAST_Scan.MVVM.View
             //verifica status de homing
             if(HommingStateManager.ServoXHomed == false || HommingStateManager.ServoYHomed == false)
             {
-                messageBoxResult = MessageBox.Show("DO NOT START SCAN IF SERVO MOTORS ARE NOT HOMED!!!\nCurrent Homming Status: NOT HOMED.\nDo you want to change Homing Status to: HOMED?", "ERROR", MessageBoxButton.YesNo, MessageBoxImage.Exclamation);
+                messageBoxResult = MessageBox.Show("DO NOT START SCAN IF SERVO MOTORS ARE NOT HOMED!!!\nCurrent Homming Status: NOT HOMED.\nDo you want to change Homing Status to: HOMED?", "WARNING", MessageBoxButton.YesNo, MessageBoxImage.Exclamation);
                 if(messageBoxResult == MessageBoxResult.Yes)
                 {
                     HommingStateManager.SetIsHomed(HommingStateManager.Servo.X, true);
@@ -304,7 +304,7 @@ namespace FAST_Scan.MVVM.View
 
             if (result == MessageBoxResult.Yes)
             {
-                FinishScan();
+                ScanStateManager.SetStopScan(true);
             }
         }
 
@@ -369,12 +369,11 @@ namespace FAST_Scan.MVVM.View
 
         private async void FinishScan()
         {
-            StatusTextBox.AppendText("Scan parado.\n");
+            await Task.Run(() => scan.Close());
 
             //notifica globalmente que o scan parou
             ScanStateManager.SetScanRunning(false);
-
-            await Task.Run(() => scan.Close()); 
+            StatusTextBox.AppendText("Scan parado.\n");
 
             StopScanButton.IsEnabled = false;
             StartScanButton.IsEnabled = true;
@@ -399,7 +398,9 @@ namespace FAST_Scan.MVVM.View
 
         private void ClearTerminalButton_Click(object sender, RoutedEventArgs e)
         {
-            StatusTextBox.Text = string.Empty;
+            //StatusTextBox.Text = string.Empty;
+            statusMessage.ClearStatusMessage();
+            StatusTextBox.Clear();
             //scanAnalysis = new ScanAnalysis(statusMessage);
             //scanAnalysis.Generate2DScanMap(saveFileTB.Text);
         }

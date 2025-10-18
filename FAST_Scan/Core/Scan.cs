@@ -582,7 +582,7 @@ namespace FAST_Scan.Core
 
                     for (int j = 0; j <= numStepsX; j++)
                     {
-                        if (ScanStateManager.ScanRunning == true)
+                        if (ScanStateManager.StopScan == false)
                         {
                             //Se o pulso é negativo pega valor minimo, se positivo pega o valor máximo
                             if (polarity == PulsePolarity.NEGATVE)
@@ -606,10 +606,11 @@ namespace FAST_Scan.Core
                         else
                         {
                             isStopped = true;
+                            ScanStateManager.SetStopScan(false);
                             return;
                         }
                     }
-                    if (ScanStateManager.ScanRunning == true)
+                    if (ScanStateManager.StopScan == false)
                     {
                         sw.Write('\n');
                         ServoX.MoveTo(initialPositionX, 60000);
@@ -621,6 +622,7 @@ namespace FAST_Scan.Core
                     else
                     {
                         isStopped = true;
+                        ScanStateManager.SetStopScan(false);
                         return;
                     }
                 }
@@ -684,7 +686,7 @@ namespace FAST_Scan.Core
 
                 for (int j = 0; j <= numSteps; j++)
                 {
-                    if (ScanStateManager.ScanRunning == true)
+                    if (ScanStateManager.StopScan == false)
                     {
                         //Se o pulso é negativo pega valor minimo, se positivo pega o valor máximo
                         if (polarity == PulsePolarity.NEGATVE)
@@ -708,6 +710,7 @@ namespace FAST_Scan.Core
                     else
                     {
                         isStopped = true;
+                        ScanStateManager.SetStopScan(false);
                         return;
                     }
                 }               

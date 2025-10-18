@@ -308,7 +308,7 @@ namespace FAST_Scan.MVVM.View
 
             if (result == MessageBoxResult.Yes)
             {
-                FinishScan();
+                ScanStateManager.SetStopScan(true);
             }
         }
 
@@ -373,12 +373,11 @@ namespace FAST_Scan.MVVM.View
 
         private async void FinishScan()
         {
-            StatusTextBox.AppendText("Scan parado.\n");
+            await Task.Run(() => scan.Close());
 
             //notifica globalmente que o scan parou
             ScanStateManager.SetScanRunning(false);
-
-            await Task.Run(() => scan.Close());
+            StatusTextBox.AppendText("Scan parado.\n");
 
             StopScanButton.IsEnabled = false;
             StartScanButton.IsEnabled = true;
@@ -419,7 +418,9 @@ namespace FAST_Scan.MVVM.View
 
         private void ClearTerminalButton_Click(object sender, RoutedEventArgs e)
         {
-            StatusTextBox.Text = string.Empty;
+            //StatusTextBox.Text = string.Empty;
+            statusMessage.ClearStatusMessage();
+            StatusTextBox.Clear();
             //scanAnalysis = new ScanAnalysis(statusMessage);
             //scanAnalysis.Generate2DScanMap(saveFileTB.Text);
         }
