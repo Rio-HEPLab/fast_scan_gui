@@ -22,7 +22,7 @@ namespace FAST_Scan.Core
             switch (type.Value)
             {
                 case LogType.Info:
-                    return Brushes.Green;
+                    return Brushes.Lime;
                 case LogType.Warning:
                     return Brushes.Yellow;
                 case LogType.Error:

@@ -26,9 +26,11 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
         <!-- ListBox com autoscroll -->
-        <ListBox ItemsSource="{Binding Logs}"
+        <ListBox Name ="LogsListBox"
+                 ItemsSource="{Binding Logs}"
                  Grid.Row="0"
-                 Background="Black"/>
+                 Background="Black"
+                 Loaded="LogsListBox_Loaded"/>
 
         <!-- Botão de limpar logs -->
         <Button Content="Clear Logs"

@@ -70,6 +70,7 @@ namespace FAST_Scan.Core
             if (e.Data != null)
             {
                 statusMessage.CreateStatusMessage(e.Data.ToString());
+                Logger.Instance.Log(e.Data.ToString(), LogType.Warning);
             }
         }
 
@@ -78,6 +79,7 @@ namespace FAST_Scan.Core
             if(e.Data != null)
             {
                 statusMessage.CreateStatusMessage(e.Data.ToString());
+                Logger.Instance.Log(e.Data.ToString(), LogType.Warning);
             }
         }
     }

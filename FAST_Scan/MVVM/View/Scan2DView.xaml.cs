@@ -129,12 +129,17 @@ namespace FAST_Scan.MVVM.View
                 {
                     HommingStateManager.SetIsHomed(HommingStateManager.Servo.X, true);
                     statusMessage.CreateStatusMessage("ServoX Homming Status Updated: HOMED");
+                    Logger.Instance.Log("ServoX Homming Status Updated: HOMED", LogType.Warning);
                     HommingStateManager.SetIsHomed(HommingStateManager.Servo.Y, true);
                     statusMessage.CreateStatusMessage("ServoY Homming Status Updated: HOMED");
+                    Logger.Instance.Log("ServoY Homming Status Updated: HOMED", LogType.Warning);
+
                 }
                 else if (messageBoxResult == MessageBoxResult.No)
                 {
                     statusMessage.CreateStatusMessage("Make sure devices are Homed before Scan starts!");
+                    Logger.Instance.Log("Make sure devices are Homed before Scan starts!", LogType.Warning);
+
                     return;
                 }
             }
@@ -289,6 +294,7 @@ namespace FAST_Scan.MVVM.View
                 catch
                 {
                     statusMessage.CreateStatusMessage("Unable to run python script to generate Image");
+                    Logger.Instance.Log("Unable to run python script to generate Image", LogType.Error);
                 }
                 
             }

@@ -114,6 +114,8 @@ namespace FAST_Scan.Core
             else
             {
                 statusMessage.CreateStatusMessage("Digitizer configured");
+                Logger.Instance.Log("Digitizer configured", LogType.Info);
+
             }
 
             ServosInit(out error);
@@ -131,12 +133,14 @@ namespace FAST_Scan.Core
                 try
                 {
                     statusMessage.CreateStatusMessage("Actuator X is Homing...");
+                    Logger.Instance.Log("Actuator X is Homing...", LogType.Info);
                     ServoX.Home(60000);
                     HommingStateManager.SetIsHomed(HommingStateManager.Servo.X, true);
                 }
                 catch
                 {
                     statusMessage.CreateStatusMessage("Unable to Home ServoX");
+                    Logger.Instance.Log("Unable to Home Servo X", LogType.Error);
                     error = true;
                 }
             }
@@ -145,12 +149,14 @@ namespace FAST_Scan.Core
                 try
                 {
                     statusMessage.CreateStatusMessage("Actuator Y is Homing...");
+                    Logger.Instance.Log("Actuator Y is Homing...", LogType.Info);
                     ServoY.Home(60000);
                     HommingStateManager.SetIsHomed(HommingStateManager.Servo.Y, true);
                 }
                 catch
                 {
                     statusMessage.CreateStatusMessage("Unable to Home ServoY");
+                    Logger.Instance.Log("Unable to Home Servo Y", LogType.Error);
                     error = true;
                 }
             }
@@ -159,12 +165,14 @@ namespace FAST_Scan.Core
                 try
                 {
                     statusMessage.CreateStatusMessage("Actuator Z is Homing...");
+                    Logger.Instance.Log("Actuator Z is Homing...", LogType.Info);
                     ServoZ.Home(60000);
                     HommingStateManager.SetIsHomed(HommingStateManager.Servo.Z, true);
                 }
                 catch
                 {
                     statusMessage.CreateStatusMessage("Unable to Home ServoZ");
+                    Logger.Instance.Log("Unable to Home Servo Z", LogType.Error);
                     error = true;
                 }
             }
@@ -228,6 +236,7 @@ namespace FAST_Scan.Core
                 {
                     positionIsSetZ = true;
                     statusMessage.CreateStatusMessage("Position Z set to: " + initialPositionZ.ToString() + " IsSet: " + positionIsSetZ.ToString());
+                    Logger.Instance.Log("Position Z set to: " + initialPositionZ.ToString() + " IsSet: " + positionIsSetZ.ToString(), LogType.Info);
                     return ErrorStatus.OK;
                 }
                 else
@@ -446,8 +455,10 @@ namespace FAST_Scan.Core
             {
                 ServoX = KCubeDCServo.CreateKCubeDCServo(serialNo_ServoX);
                 statusMessage.CreateStatusMessage("ServoX Configured.");
+                Logger.Instance.Log("ServoX Configured.", LogType.Info);
                 ServoX.Connect(serialNo_ServoX);
                 statusMessage.CreateStatusMessage("ServoX Connected.");
+                Logger.Instance.Log("ServoX Connected.", LogType.Info);
                 // Wait for the device settings to initialize. We ask the device to
                 // throw an exception if this takes more than 5000ms (5s) to complete.
                 ServoX.WaitForSettingsInitialized(5000);
@@ -458,6 +469,7 @@ namespace FAST_Scan.Core
                 // We are now able to Enable the device otherwise any move is ignored. You should see a physical response from your controller.
                 ServoX.EnableDevice();
                 statusMessage.CreateStatusMessage("Servo X Enabled");
+                Logger.Instance.Log("Servo X Enabled", LogType.Info);
                 // Needs a delay to give time for the device to be enabled.
                 Thread.Sleep(500);
             }
@@ -465,6 +477,7 @@ namespace FAST_Scan.Core
             {
                 error = ErrorStatus.CONFIGURE_SERVO_FAIL;
                 statusMessage.CreateStatusMessage("Unable to configure ServoX");
+                Logger.Instance.Log("Unable to configure ServoX", LogType.Error);
                 if (positionIsSetX)     //não permite continuar caso X seja necessario
                 {
                     Digitizer.Close();
@@ -476,19 +489,23 @@ namespace FAST_Scan.Core
             {
                 ServoY = KCubeDCServo.CreateKCubeDCServo(serialNo_ServoY);
                 statusMessage.CreateStatusMessage("ServoY Configured.");
+                Logger.Instance.Log("ServoY Configured.", LogType.Info);
                 ServoY.Connect(serialNo_ServoY);
                 statusMessage.CreateStatusMessage("ServoY Connected.");
+                Logger.Instance.Log("ServoY Connected.", LogType.Info);
                 ServoY.WaitForSettingsInitialized(5000);
                 MotorConfiguration motorSettings_ServoY = ServoY.LoadMotorConfiguration(serialNo_ServoY, DeviceConfiguration.DeviceSettingsUseOptionType.UseFileSettings);
                 ServoY.StartPolling(250);
                 ServoY.EnableDevice();
                 statusMessage.CreateStatusMessage("Servo Y Enabled");
+                Logger.Instance.Log("Servo Y Enabled", LogType.Info);
                 Thread.Sleep(500);
             }
             catch
             {
                 error = ErrorStatus.CONFIGURE_SERVO_FAIL;
                 statusMessage.CreateStatusMessage("Unable to configure ServoY");
+                Logger.Instance.Log("Unable to configure ServoY", LogType.Error);
                 if (positionIsSetY)     //não permite continuar caso Y seja necessario
                 {
                     Digitizer.Close();
@@ -500,19 +517,23 @@ namespace FAST_Scan.Core
             {
                 ServoZ = KCubeDCServo.CreateKCubeDCServo(serialNo_ServoZ);
                 statusMessage.CreateStatusMessage("ServoZ Configured.");
+                Logger.Instance.Log("ServoZ Configured.", LogType.Info);
                 ServoZ.Connect(serialNo_ServoZ);
                 statusMessage.CreateStatusMessage("ServoZ Connected.");
+                Logger.Instance.Log("ServoZ Connected.", LogType.Info);
                 ServoZ.WaitForSettingsInitialized(5000);
                 MotorConfiguration motorSettings_ServoZ = ServoZ.LoadMotorConfiguration(serialNo_ServoZ, DeviceConfiguration.DeviceSettingsUseOptionType.UseFileSettings);
                 ServoZ.StartPolling(250);
                 ServoZ.EnableDevice();
                 statusMessage.CreateStatusMessage("Servo Z Enabled");
+                Logger.Instance.Log("Servo Z Enabled", LogType.Info);
                 Thread.Sleep(500);
             }
             catch
             {
                 error = ErrorStatus.CONFIGURE_SERVO_FAIL;
                 statusMessage.CreateStatusMessage("Unable to configure ServoZ");
+                Logger.Instance.Log("Unable to configure ServoZ", LogType.Error);
                 if (positionIsSetZ)     //não permite continuar caso Z seja necessario
                 {
                     Digitizer.Close();
@@ -526,6 +547,7 @@ namespace FAST_Scan.Core
         {
             isStopped = false;
             statusMessage.CreateStatusMessage("Scan initiated");
+            Logger.Instance.Log("Scan initiated", LogType.Info);
 
             switch (scanType)
             {
@@ -547,6 +569,7 @@ namespace FAST_Scan.Core
             }
             isStopped = true;
             statusMessage.CreateStatusMessage("Scan Finished");
+            Logger.Instance.Log("Scan Finished", LogType.Info);
         }
 
         private void Scan_2D_exe()
@@ -557,6 +580,7 @@ namespace FAST_Scan.Core
 
             //Move os servos para a posição inicial
             statusMessage.CreateStatusMessage("Moving to initial position...");
+            Logger.Instance.Log("Moving to initial position...", LogType.Info);
             ServoX.MoveTo(initialPositionX, 60000);
             ServoY.MoveTo(initialPositionY, 60000);
 
@@ -568,6 +592,7 @@ namespace FAST_Scan.Core
 
             //Move relativo a posição inicial
             statusMessage.CreateStatusMessage("Scan in execution...");
+            Logger.Instance.Log("Scan in execution...", LogType.Info);
 
             StreamWriter sw = null;
                 
@@ -594,6 +619,7 @@ namespace FAST_Scan.Core
                             PositionX = j * stepX;
 
                             statusMessage.CreateStatusMessage("Amplitude: " + amplitude.ToString() + "\tPosicao X: " + PositionX.ToString() + "\tPosicao Y: " + PositionY.ToString());
+                            Logger.Instance.Log("Amplitude: " + amplitude.ToString() + "\tPosicao X: " + PositionX.ToString() + "\tPosicao Y: " + PositionY.ToString(), LogType.Data);
 
                             //escreve amplitude no outputFile
                             sw.Write(amplitude.ToString());
@@ -655,12 +681,15 @@ namespace FAST_Scan.Core
                 default:
                     {
                         statusMessage.CreateStatusMessage("ERROR! Unable to identify scan axis!");
+                        Logger.Instance.Log("Unable to identify scan axis!", LogType.Error);
                         return;
                     }
             }
 
             //Move os servos para a posição inicial
             statusMessage.CreateStatusMessage("Moving to initial position...");
+            Logger.Instance.Log("Moving to initial position...", LogType.Info);
+
 
             if (positionIsSetX)
                 ServoX.MoveTo(initialPositionX, 60000);
@@ -674,6 +703,7 @@ namespace FAST_Scan.Core
 
 
             statusMessage.CreateStatusMessage("Scan in execution...");
+            Logger.Instance.Log("Scan in execution...", LogType.Info);
 
             StreamWriter sw = null;
 
@@ -698,6 +728,8 @@ namespace FAST_Scan.Core
                         Position = j * step;
 
                         statusMessage.CreateStatusMessage("Amplitude: " + amplitude.ToString() + "\tPosition: " + Position.ToString());
+                        Logger.Instance.Log("Amplitude: " + amplitude.ToString() + "\tPosition: " + Position.ToString(), LogType.Data);
+
 
                         //escreve amplitude no outputFile
                         sw.Write(amplitude.ToString());
@@ -778,10 +810,13 @@ namespace FAST_Scan.Core
             while (!isStopped)
             {
                 statusMessage.CreateStatusMessage("Waiting for Scan to stop...");
+                Logger.Instance.Log("Waiting for Scan to stop...", LogType.Warning);
                 Thread.Sleep(500);
             }
 
             statusMessage.CreateStatusMessage("Scan Stopped. Closing Devices");
+            Logger.Instance.Log("Scan Stopped. Closing Devices", LogType.Info);
+
 
             Digitizer.Close();
 
@@ -795,6 +830,7 @@ namespace FAST_Scan.Core
             ServoZ.ShutDown();
 
             statusMessage.CreateStatusMessage("DevicesClosed");
+            Logger.Instance.Log("DevicesClosed", LogType.Info);
 
             positionIsSetX = false;
             positionIsSetY = false;

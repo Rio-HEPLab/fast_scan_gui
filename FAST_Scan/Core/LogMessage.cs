@@ -24,7 +24,16 @@ namespace FAST_Scan.Core
             Text = text;
             Type = type;
 
-            Log = $"[{Type.ToString()}]\t{Timestamp}\t{Text}";
+            //Log = $"[{Type.ToString()}]\t{Timestamp}\t{Text}";
+            if(type != LogType.Data)
+            {
+                Log = $"[{Type.ToString()}]{Timestamp}{Text}";
+            }
+            else
+            {
+                Log = $"{Timestamp}{Text}";
+            }
+
 
         }
     }
