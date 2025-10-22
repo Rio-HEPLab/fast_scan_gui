@@ -4,18 +4,20 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:FAST_Scan.MVVM.View"
+             xmlns:core="clr-namespace:FAST_Scan.Core"
              mc:Ignorable="d" 
              d:DesignHeight="250" d:DesignWidth="800">
 
     <UserControl.Resources>
+        <core:LogTypeToBrushConverter x:Key="LogTypeToBrushConverter"/>
         <!-- Estilo global para o ListBox -->
-        <Style TargetType="ListBox">
-            <Setter Property="Background" Value="Black"/>
-            <Setter Property="Foreground" Value="Lime"/>
-            <Setter Property="FontFamily" Value="Consolas"/>
-            <Setter Property="FontSize" Value="13"/>
-            <Setter Property="BorderThickness" Value="0"/>
-        </Style>
+        <DataTemplate DataType="{x:Type core:LogMessage}">
+            <TextBlock Text="{Binding Log}"
+                       Foreground="{Binding Type, Converter={StaticResource LogTypeToBrushConverter}}"
+                       FontFamily="Consolas"
+                       FontSize="13"/>
+        </DataTemplate>
+
     </UserControl.Resources>
 
     <Grid Margin="10">
@@ -29,7 +31,7 @@
                  Background="Black"/>
 
         <!-- Botão de limpar logs -->
-        <Button Content="Limpar Logs"
+        <Button Content="Clear Logs"
                 DockPanel.Dock="Top"
                 Margin="10"
                 Width="100"

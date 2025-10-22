@@ -107,6 +107,7 @@
     <Compile Include="Core\HommingStateManager.cs" />
     <Compile Include="Core\Logger.cs" />
     <Compile Include="Core\LogMessage.cs" />
+    <Compile Include="Core\LogTypeToBrushConverter.cs" />
     <Compile Include="Core\ObservebleObject.cs" />
     <Compile Include="Core\RelayCommand.cs" />
     <Compile Include="Core\ScanAnalysis.cs" />

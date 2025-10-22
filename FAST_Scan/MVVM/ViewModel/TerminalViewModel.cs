@@ -14,12 +14,12 @@ namespace FAST_Scan.MVVM.ViewModel
 {
     internal class TerminalViewModel
     {
-        public ObservableCollection<string> Logs { get; private set; }
+        public ObservableCollection<LogMessage> Logs { get; private set; }
         public RelayCommand ClearLogsCommand { get; set; }
 
         public TerminalViewModel()
         {
-            Logs = new ObservableCollection<string>();
+            Logs = new ObservableCollection<LogMessage>();
             ClearLogsCommand = new RelayCommand(o => {
                 Logs.Clear();
             });
@@ -30,10 +30,8 @@ namespace FAST_Scan.MVVM.ViewModel
 
         //Adiciona mensagem de log a coleção
         //função chamada pelo Logger
-        public void AddLog(LogMessage _log)
+        public void AddLog(LogMessage log)
         {
-            string log = $"[{_log.Type.ToString()}]\t{_log.Timestamp}\t{_log.Text}";
-
             // Garante que a atualização ocorra na thread da interface (UI Thread)
             App.Current.Dispatcher.Invoke(() =>
             {
