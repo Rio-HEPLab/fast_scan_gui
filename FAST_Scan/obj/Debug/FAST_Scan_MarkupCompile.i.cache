@@ -4,17 +4,17 @@
 winexe
 C#
 .cs
-C:\Users\Vinícius\Desktop\PIBIC\FAST_Scan\FAST_Scan\obj\Debug\
+C:\Users\Vinícius\OneDrive\Desktop\PIBIC\FAST_Scan\FAST_Scan\obj\Debug\
 FAST_Scan
 none
 false
 DEBUG;TRACE
-C:\Users\Vinícius\Desktop\PIBIC\FAST_Scan\FAST_Scan\App.xaml
-4-1394526391
+C:\Users\Vinícius\OneDrive\Desktop\PIBIC\FAST_Scan\FAST_Scan\App.xaml
+5384311323
 
-19-990720180
-19-941946527
-MainWindow.xaml;MVVM\View\Scan1DView.xaml;MVVM\View\Scan2DView.xaml;Theme\MenuButtonTheme.xaml;
+231258273561
+19-636732179
+MainWindow.xaml;MVVM\View\Scan1DView.xaml;MVVM\View\Scan2DView.xaml;MVVM\View\TerminalView.xaml;Theme\MenuButtonTheme.xaml;
 
-True
+False
 

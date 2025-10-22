@@ -105,6 +105,8 @@
     </Compile>
     <Compile Include="Core\Digitizer.cs" />
     <Compile Include="Core\HommingStateManager.cs" />
+    <Compile Include="Core\Logger.cs" />
+    <Compile Include="Core\LogMessage.cs" />
     <Compile Include="Core\ObservebleObject.cs" />
     <Compile Include="Core\RelayCommand.cs" />
     <Compile Include="Core\ScanAnalysis.cs" />
@@ -123,6 +125,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="MVVM\View\TerminalView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Theme\MenuButtonTheme.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -132,11 +138,15 @@
     <Compile Include="MVVM\ViewModel\MainViewModel.cs" />
     <Compile Include="MVVM\ViewModel\Scan1DViewModel.cs" />
     <Compile Include="MVVM\ViewModel\Scan2DViewModel.cs" />
+    <Compile Include="MVVM\ViewModel\TerminalViewModel.cs" />
     <Compile Include="MVVM\View\Scan1DView.xaml.cs">
       <DependentUpon>Scan1DView.xaml</DependentUpon>
     </Compile>
     <Compile Include="MVVM\View\Scan2DView.xaml.cs">
       <DependentUpon>Scan2DView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MVVM\View\TerminalView.xaml.cs">
+      <DependentUpon>TerminalView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>

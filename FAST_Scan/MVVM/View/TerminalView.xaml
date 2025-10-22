@@ -1,0 +1,41 @@
+﻿<UserControl x:Class="FAST_Scan.MVVM.View.TerminalView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:FAST_Scan.MVVM.View"
+             mc:Ignorable="d" 
+             d:DesignHeight="250" d:DesignWidth="800">
+
+    <UserControl.Resources>
+        <!-- Estilo global para o ListBox -->
+        <Style TargetType="ListBox">
+            <Setter Property="Background" Value="Black"/>
+            <Setter Property="Foreground" Value="Lime"/>
+            <Setter Property="FontFamily" Value="Consolas"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="BorderThickness" Value="0"/>
+        </Style>
+    </UserControl.Resources>
+
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="4*"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <!-- ListBox com autoscroll -->
+        <ListBox ItemsSource="{Binding Logs}"
+                 Grid.Row="0"
+                 Background="Black"/>
+
+        <!-- Botão de limpar logs -->
+        <Button Content="Limpar Logs"
+                DockPanel.Dock="Top"
+                Margin="10"
+                Width="100"
+                Height="20"
+                Command="{Binding ClearLogsCommand}" 
+                Grid.Row="1"/>
+    </Grid>
+
+</UserControl>

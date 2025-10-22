@@ -16,9 +16,11 @@ namespace FAST_Scan.MVVM.ViewModel
 
         public Scan2DViewModel Scan2DVM { get; set; }
         public Scan1DViewModel Scan1DVM { get; set; }
-
+        public TerminalViewModel TerminalVM { get; set; }
 
         private object _currentView;
+        private object _terminalView;
+
 
         public object CurrentView
         {
@@ -30,10 +32,23 @@ namespace FAST_Scan.MVVM.ViewModel
             }
         }
 
+        public object TerminalView
+        {
+            get { return _terminalView; }
+            set
+            {
+                _terminalView = value;
+                OnPropertyChanged();
+            }
+        }
+
         public MainViewModel() 
         {
             Scan2DVM = new Scan2DViewModel();
             Scan1DVM = new Scan1DViewModel();
+            
+            TerminalVM = new TerminalViewModel();
+            TerminalView = TerminalVM;
 
             //CurrentView = Scan2DVM;
 

@@ -108,6 +108,7 @@ namespace FAST_Scan.Core
             {
                 error = ErrorStatus.CONFIGURE_DIGITIZER_FAIL;
                 statusMessage.CreateStatusMessage("Unable to configure Digitizer");
+                Logger.Instance.Log("Unable to configure Digitizer", LogType.Error);
                 return;
             }
             else
