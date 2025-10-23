@@ -9,8 +9,7 @@
 
     <Grid Background="White">
         <Grid.RowDefinitions>
-            <RowDefinition Height="1*"
-                           MaxHeight="50"/>
+            <RowDefinition Height="60"/>
             <RowDefinition Height="3*"
                            MinHeight="220"/>
             <RowDefinition Height="2*"
@@ -26,7 +25,8 @@
                  HorizontalAlignment="Center"
                  FontFamily="Bahnschrift Bold"
                  Foreground="#4053A0"
-                 VerticalAlignment="Center"/>
+                 VerticalAlignment="Top"
+                   Margin="10"/>
 
 
         <Grid Grid.Row="1"
@@ -79,8 +79,9 @@
                                HorizontalAlignment="Center"/>
 
                 <TextBox Name="StartTB"
-                             Margin="10,0,10,10"
+                         Margin="10,0,10,10"
                          MaxWidth="250"
+                         Height="20"
                          HorizontalAlignment="Stretch"
                              PreviewTextInput="NumbersOnly_PreviewTextInput"/>
             </StackPanel>
@@ -94,6 +95,7 @@
                 <TextBox Name="StopTB"
                          Margin="10,0,10,10"
                          MaxWidth="250"
+                         Height="20"
                          HorizontalAlignment="Stretch"    
                          PreviewTextInput="NumbersOnly_PreviewTextInput"/>
             </StackPanel>
@@ -107,8 +109,9 @@
                 <TextBox Name="StepsTB"
                          HorizontalAlignment="Stretch"   
                          MaxWidth="250"
-                             Margin="10,0,10,10"
-                             PreviewTextInput="DigitsOnly_PreviewTextInput"/>
+                         Height="20"
+                         Margin="10,0,10,10"
+                         PreviewTextInput="DigitsOnly_PreviewTextInput"/>
             </StackPanel>
 
 
@@ -121,9 +124,10 @@
                 <TextBox Name="xPositionTB"
                          HorizontalAlignment="Stretch"
                          MaxWidth="250"
-                             Margin="10,0,10,3"
-                             PreviewTextInput="NumbersOnly_PreviewTextInput"
-                             IsEnabled="{Binding IsChecked, ElementName=xSetCB}"/>
+                         Height="20"
+                         Margin="10,0,10,3"
+                         PreviewTextInput="NumbersOnly_PreviewTextInput"
+                         IsEnabled="{Binding IsChecked, ElementName=xSetCB}"/>
                 <CheckBox Name="xSetCB"
                               Content="Set X Position"
                               Margin="0,0,0,0"
@@ -139,7 +143,8 @@
 
                 <TextBox Name="yPositionTB"
                          HorizontalAlignment="Stretch" 
-                        MaxWidth="250"
+                         MaxWidth="250"
+                         Height="20"
                              Margin="10,0,10,3"
                              PreviewTextInput="NumbersOnly_PreviewTextInput"
                              IsEnabled="{Binding IsChecked, ElementName=ySetCB}"/>
@@ -159,6 +164,7 @@
                 <TextBox Name="zPositionTB"
                          HorizontalAlignment="Stretch"    
                           MaxWidth="250"
+                         Height="20"
                             Margin="10,0,10,3"
                              PreviewTextInput="NumbersOnly_PreviewTextInput"
                              IsEnabled="{Binding IsChecked, ElementName=zSetCB}"/>
@@ -178,6 +184,7 @@
                          HorizontalAlignment="Stretch"
                          Margin="10,0,10,10"
                          MaxWidth="250"
+                         Height="20"
                              PreviewTextInput="DigitsOnly_PreviewTextInput"/>
             </StackPanel>
 
@@ -245,11 +252,11 @@
                 VerticalAlignment="Bottom"
               Margin="0,0,0,5">
             <Grid.ColumnDefinitions>
+                <ColumnDefinition MinWidth="105"/>
+                <ColumnDefinition MinWidth="105"/>
                 <ColumnDefinition/>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
+                <ColumnDefinition MinWidth="105"/>
+                <ColumnDefinition MinWidth="105"/>
             </Grid.ColumnDefinitions>
 
             <Button Name="HomeButton"

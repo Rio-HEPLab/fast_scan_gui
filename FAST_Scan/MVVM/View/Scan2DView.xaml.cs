@@ -61,7 +61,7 @@ namespace FAST_Scan.MVVM.View
             if (e.PropertyName == "Log")
             {
                 // Garantir que o scroll ocorra na UI thread
-                Dispatcher.Invoke(() => StatusTextBox.ScrollToEnd());
+                //Dispatcher.Invoke(() => StatusTextBox.ScrollToEnd());
             }
         }
 
@@ -276,12 +276,14 @@ namespace FAST_Scan.MVVM.View
                 //notifica globalmente que o scan está rodando
                 ScanStateManager.SetScanRunning(true);
 
-                StatusTextBox.AppendText("Iniciando scan...\n");
+                //StatusTextBox.AppendText("Iniciando scan...\n");
+                Logger.Instance.Log("Iniciando scan...", LogType.Info);
 
                 await Task.Run(() => scan.Execute());
 
                 FinishScan();
-                StatusTextBox.AppendText("Scan Finalizado...\n");
+                //StatusTextBox.AppendText("Scan Finalizado...\n");
+                Logger.Instance.Log("Scan Finalizado", LogType.Info);
 
                 try
                 {
@@ -379,7 +381,8 @@ namespace FAST_Scan.MVVM.View
 
             //notifica globalmente que o scan parou
             ScanStateManager.SetScanRunning(false);
-            StatusTextBox.AppendText("Scan parado.\n");
+            //StatusTextBox.AppendText("Scan parado.\n");
+            Logger.Instance.Log("Scan parado", LogType.Warning);
 
             StopScanButton.IsEnabled = false;
             StartScanButton.IsEnabled = true;
@@ -400,15 +403,6 @@ namespace FAST_Scan.MVVM.View
 
 
             //StatusTextBox.Text = string.Empty;
-        }
-
-        private void ClearTerminalButton_Click(object sender, RoutedEventArgs e)
-        {
-            //StatusTextBox.Text = string.Empty;
-            statusMessage.ClearStatusMessage();
-            StatusTextBox.Clear();
-            //scanAnalysis = new ScanAnalysis(statusMessage);
-            //scanAnalysis.Generate2DScanMap(saveFileTB.Text);
         }
 
         private void ClearParametersButton_Click(object sender, RoutedEventArgs e)
@@ -432,6 +426,11 @@ namespace FAST_Scan.MVVM.View
             {
                 return;
             }
+        }
+
+        private void xStartTB_TextChanged(object sender, TextChangedEventArgs e)
+        {
+
         }
     }
 }
