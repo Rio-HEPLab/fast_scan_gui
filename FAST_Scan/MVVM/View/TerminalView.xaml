@@ -23,23 +23,31 @@
     <Grid Margin="10">
         <Grid.RowDefinitions>
             <RowDefinition Height="4*"/>
-            <RowDefinition/>
+            <RowDefinition MinHeight="50"/>
         </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
         <!-- ListBox com autoscroll -->
         <ListBox Name ="LogsListBox"
                  ItemsSource="{Binding Logs}"
                  Grid.Row="0"
                  Background="Black"
-                 Loaded="LogsListBox_Loaded"/>
+                 Loaded="LogsListBox_Loaded"
+                 Grid.ColumnSpan="3"/>
 
         <!-- Botão de limpar logs -->
         <Button Content="Clear Logs"
                 DockPanel.Dock="Top"
                 Margin="10"
-                Width="100"
-                Height="20"
+                MinWidth="100"
+                MaxWidth="200"
+                Height="25"
                 Command="{Binding ClearLogsCommand}" 
-                Grid.Row="1"/>
+                Grid.Row="1"
+                Grid.Column="1"/>
     </Grid>
 
 </UserControl>

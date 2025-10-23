@@ -8,10 +8,12 @@
         mc:Ignorable="d"
         Title="FAST SCAN" Height="800" Width="800"
         WindowStyle="ThreeDBorderWindow"
-        ResizeMode="CanMinimize"
         Background="LightGray"
         Icon="/Images/FAST_SCAN_Icon.png"
-        Closing="Window_Closing">
+        Closing="Window_Closing"
+        ResizeMode="CanResize"
+        MinHeight="500"
+        MinWidth="700">
 
     <Window.DataContext>
         <viewModel:MainViewModel/>
@@ -51,8 +53,9 @@
 
         <Grid Grid.Column="1">
             <Grid.RowDefinitions>
+                <RowDefinition Height="5*"
+                               MinHeight="350"/>
                 <RowDefinition Height="3*"/>
-                <RowDefinition Height="2*"/>
             </Grid.RowDefinitions>
 
             <Image Source="/Images/FAST_SCAN_Logo2.png"

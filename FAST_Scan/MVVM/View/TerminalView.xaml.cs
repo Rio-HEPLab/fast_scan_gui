@@ -30,6 +30,7 @@ namespace FAST_Scan.MVVM.View
             InitializeComponent();
         }
 
+        //implementa autoscroll
         private void LogsListBox_Loaded(object sender, RoutedEventArgs e)
         {
             _scrollViewer = GetScrollViewer(LogsListBox);
