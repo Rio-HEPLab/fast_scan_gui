@@ -120,7 +120,7 @@ namespace FAST_Scan.MVVM.View
                 }
                 ScanStateManager.SetScanRunning(false);
                 StartScanButton.IsEnabled = true;
-                StopScanButton.IsEnabled = true;
+                StopScanButton.IsEnabled = false;
             }
 
                 
