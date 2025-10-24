@@ -6,7 +6,6 @@
              xmlns:local="clr-namespace:FAST_Scan.MVVM.View"
              mc:Ignorable="d" 
              d:DesignHeight="400" d:DesignWidth="600">
-
     <Grid Background="White">
         <Grid.RowDefinitions>
             <RowDefinition Height="70"/>
@@ -119,7 +118,11 @@
                 <ComboBox Name="PulsePolarityCB"
                           HorizontalAlignment="Stretch"
                           MaxWidth="250"
-                          Margin="10,0,10,10"/>
+                          Margin="10,0,10,10"
+                          ItemsSource="{Binding PolarityOptions,
+                                        RelativeSource={RelativeSource AncestorType=UserControl}}"
+                          SelectedItem="{Binding selectedPolarity,
+                                        RelativeSource={RelativeSource AncestorType=UserControl}}"/>
             </StackPanel>
 
             <StackPanel Grid.Row="0"

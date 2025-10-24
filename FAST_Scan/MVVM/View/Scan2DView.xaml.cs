@@ -20,6 +20,7 @@ using Microsoft.Win32;
 using Thorlabs.MotionControl.DeviceManagerCLI;
 using Thorlabs.MotionControl.KCube.DCServoCLI;
 using System.ComponentModel;
+using System.Collections.ObjectModel;
 
 
 namespace FAST_Scan.MVVM.View
@@ -33,6 +34,8 @@ namespace FAST_Scan.MVVM.View
         StatusMessage statusMessage;
         ScanAnalysis scanAnalysis;
 
+        private AppConfig _config;
+
         public Scan2DView()
         {
             InitializeComponent();
@@ -40,12 +43,19 @@ namespace FAST_Scan.MVVM.View
             //evento para todas as textbox -> ir para proxima ao apertar enter
             EventManager.RegisterClassHandler(typeof(TextBox), TextBox.KeyDownEvent, new KeyEventHandler(TextBox_KeyDown));
 
-            //adiciona elementos a combobox
-            PulsePolarityCB.Items.Add("Negative");
-            PulsePolarityCB.Items.Add("Positive");
-            PulsePolarityCB.SelectedItem = null;
+            //Carrega configurações salvas no JSON
+            _config = ConfigManager.Load();
 
-            digitizerSamplesTB.Text = "1000";
+            //seta valores iniciais conforme salvos no JSON;
+            digitizerSamplesTB.Text = _config.DigitizerSamples;
+            xStartTB.Text = _config.params2D.X_InitialPosition;
+            xStopTB.Text = _config.params2D.X_FinalPosition;
+            xStepsTB.Text = _config.params2D.X_NumberOfSteps;
+            yStartTB.Text = _config.params2D.Y_InitialPosition;
+            yStopTB.Text = _config.params2D.Y_FinalPosition;
+            yStepsTB.Text = _config.params2D.Y_NumberOfSteps;
+            zSetCB.IsChecked = _config.params2D.SetZ;
+            zPositionTB.Text = _config.params2D.ZPosition;
 
             statusMessage = new StatusMessage();
             DataContext = statusMessage;
@@ -55,6 +65,10 @@ namespace FAST_Scan.MVVM.View
 
             StopScanButton.IsEnabled = false;
         }
+
+        //Opções para a combobox
+        public ObservableCollection<string> PolarityOptions { get; } = new ObservableCollection<string> { "Positive", "Negative" };
+
 
         private void StatusMessage_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
@@ -120,6 +134,9 @@ namespace FAST_Scan.MVVM.View
 
             MessageBoxResult messageBoxResult;
             string dir;
+
+            //Apenas para teste
+            //saveConfig();
 
             //verifica status de homing
             if(HommingStateManager.ServoXHomed == false || HommingStateManager.ServoYHomed == false)
@@ -255,6 +272,9 @@ namespace FAST_Scan.MVVM.View
                     errorScan = scan.setInitialZ(zPositionTB.Text);
                     if (returnErrorConfigStatus(errorScan, "Z Position") == true) return;
                 }
+
+                //salca as configurações do Scan para o JSON
+                saveConfig();
 
                 StopScanButton.IsEnabled = true;
                 StartScanButton.IsEnabled = false;
@@ -431,6 +451,28 @@ namespace FAST_Scan.MVVM.View
         private void xStartTB_TextChanged(object sender, TextChangedEventArgs e)
         {
 
+        }
+
+        private void saveConfig()
+        {
+            _config.PulsePolarity = PulsePolarityCB.SelectedItem.ToString();
+            _config.DigitizerSamples = digitizerSamplesTB.Text;
+            _config.params2D.X_InitialPosition = xStartTB.Text;
+            _config.params2D.X_FinalPosition = xStopTB.Text;
+            _config.params2D.X_NumberOfSteps = xStepsTB.Text;
+            _config.params2D.Y_InitialPosition = yStartTB.Text;
+            _config.params2D.Y_FinalPosition = yStopTB.Text;
+            _config.params2D.Y_NumberOfSteps = yStepsTB.Text;
+            _config.params2D.SetZ = zSetCB.IsChecked;
+            _config.params2D.ZPosition = zPositionTB.Text;
+
+            ConfigManager.Save(_config);
+        }
+
+        public string selectedPolarity
+        {
+            get => _config.PulsePolarity;
+            set => _config.PulsePolarity = value;
         }
     }
 }

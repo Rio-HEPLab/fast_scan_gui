@@ -2,6 +2,7 @@
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
@@ -32,12 +33,18 @@ namespace FAST_Scan.MVVM.View
         ScanAnalysis scanAnalysis;
         Scan.Axis axis; //guarda qual o eixo será realizado o scan
 
+        private AppConfig _config;
+
+
         public Scan1DView()
         {
             InitializeComponent();
             xRB.IsChecked = true;
             //evento para todas as textbox -> ir para proxima ao apertar enter
             EventManager.RegisterClassHandler(typeof(TextBox), TextBox.KeyDownEvent, new KeyEventHandler(TextBox_KeyDown));
+
+            //Carrega configurações salvas no JSON
+            _config = ConfigManager.Load();
 
             //adiciona elementos a combobox
             PulsePolarityCB.Items.Add("Negative");
@@ -54,6 +61,9 @@ namespace FAST_Scan.MVVM.View
 
             StopScanButton.IsEnabled = false;
         }
+
+        //Opções para a combobox
+        public ObservableCollection<string> PolarityOptions { get; } = new ObservableCollection<string> { "Positive", "Negative" };
 
         private void StatusMessage_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
@@ -256,6 +266,9 @@ namespace FAST_Scan.MVVM.View
                 {
                     return;
                 }
+
+                //Salva configurações de scan para JSON
+                saveConfig();
 
                 StopScanButton.IsEnabled = true;
                 StartScanButton.IsEnabled = false;
@@ -495,5 +508,29 @@ namespace FAST_Scan.MVVM.View
             if (ySetCB.IsChecked== true)
                 yPositionTB.IsEnabled = true;
         }
+        private void saveConfig()
+        {
+            _config.PulsePolarity = PulsePolarityCB.SelectedItem.ToString();
+            _config.DigitizerSamples = digitizerSamplesTB.Text;
+            _config.params1D.Axis = axis; 
+            _config.params1D.InitialPosition = StartTB.Text;
+            _config.params1D.FinalPosition = StopTB.Text;
+            _config.params1D.NumberOfSteps = StepsTB.Text;
+            _config.params1D.SetX = xSetCB.IsChecked;
+            _config.params1D.SetY = ySetCB.IsChecked;
+            _config.params1D.SetZ = zSetCB.IsChecked;
+            _config.params1D.XPosition = xPositionTB.Text;
+            _config.params1D.YPosition = yPositionTB.Text;
+            _config.params1D.ZPosition = zPositionTB.Text;
+
+            ConfigManager.Save(_config);
+        }
+        public string selectedPolarity
+        {
+            get => _config.PulsePolarity;
+            set => _config.PulsePolarity = value;
+        }
+
+
     }
 }

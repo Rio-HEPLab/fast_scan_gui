@@ -50,3 +50,5 @@ C:\Users\Vinícius\OneDrive\Desktop\PIBIC\FAST_Scan\FAST_Scan\obj\Debug\FAST_Sca
 C:\Users\Vinícius\OneDrive\Desktop\PIBIC\FAST_Scan\FAST_Scan\obj\Debug\FAST_Scan.pdb
 C:\Users\Vinícius\OneDrive\Desktop\PIBIC\FAST_Scan\FAST_Scan\obj\Debug\MVVM\View\TerminalView.g.cs
 C:\Users\Vinícius\OneDrive\Desktop\PIBIC\FAST_Scan\FAST_Scan\obj\Debug\MVVM\View\TerminalView.baml
+C:\Users\Vinícius\OneDrive\Desktop\PIBIC\FAST_Scan\FAST_Scan\bin\Debug\Newtonsoft.Json.dll
+C:\Users\Vinícius\OneDrive\Desktop\PIBIC\FAST_Scan\FAST_Scan\bin\Debug\Newtonsoft.Json.xml
