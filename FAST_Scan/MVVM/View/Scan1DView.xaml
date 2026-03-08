@@ -198,8 +198,9 @@
                 <ComboBox Name="PulsePolarityCB"
                           Margin="10,0,10,3"
                           HorizontalAlignment="Stretch"
-                          ItemsSource="{Binding PolarityOptions}"
-                        MaxWidth="250"
+                          ItemsSource="{Binding PolarityOptions,
+                                        RelativeSource={RelativeSource AncestorType=UserControl}}"
+                MaxWidth="250"
                           SelectedItem="{Binding SelectedPolarity,
                                         RelativeSource={RelativeSource AncestorType=UserControl}}"/>
             </StackPanel>

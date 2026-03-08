@@ -47,11 +47,9 @@ namespace FAST_Scan.MVVM.View
             _config = ConfigManager.Load();
 
             //adiciona elementos a combobox
-            PulsePolarityCB.Items.Add("Negative");
-            PulsePolarityCB.Items.Add("Positive");
-            PulsePolarityCB.SelectedItem = null;
-
-            digitizerSamplesTB.Text = "1000";
+            //PulsePolarityCB.Items.Add("Negative");
+            //PulsePolarityCB.Items.Add("Positive");
+            //PulsePolarityCB.SelectedItem = null;
 
             statusMessage = new StatusMessage();
             DataContext = statusMessage;
@@ -124,7 +122,7 @@ namespace FAST_Scan.MVVM.View
                 ScanStateManager.SetScanRunning(false);
 
                 StartScanButton.IsEnabled = true;
-                StopScanButton.IsEnabled = true;
+                StopScanButton.IsEnabled = false;
             }
 
         }
