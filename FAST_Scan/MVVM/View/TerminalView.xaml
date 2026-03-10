@@ -48,6 +48,16 @@
                 Command="{Binding ClearLogsCommand}" 
                 Grid.Row="1"
                 Grid.Column="1"/>
+        <!-- Botão de abrir gráfico -->
+            <Button Content="Open Graph"
+                DockPanel.Dock="Top"
+                Margin="10"
+                MinWidth="100"
+                MaxWidth="200"
+                Height="25"
+                Click="OpenGraphWindowClick"
+                Grid.Row="1"
+                Grid.Column="2"/>
     </Grid>
 
 </UserControl>

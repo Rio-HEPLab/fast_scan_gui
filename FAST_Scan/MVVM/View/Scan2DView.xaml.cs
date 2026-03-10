@@ -183,6 +183,7 @@ namespace FAST_Scan.MVVM.View
                     if (Directory.Exists(dir))
                     {
                         scan.setOutputFilePath(saveFileTB.Text);
+                        Logger.Instance.Log("Path Exists", LogType.Info);
                     }
                     else
                     {

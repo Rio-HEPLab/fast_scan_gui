@@ -27,6 +27,8 @@ namespace FAST_Scan
             HommingStateManager.SetIsHomed(HommingStateManager.Servo.X, false);
             HommingStateManager.SetIsHomed(HommingStateManager.Servo.Y, false);
             HommingStateManager.SetIsHomed(HommingStateManager.Servo.Z, false);
+
+            TestModeText.Visibility = Scan.isTestMode() == true ? Visibility.Visible : Visibility.Collapsed;
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)

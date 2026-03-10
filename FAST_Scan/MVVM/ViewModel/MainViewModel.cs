@@ -18,6 +18,7 @@ namespace FAST_Scan.MVVM.ViewModel
         public Scan1DViewModel Scan1DVM { get; set; }
         public TerminalViewModel TerminalVM { get; set; }
 
+
         private object _currentView;
         private object _terminalView;
 

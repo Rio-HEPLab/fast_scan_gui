@@ -25,9 +25,13 @@ namespace FAST_Scan.MVVM.View
     {
         private ScrollViewer _scrollViewer;
         private bool _autoScroll = true;
+
+        GraphWindow graphWindow;
+
         public TerminalView()
         {
             InitializeComponent();
+
         }
 
         //implementa autoscroll
@@ -90,6 +94,16 @@ namespace FAST_Scan.MVVM.View
             }
 
             return null;
+        }
+
+        private void OpenGraphWindowClick(object sender, RoutedEventArgs e)
+        {
+            if (graphWindow == null || !graphWindow.IsVisible)
+            {
+                graphWindow = new GraphWindow();
+                graphWindow.Show();
+            }
+            
         }
     }
 }
