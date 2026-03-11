@@ -4,9 +4,13 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:FAST_Scan" xmlns:scottPlot="http://schemas.scottplot.net/2008/xaml/presentation"
+        xmlns:viewModel="clr-namespace:FAST_Scan.MVVM.ViewModel"
         mc:Ignorable="d"
         Title="GraphWindow" Height="450" Width="800">
+    <Window.DataContext>
+        <viewModel:GraphViewModel/>
+    </Window.DataContext>
     <Grid>
-        <scottPlot:WpfPlot x:Name="PlotArea"/>
+        <ContentControl Content="{Binding CurrentView}"/>
     </Grid>
 </Window>

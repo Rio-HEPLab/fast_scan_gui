@@ -205,16 +205,22 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="MVVM\View\WaveformPlotView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Theme\MenuButtonTheme.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MVVM\ViewModel\GraphViewModel.cs" />
     <Compile Include="MVVM\ViewModel\MainViewModel.cs" />
     <Compile Include="MVVM\ViewModel\Scan1DViewModel.cs" />
     <Compile Include="MVVM\ViewModel\Scan2DViewModel.cs" />
     <Compile Include="MVVM\ViewModel\TerminalViewModel.cs" />
+    <Compile Include="MVVM\ViewModel\WaveformPlotViewModel.cs" />
     <Compile Include="MVVM\View\Scan1DView.xaml.cs">
       <DependentUpon>Scan1DView.xaml</DependentUpon>
     </Compile>
@@ -223,6 +229,9 @@
     </Compile>
     <Compile Include="MVVM\View\TerminalView.xaml.cs">
       <DependentUpon>TerminalView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MVVM\View\WaveformPlotView.xaml.cs">
+      <DependentUpon>WaveformPlotView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
