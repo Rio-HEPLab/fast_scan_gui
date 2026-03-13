@@ -24,10 +24,6 @@ namespace FAST_Scan.MVVM.View
     public partial class WaveformPlotView : UserControl
     {
         private DispatcherTimer timer;
-        private Random rand = new Random();
-
-        private double[] x;
-        private double[] y;
         public WaveformPlotView()
         {
             InitializeComponent();

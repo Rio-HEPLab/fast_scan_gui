@@ -16,13 +16,13 @@ using Thorlabs.MotionControl.GenericMotor;
 namespace FAST_Scan.Core
 {
 
-    public static class DataStore
-    {
-        public static int[] Waveform = new int[1024];
-    }
 
     internal class Scan
     {
+#if TEST_MODE
+        int SCAN_DELAY_MOTOR_SIM = 100;
+#endif
+
         string serialNo_ServoX = "27261487";
         string serialNo_ServoY = "27261089";
         string serialNo_ServoZ = "27269670";
@@ -37,15 +37,15 @@ namespace FAST_Scan.Core
         const decimal positionLimit = 45;
 
         //Scan variables
-        decimal initialPositionX = 0;
-        decimal initialPositionY = 0;
-        decimal initialPositionZ = 0;
-        decimal finalPositionX = 0;
-        decimal finalPositionY = 0;
-        decimal finalPositionZ = 0;
-        decimal stepX = 0;
-        decimal stepY = 0;
-        decimal stepZ = 0;
+        static decimal initialPositionX = 0;
+        static decimal initialPositionY = 0;
+        static decimal initialPositionZ = 0;
+        static decimal finalPositionX = 0;
+        static decimal finalPositionY = 0;
+        static decimal finalPositionZ = 0;
+        static decimal stepX = 0;
+        static decimal stepY = 0;
+        static decimal stepZ = 0;
         int numStepsX = 0;
         int numStepsY = 0;
         int numStepsZ = 0;
@@ -144,6 +144,34 @@ namespace FAST_Scan.Core
             Logger.Instance.Log("Digitizer configured: TEST_MODE", LogType.Info);
             error = ErrorStatus.OK;
 #endif
+        }
+
+        public static double getStepX()
+        {
+            return (double)stepX;
+        }
+
+        public static double getStepY()
+        {
+            return (double)stepY;
+        }
+
+        public static double getStepZ()
+        {
+            return (double)stepZ;
+        }
+
+        public static double getSpanX()
+        {
+            return (double)(finalPositionX - initialPositionX);
+        }
+        public static double getSpanY()
+        {
+            return (double)(finalPositionY - initialPositionY);
+        }
+        public static double getSpanZ()
+        {
+            return (double)(finalPositionZ - initialPositionZ);
         }
 
         public ErrorStatus Home(Axis axis)
@@ -899,12 +927,16 @@ namespace FAST_Scan.Core
 
         }
 
-
+#if TEST_MODE
         private void Scan_2D_Simulator()
         {
             decimal PositionX;
             decimal PositionY;
             int amplitude = 0;
+
+            //Cria matriz com variável global para fazer plot em tempo real
+            //DataStore.Heatmap = new double[numStepsX + 1, numStepsY + 1];
+            DataStore.HeatmapCreate(numStepsX+1, numStepsY+1);
 
             //Move os servos para a posição inicial
             statusMessage.CreateStatusMessage("Moving to initial position...");
@@ -934,10 +966,12 @@ namespace FAST_Scan.Core
                         statusMessage.CreateStatusMessage("Amplitude: " + amplitude.ToString() + "\tPosicao X: " + PositionX.ToString() + "\tPosicao Y: " + PositionY.ToString());
                         Logger.Instance.Log("Amplitude: " + amplitude.ToString() + "\tPosicao X: " + PositionX.ToString() + "\tPosicao Y: " + PositionY.ToString(), LogType.Data);
 
+                        DataStore.HeatmapAddPoint(i,j,amplitude);
+
                         //escreve amplitude no outputFile
                         if (j != numStepsX)
                         {   //simula passo do motor
-                            Task.Delay(250).Wait();
+                            Task.Delay(SCAN_DELAY_MOTOR_SIM).Wait();
                             //ServoX.MoveRelative(MotorDirection.Forward, stepX, 60000);
                         }
                     }
@@ -950,11 +984,11 @@ namespace FAST_Scan.Core
                 }
                 if (ScanStateManager.StopScan == false)
                 {   //simula passo do motor
-                    Task.Delay(250).Wait();
+                    Task.Delay(SCAN_DELAY_MOTOR_SIM).Wait();
                     //ServoX.MoveTo(initialPositionX, 60000);
                     if (i != numStepsY)
                     {   //simula passo do motor
-                        Task.Delay(250).Wait();
+                        Task.Delay(SCAN_DELAY_MOTOR_SIM).Wait();
                         //ServoY.MoveRelative(MotorDirection.Forward, stepY, 60000);
                     }
                 }
@@ -966,6 +1000,7 @@ namespace FAST_Scan.Core
                 }
             }
         }
+#endif
 
     }
 

@@ -99,3 +99,7 @@ C:\Users\Vinícius\OneDrive\Desktop\PIBIC\FAST_Scan\FAST_Scan\obj\Debug\GraphWin
 C:\Users\Vinícius\OneDrive\Desktop\PIBIC\FAST_Scan\FAST_Scan\obj\Debug\GraphWindow.baml
 C:\Users\Vinícius\OneDrive\Desktop\PIBIC\FAST_Scan\FAST_Scan\obj\Debug\MVVM\View\WaveformPlotView.g.cs
 C:\Users\Vinícius\OneDrive\Desktop\PIBIC\FAST_Scan\FAST_Scan\obj\Debug\MVVM\View\WaveformPlotView.baml
+C:\Users\Vinícius\OneDrive\Desktop\PIBIC\FAST_Scan\FAST_Scan\obj\Debug\MVVM\View\HeatmapPlotView.g.cs
+C:\Users\Vinícius\OneDrive\Desktop\PIBIC\FAST_Scan\FAST_Scan\obj\Debug\MVVM\View\HeatmapPlotView.baml
+C:\Users\Vinícius\OneDrive\Desktop\PIBIC\FAST_Scan\FAST_Scan\obj\Debug\MVVM\View\GraphContainerView.g.cs
+C:\Users\Vinícius\OneDrive\Desktop\PIBIC\FAST_Scan\FAST_Scan\obj\Debug\MVVM\View\GraphContainerView.baml

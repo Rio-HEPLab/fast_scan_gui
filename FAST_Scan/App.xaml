@@ -27,6 +27,14 @@
                 <view:WaveformPlotView/>
             </DataTemplate>
 
+            <DataTemplate DataType="{x:Type viewModel:HeatmapPlotViewModel}">
+                <view:HeatmapPlotView/>
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type viewModel:GraphContainerViewModel}">
+                <view:GraphContainerView/>
+            </DataTemplate>
+
         </ResourceDictionary>
     </Application.Resources>
 </Application>

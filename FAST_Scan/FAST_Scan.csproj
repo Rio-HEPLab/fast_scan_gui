@@ -175,6 +175,7 @@
     </Compile>
     <Compile Include="Core\AppConfig.cs" />
     <Compile Include="Core\ConfigManager.cs" />
+    <Compile Include="Core\DataStore.cs" />
     <Compile Include="Core\Digitizer.cs" />
     <Compile Include="Core\HommingStateManager.cs" />
     <Compile Include="Core\Logger.cs" />
@@ -193,6 +194,14 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="MVVM\View\GraphContainerView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MVVM\View\HeatmapPlotView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MVVM\View\Scan1DView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -215,12 +224,20 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MVVM\ViewModel\GraphContainerViewModel.cs" />
     <Compile Include="MVVM\ViewModel\GraphViewModel.cs" />
+    <Compile Include="MVVM\ViewModel\HeatmapPlotViewModel.cs" />
     <Compile Include="MVVM\ViewModel\MainViewModel.cs" />
     <Compile Include="MVVM\ViewModel\Scan1DViewModel.cs" />
     <Compile Include="MVVM\ViewModel\Scan2DViewModel.cs" />
     <Compile Include="MVVM\ViewModel\TerminalViewModel.cs" />
     <Compile Include="MVVM\ViewModel\WaveformPlotViewModel.cs" />
+    <Compile Include="MVVM\View\GraphContainerView.xaml.cs">
+      <DependentUpon>GraphContainerView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MVVM\View\HeatmapPlotView.xaml.cs">
+      <DependentUpon>HeatmapPlotView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="MVVM\View\Scan1DView.xaml.cs">
       <DependentUpon>Scan1DView.xaml</DependentUpon>
     </Compile>
