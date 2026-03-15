@@ -1,5 +1,6 @@
 ﻿using FAST_Scan.Core;
 using ScottPlot;
+using ScottPlot.Panels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -81,6 +82,7 @@ namespace FAST_Scan.MVVM.View
                 Scan.getSpanY() + Scan.getStepX() / 2
             );
             //heatmap.Smooth = true;
+            
         }
     }
 }

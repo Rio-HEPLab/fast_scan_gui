@@ -12,6 +12,8 @@ namespace FAST_Scan.MVVM.ViewModel
     {
         public WaveformPlotViewModel WaveformPlotVM { get; set; }
         public HeatmapPlotViewModel HeatmapPlotVM { get; set; }
+        public FocalPlotViewModel FocalPlotVM { get; set; }
+
 
         private object _currentGraphView;
         public object CurrentGraphView
@@ -28,7 +30,19 @@ namespace FAST_Scan.MVVM.ViewModel
         {
             WaveformPlotVM = new WaveformPlotViewModel();
             HeatmapPlotVM = new HeatmapPlotViewModel();
+            FocalPlotVM = new FocalPlotViewModel();
+
+            //CurrentGraphView = FocalPlotVM;
             CurrentGraphView = WaveformPlotVM;
+
+            //if(AppManager.State == AppState.SCAN_1D)
+            //{
+            //    CurrentGraphView = WaveformPlotVM;
+            //}
+            //else if(AppManager.State == AppState.SCAN_2D)
+            //{
+            //    CurrentGraphView = HeatmapPlotVM;
+            //}
         }
     }
 }

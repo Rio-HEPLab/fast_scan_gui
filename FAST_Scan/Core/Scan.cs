@@ -15,8 +15,6 @@ using Thorlabs.MotionControl.GenericMotor;
 
 namespace FAST_Scan.Core
 {
-
-
     internal class Scan
     {
 #if TEST_MODE
@@ -643,6 +641,7 @@ namespace FAST_Scan.Core
 #if !TEST_MODE
                         Scan_1D_exe();
 #else
+                        Scan_1D_Simulator();
 #endif
                         break;
                     }
@@ -999,6 +998,80 @@ namespace FAST_Scan.Core
                     return;
                 }
             }
+        }
+
+        private void Scan_1D_Simulator()
+        {
+            decimal Position;
+            int amplitude = 0;
+
+            int numSteps = 0;
+            decimal step = 0;
+
+            switch (axis_1D)
+            {
+                case Axis.X:
+                    {
+                        numSteps = numStepsX; step = stepX; break;
+                    }
+                case Axis.Y:
+                    {
+                        numSteps = numStepsY; step = stepY; break;
+                    }
+                case Axis.Z:
+                    {
+                        numSteps = numStepsZ; step = stepZ; break;
+                    }
+                default:
+                    {
+                        statusMessage.CreateStatusMessage("ERROR! Unable to identify scan axis!");
+                        Logger.Instance.Log("Unable to identify scan axis!", LogType.Error);
+                        return;
+                    }
+            }
+
+            //Pontos para fazer plot em tempo real
+            DataStore.FocalPlotCreate(numSteps + 1, (double)step);
+
+            //Move os servos para a posição inicial
+            statusMessage.CreateStatusMessage("Moving to initial position...");
+            Logger.Instance.Log("Moving to initial position...", LogType.Info);
+
+            statusMessage.CreateStatusMessage("Scan in execution...");
+            Logger.Instance.Log("Scan in execution...", LogType.Info);
+
+            for (int j = 0; j <= numSteps; j++)
+            {
+                if (ScanStateManager.StopScan == false)
+                {
+                    //Se o pulso é negativo pega valor minimo, se positivo pega o valor máximo
+                    if (polarity == PulsePolarity.NEGATVE)
+                        amplitude = Digitizer.GetMinAvgFromWaveform_Sim(DataStore.Waveform, digitizerSamples, intervalBinStart, intervalBinEnd);
+                    else if (polarity == PulsePolarity.POSITIVE)
+                        amplitude = Digitizer.GetMaxAvgFromWaveform_Sim(DataStore.Waveform, digitizerSamples, intervalBinStart, intervalBinEnd);
+
+                    Position = j * step;
+
+                    statusMessage.CreateStatusMessage("Amplitude: " + amplitude.ToString() + "\tPosition: " + Position.ToString());
+                    Logger.Instance.Log("Amplitude: " + amplitude.ToString() + "\tPosition: " + Position.ToString(), LogType.Data);
+
+                    DataStore.FocalPlotAddPoint(j, amplitude);
+
+                    //escreve amplitude no outputFile
+                    if (j != numStepsX)
+                    {
+                        Task.Delay(SCAN_DELAY_MOTOR_SIM).Wait();
+                        //ServoX.MoveRelative(MotorDirection.Forward, stepX, 60000);
+                    }
+                }
+                else
+                {
+                    isStopped = true;
+                    ScanStateManager.SetStopScan(false);
+                    return;
+                }
+            }
+            
         }
 #endif
 

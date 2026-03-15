@@ -17,8 +17,6 @@ namespace FAST_Scan.MVVM.ViewModel
         public Scan2DViewModel Scan2DVM { get; set; }
         public Scan1DViewModel Scan1DVM { get; set; }
         public TerminalViewModel TerminalVM { get; set; }
-        public WaveformPlotViewModel WaveformPlotVM { get; set; }
-        public HeatmapPlotViewModel HeatmapPlotVM { get; set; }
 
 
         private object _currentView;
@@ -49,9 +47,6 @@ namespace FAST_Scan.MVVM.ViewModel
         {
             Scan2DVM = new Scan2DViewModel();
             Scan1DVM = new Scan1DViewModel();
-            WaveformPlotVM = new WaveformPlotViewModel();
-            HeatmapPlotVM = new HeatmapPlotViewModel();
-
 
             TerminalVM = new TerminalViewModel();
             TerminalView = TerminalVM;
@@ -67,6 +62,7 @@ namespace FAST_Scan.MVVM.ViewModel
                 else
                 {
                     CurrentView = Scan1DVM;
+                    AppManager.SetState(AppState.SCAN_1D);
                 }
             });
 
@@ -79,6 +75,8 @@ namespace FAST_Scan.MVVM.ViewModel
                 else
                 {
                     CurrentView = Scan2DVM;
+                    AppManager.SetState(AppState.SCAN_2D);
+
                 }
             });
         }

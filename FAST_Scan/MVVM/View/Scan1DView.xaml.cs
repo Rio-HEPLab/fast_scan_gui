@@ -46,6 +46,18 @@ namespace FAST_Scan.MVVM.View
             //Carrega configurações salvas no JSON
             _config = ConfigManager.Load();
 
+            digitizerSamplesTB.Text = _config.DigitizerSamples;
+            axis = _config.params1D.Axis;
+            StartTB.Text = _config.params1D.InitialPosition;
+            StopTB.Text = _config.params1D.FinalPosition;
+            StepsTB.Text = _config.params1D.NumberOfSteps;
+            xSetCB.IsChecked = _config.params1D.SetX;
+            ySetCB.IsChecked = _config.params1D.SetY;
+            zSetCB.IsChecked = _config.params1D.SetZ;
+            xPositionTB.Text = _config.params1D.XPosition;
+            yPositionTB.Text = _config.params1D.YPosition;
+            zPositionTB.Text = _config.params1D.ZPosition;
+
             //adiciona elementos a combobox
             //PulsePolarityCB.Items.Add("Negative");
             //PulsePolarityCB.Items.Add("Positive");

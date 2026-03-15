@@ -35,6 +35,10 @@
                 <view:GraphContainerView/>
             </DataTemplate>
 
+            <DataTemplate DataType="{x:Type viewModel:FocalPlotViewModel}">
+                <view:FocalPlotView/>
+            </DataTemplate>
+
         </ResourceDictionary>
     </Application.Resources>
 </Application>

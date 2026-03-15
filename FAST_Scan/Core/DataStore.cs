@@ -12,7 +12,14 @@ namespace FAST_Scan.Core
     //Classe que armazena valores globais para variaveis utilizadas em plots
     public static class DataStore
     {
+        /*********************************************************/
+        /*                      WAVEFORM                         */
+        /*********************************************************/
         public static int[] Waveform = new int[1024];
+
+        /*********************************************************/
+        /*                       HEATMAP                         */
+        /*********************************************************/
 
         public static double[,] Heatmap { get; private set; }
         public static int HeatmapRows { get; private set; }
@@ -39,6 +46,39 @@ namespace FAST_Scan.Core
             Heatmap[x,y] = amplitude;
             HeatmapUpdated = true;
         }
+
+        /*********************************************************/
+        /*                     FOCAL PLOT                        */
+        /*********************************************************/
+
+        public static double[] FocalData_x { get; private set; }
+        public static double[] FocalData_y { get; private set; }
+        public static double NumPoints { get; private set; }
+        public static double StepValue { get; private set; }
+
+        public static void FocalPlotCreate(int numPoints, double stepValue)
+        {
+            FocalData_x = new double[numPoints];
+            FocalData_y = new double[numPoints];
+
+            NumPoints = numPoints;
+            StepValue = stepValue;
+
+            for (int i = 0; i < numPoints; i++)
+            {
+                FocalData_x[i] = i*stepValue;
+                FocalData_y[i] = double.NaN;
+
+                Console.WriteLine($"x[{i}] = {FocalData_x[i]}");
+            }
+            FocalData_y[0] = 0;
+        }
+
+        public static void FocalPlotAddPoint(int index, int value)
+        {
+            FocalData_y[index] = value;
+        }
+
 
     }
 }
