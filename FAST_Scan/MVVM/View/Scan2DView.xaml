@@ -5,11 +5,11 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:FAST_Scan.MVVM.View"
              mc:Ignorable="d" 
-             d:DesignHeight="400" d:DesignWidth="600">
-    <Grid Background="White">
+             d:DesignHeight="400" d:DesignWidth="600"
+             Background="White">
+    <Grid >
         <Grid.RowDefinitions>
-            <RowDefinition Height="70"/>
-            <RowDefinition Height="3*"
+            <RowDefinition Height="4,5*"
                            MinHeight="220"/>
             <RowDefinition Height="2*"
                            MaxHeight="80"
@@ -18,17 +18,7 @@
                            MinHeight="50"/>
         </Grid.RowDefinitions>
 
-        <TextBlock Text="Configure 2D Scan"
-                   Grid.Row="0"
-                   FontSize="25"
-                   HorizontalAlignment="Center"
-                   FontFamily="Bahnschrift Bold"
-                   Foreground="#4053A0"
-                   VerticalAlignment="Top"
-                   Margin="10"/>
-
-
-        <Grid Grid.Row="1">
+        <Grid Grid.Row="0" Margin="0,20,0,0">
             <Grid.RowDefinitions>
                 <RowDefinition MinHeight="40"/>
                 <RowDefinition MinHeight="40"/>
@@ -174,7 +164,7 @@
             </StackPanel>
         </Grid>
 
-        <Grid Grid.Row="2"
+        <Grid Grid.Row="1"
       VerticalAlignment="Center">
             <Grid.RowDefinitions>
                 <RowDefinition Height="3*"/>
@@ -219,8 +209,8 @@
 
         </Grid>
 
-        <Grid Grid.Row="3"
-        VerticalAlignment="Bottom"
+        <Grid Grid.Row="2"
+        VerticalAlignment="Center"
       Margin="0,0,0,5">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition MinWidth="105"/>

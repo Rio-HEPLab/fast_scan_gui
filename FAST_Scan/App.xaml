@@ -39,6 +39,10 @@
                 <view:FocalPlotView/>
             </DataTemplate>
 
+            <DataTemplate DataType="{x:Type viewModel:ScanTabControlViewModel}">
+                <view:ScanTabControlView/>
+            </DataTemplate>
+
         </ResourceDictionary>
     </Application.Resources>
 </Application>

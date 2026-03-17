@@ -13,8 +13,8 @@
         Icon="/Images/FAST_SCAN_Icon.png"
         Closing="Window_Closing"
         ResizeMode="CanResize"
-        MinHeight="500"
-        MinWidth="700">
+        MinHeight="700"
+        MinWidth="1000">
 
     <Window.DataContext>
         <viewModel:MainViewModel/>
@@ -61,13 +61,17 @@
 
             <Image Source="/Images/FAST_SCAN_Logo2.png"
                    Grid.Column="1"
-                   Margin="20"
+                   Grid.Row="0"
+                   Grid.RowSpan="2"
+                   Margin="30"
                    Opacity="0.7"/>
 
             <TextBlock x:Name="TestModeText"
                        Text="TestMode"
                        FontSize="80"
                        Grid.Column="1"
+                       Grid.Row="0"
+                       Grid.RowSpan="2"
                        HorizontalAlignment="Center"
                        VerticalAlignment="Center"
                        FontWeight="Bold"

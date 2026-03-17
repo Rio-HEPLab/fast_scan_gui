@@ -17,6 +17,7 @@ namespace FAST_Scan.MVVM.ViewModel
         public Scan2DViewModel Scan2DVM { get; set; }
         public Scan1DViewModel Scan1DVM { get; set; }
         public TerminalViewModel TerminalVM { get; set; }
+        public ScanTabControlViewModel ScanTabControlVM { get; set; }
 
 
         private object _currentView;
@@ -49,8 +50,6 @@ namespace FAST_Scan.MVVM.ViewModel
             Scan1DVM = new Scan1DViewModel();
 
             TerminalVM = new TerminalViewModel();
-            TerminalView = TerminalVM;
-
             //CurrentView = Scan2DVM;
 
             Scan1DCommand = new RelayCommand(o =>
@@ -61,8 +60,13 @@ namespace FAST_Scan.MVVM.ViewModel
                 }
                 else
                 {
-                    CurrentView = Scan1DVM;
-                    AppManager.SetState(AppState.SCAN_1D);
+                    //AppManager.SetState(AppState.SCAN_1D);
+
+                    //CurrentView = Scan1DVM;
+                    ScanTabControlVM = new ScanTabControlViewModel(AppState.SCAN_1D);
+
+                    CurrentView = ScanTabControlVM;
+                    TerminalView = TerminalVM;
                 }
             });
 
@@ -74,8 +78,13 @@ namespace FAST_Scan.MVVM.ViewModel
                 }
                 else
                 {
-                    CurrentView = Scan2DVM;
-                    AppManager.SetState(AppState.SCAN_2D);
+                    //AppManager.SetState(AppState.SCAN_2D);
+
+                    //CurrentView = Scan2DVM;
+                    ScanTabControlVM = new ScanTabControlViewModel(AppState.SCAN_2D);
+
+                    CurrentView = ScanTabControlVM;
+                    TerminalView = TerminalVM;
 
                 }
             });

@@ -5,16 +5,17 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:FAST_Scan.MVVM.View"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="450" d:DesignWidth="500">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="4*"/>
+            <RowDefinition Height="5*"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
         <ContentControl Grid.Row="0"
                         Content="{Binding CurrentGraphView}"
                         Margin="20"/>
-        <Grid Grid.Row="1">
+        <Grid Grid.Row="1"
+              Margin="30,5">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
                 <ColumnDefinition/>
@@ -22,7 +23,7 @@
             </Grid.ColumnDefinitions>
 
             <Button Name="ExpandWindowButton"
-                    Content="Expand Window" 
+                    Content="Expand" 
                     Grid.Column="0"
                     MinWidth="80"
                     MaxWidth="150"

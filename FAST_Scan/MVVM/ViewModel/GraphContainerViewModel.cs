@@ -26,23 +26,24 @@ namespace FAST_Scan.MVVM.ViewModel
             }
         }
 
-        public GraphContainerViewModel()
+        public GraphContainerViewModel(GraphType graphType)
         {
-            WaveformPlotVM = new WaveformPlotViewModel();
-            HeatmapPlotVM = new HeatmapPlotViewModel();
-            FocalPlotVM = new FocalPlotViewModel();
 
-            //CurrentGraphView = FocalPlotVM;
-            CurrentGraphView = WaveformPlotVM;
-
-            //if(AppManager.State == AppState.SCAN_1D)
-            //{
-            //    CurrentGraphView = WaveformPlotVM;
-            //}
-            //else if(AppManager.State == AppState.SCAN_2D)
-            //{
-            //    CurrentGraphView = HeatmapPlotVM;
-            //}
+            if (graphType == GraphType.Waveform)
+            {
+                WaveformPlotVM = new WaveformPlotViewModel();
+                CurrentGraphView = WaveformPlotVM;
+            }
+            if (graphType == GraphType.FocalPlot)
+            {
+                FocalPlotVM = new FocalPlotViewModel();
+                CurrentGraphView = FocalPlotVM;
+            }
+            if (graphType == GraphType.Heatmap)
+            {
+                HeatmapPlotVM = new HeatmapPlotViewModel();
+                CurrentGraphView = HeatmapPlotVM;
+            }
         }
     }
 }

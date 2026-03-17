@@ -1,0 +1,104 @@
+﻿<UserControl x:Class="FAST_Scan.MVVM.View.ScanTabControlView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:FAST_Scan.MVVM.View"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800" 
+             Background="White">
+    <UserControl.Resources>
+        <!-- Start: Styles-->
+        <!-- Start: TabItem Style-->
+        <Style x:Key="TabItemStyle" TargetType="TabItem">
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="Width" Value="150"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Padding" Value="10 5"/>
+            <Setter Property="FontWeight" Value="Medium"/>
+
+            <!-- Aqui você estiliza só o HEADER -->
+            <Setter Property="HeaderTemplate">
+                <Setter.Value>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding}"
+                           FontFamily="Bahnschrift"
+                           FontWeight="Bold"
+                           FontSize="15"
+                           Foreground="DarkSlateGray"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center"/>
+                    </DataTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <!-- Start: TabItem Style-->
+        <!-- End: Styles-->
+    </UserControl.Resources>
+
+    <Grid Margin="10">
+        <TabControl Tag="{Binding Title}">
+
+            <TabControl.Template>
+                <ControlTemplate TargetType="TabControl">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+
+                        <!-- Header -->
+                        <Grid Grid.Row="0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <!-- Tabs -->
+                            <TabPanel Grid.Column="0"
+                              IsItemsHost="True"
+                              VerticalAlignment="Center"/>
+
+                            <!-- Título -->
+                            <TextBlock Grid.Column="2"
+                                       Text="{TemplateBinding Tag}"
+                                       VerticalAlignment="Center"
+                                       FontWeight="Bold"
+                                       FontSize="25"
+                                       Margin="0,0,30,0"
+                                       Foreground="#4053A0"/>
+                        </Grid>
+
+                        <!-- Conteúdo -->
+                        <ContentPresenter Grid.Row="1"
+                                  ContentSource="SelectedContent"/>
+                    </Grid>
+                </ControlTemplate>
+            </TabControl.Template>
+
+            <!-- Suas abas -->
+            <TabItem Header="Configurations" Style="{DynamicResource TabItemStyle}">
+                <ContentControl Content="{Binding ScanConfigurationsView}"/>
+            </TabItem>
+            <TabItem Header="Graphs" Style="{DynamicResource TabItemStyle}">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+
+                    <ContentControl Grid.Column="0"
+                                   Content="{Binding WaveformGraphView}"/>
+                    <ContentControl Grid.Column="1"
+                                   Content="{Binding ScanGraphView}"/>
+
+                </Grid>
+            </TabItem>
+
+
+        </TabControl>
+    </Grid>
+</UserControl>

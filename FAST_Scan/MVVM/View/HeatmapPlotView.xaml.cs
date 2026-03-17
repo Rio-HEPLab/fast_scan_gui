@@ -31,16 +31,20 @@ namespace FAST_Scan.MVVM.View
         {
             InitializeComponent();
 
+            DataStore.HeatmapCreate(1, 1);
             // desativa interação do usuário
             PlotHeatmap.UserInputProcessor.IsEnabled = false;
+
+            PlotHeatmap.Plot.Title("2D Scan");
+            PlotHeatmap.Plot.XLabel("x (mm)");
+            PlotHeatmap.Plot.YLabel("y (mm)");
+
 
             heatmap = PlotHeatmap.Plot.Add.Heatmap(DataStore.Heatmap);
             PlotHeatmap.Plot.Add.ColorBar(heatmap);
             ConfigureHeatmapPlot(heatmap);
 
             //PlotHeatmap.Plot.Axes.SetLimits(0, DataStore.HeatmapCols, 0, DataStore.HeatmapRows);
-
-
 
             PlotHeatmap.Refresh();
 

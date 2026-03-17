@@ -31,9 +31,9 @@ namespace FAST_Scan.MVVM.View
             // desativa interação do usuário
             PlotArea.UserInputProcessor.IsEnabled = false;
 
-            PlotArea.Plot.Title("Random Vector (1024 pontos)");
-            PlotArea.Plot.XLabel("Index");
-            PlotArea.Plot.YLabel("Value");
+            PlotArea.Plot.Title("Waveform");
+            PlotArea.Plot.XLabel("Bin");
+            PlotArea.Plot.YLabel("Amplitude");
 
             PlotArea.Plot.Axes.SetLimits(
                 left: 0,

@@ -215,6 +215,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="MVVM\View\ScanTabControlView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MVVM\View\TerminalView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -236,6 +240,7 @@
     <Compile Include="MVVM\ViewModel\MainViewModel.cs" />
     <Compile Include="MVVM\ViewModel\Scan1DViewModel.cs" />
     <Compile Include="MVVM\ViewModel\Scan2DViewModel.cs" />
+    <Compile Include="MVVM\ViewModel\ScanTabControlViewModel.cs" />
     <Compile Include="MVVM\ViewModel\TerminalViewModel.cs" />
     <Compile Include="MVVM\ViewModel\WaveformPlotViewModel.cs" />
     <Compile Include="MVVM\View\FocalPlotView.xaml.cs">
@@ -252,6 +257,9 @@
     </Compile>
     <Compile Include="MVVM\View\Scan2DView.xaml.cs">
       <DependentUpon>Scan2DView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MVVM\View\ScanTabControlView.xaml.cs">
+      <DependentUpon>ScanTabControlView.xaml</DependentUpon>
     </Compile>
     <Compile Include="MVVM\View\TerminalView.xaml.cs">
       <DependentUpon>TerminalView.xaml</DependentUpon>

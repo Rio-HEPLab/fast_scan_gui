@@ -27,7 +27,13 @@ namespace FAST_Scan.MVVM.View
         public FocalPlotView()
         {
             InitializeComponent();
+            DataStore.FocalPlotCreate(1, 0);
             PlotFocal.Plot.Add.SignalXY(DataStore.FocalData_x, DataStore.FocalData_y);
+
+            PlotFocal.Plot.Title("Scan 1D");
+            PlotFocal.Plot.XLabel("Amplitude");
+            PlotFocal.Plot.YLabel("Position (mm)");
+
 
             PlotFocal.UserInputProcessor.IsEnabled = false;
             //PlotFocal.Plot.Axes.SetLimitsY(425, 475);
