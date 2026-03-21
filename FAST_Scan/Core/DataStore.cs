@@ -32,8 +32,18 @@ namespace FAST_Scan.Core
         public static int HeatmapRows { get; private set; }
         public static int HeatmapCols { get; private set; }
 
-        public static bool HeatmapUpdated;
+        public static event Action HeatmapChanged;
+        public static event Action NewHeatmapChanged;
 
+
+        public static void NotifyHeatmapChanged()
+        {
+            HeatmapChanged?.Invoke();
+        }
+        public static void NotifyNewHeatmapChanged()
+        {
+            NewHeatmapChanged?.Invoke();
+        }
 
         public static void HeatmapCreate(int rows, int cols)
         {
@@ -46,12 +56,14 @@ namespace FAST_Scan.Core
                     Heatmap[i, j] = double.NaN;
             }
             Heatmap[0,0] = 0;
+            NotifyNewHeatmapChanged();
         }
 
         public static void HeatmapAddPoint(int x, int y, double amplitude) 
         {
             Heatmap[x,y] = amplitude;
-            HeatmapUpdated = true;
+            //HeatmapUpdated = true;
+            NotifyHeatmapChanged();
         }
 
         /*********************************************************/
@@ -62,6 +74,18 @@ namespace FAST_Scan.Core
         public static double[] FocalData_y { get; private set; }
         public static double NumPoints { get; private set; }
         public static double StepValue { get; private set; }
+
+        public static event Action FocalPlotChanged;
+        public static event Action NewFocalPlotChanged;
+
+        public static void NotifyFocalPlotChanged()
+        {
+            FocalPlotChanged?.Invoke();
+        }
+        public static void NotifyNewFocalPlotChanged()
+        {
+            NewFocalPlotChanged?.Invoke();
+        }
 
         public static void FocalPlotCreate(int numPoints, double stepValue)
         {
@@ -79,11 +103,13 @@ namespace FAST_Scan.Core
                 Console.WriteLine($"x[{i}] = {FocalData_x[i]}");
             }
             FocalData_y[0] = 0;
+            NotifyNewFocalPlotChanged();
         }
 
         public static void FocalPlotAddPoint(int index, int value)
         {
             FocalData_y[index] = value;
+            NotifyFocalPlotChanged();
         }
 
 

@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>ScottPlot.WPF</name>
+    </assembly>
+    <members>
+        <member name="M:ScottPlot.WPF.WpfPlotBase.GetPlotPixelPosition(System.Windows.Input.MouseEventArgs)">
+            <summary>
+            Returns the position of the mouse pointer relative to Plot drawing surface.
+            </summary>
+            <param name="e">Provides data for mouse related routed events</param>
+            <returns>The x and y coordinates in pixel of the mouse pointer position relative to Plot. The point (0,0) is the upper-left corner of the plot.</returns>
+        </member>
+        <member name="M:ScottPlot.WPF.WpfPlotBase.GetCurrentPlotPixelPosition">
+            <summary>
+            Returns the current position of the mouse pointer relative to Plot drawing surface
+            </summary>
+            <returns>The x and y coordinates in pixel of the mouse pointer position relative to Plot. The point (0,0) is the upper-left corner of the plot.</returns>
+        </member>
+    </members>
+</doc>

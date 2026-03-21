@@ -26,8 +26,6 @@ namespace FAST_Scan.MVVM.View
         private ScrollViewer _scrollViewer;
         private bool _autoScroll = true;
 
-        GraphWindow graphWindow;
-
         public TerminalView()
         {
             InitializeComponent();

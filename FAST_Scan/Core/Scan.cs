@@ -935,6 +935,7 @@ namespace FAST_Scan.Core
 
             //Cria matriz com variável global para fazer plot em tempo real
             //DataStore.Heatmap = new double[numStepsX + 1, numStepsY + 1];
+            //DataStore.NewHeatMap = true;
             DataStore.HeatmapCreate(numStepsX+1, numStepsY+1);
 
             //Move os servos para a posição inicial

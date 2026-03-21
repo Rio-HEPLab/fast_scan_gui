@@ -1,6 +1,7 @@
 ﻿using FAST_Scan.Core;
 using ScottPlot;
 using ScottPlot.Panels;
+using ScottPlot.Plottables;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,11 +28,15 @@ namespace FAST_Scan.MVVM.View
     {
         private DispatcherTimer timer;
         private ScottPlot.Plottables.Heatmap heatmap;
+        private ScottPlot.Panels.ColorBar colorbar;
         public HeatmapPlotView()
         {
             InitializeComponent();
+            Loaded += OnLoaded;
+            Unloaded += OnUnloaded;
 
-            DataStore.HeatmapCreate(1, 1);
+            Console.WriteLine("VIEW CRIADA: " + GetHashCode());
+
             // desativa interação do usuário
             PlotHeatmap.UserInputProcessor.IsEnabled = false;
 
@@ -39,40 +44,29 @@ namespace FAST_Scan.MVVM.View
             PlotHeatmap.Plot.XLabel("x (mm)");
             PlotHeatmap.Plot.YLabel("y (mm)");
 
-
             heatmap = PlotHeatmap.Plot.Add.Heatmap(DataStore.Heatmap);
-            PlotHeatmap.Plot.Add.ColorBar(heatmap);
             ConfigureHeatmapPlot(heatmap);
-
-            //PlotHeatmap.Plot.Axes.SetLimits(0, DataStore.HeatmapCols, 0, DataStore.HeatmapRows);
-
             PlotHeatmap.Refresh();
 
-            timer = new DispatcherTimer();
-            timer.Interval = TimeSpan.FromMilliseconds(50);
+            DataStore.HeatmapChanged += OnHeatmapChanged;
+            DataStore.NewHeatmapChanged += OnNewHeatmapChanged;
 
-
-            timer.Tick += (s, e) =>
-            {
-                if (DataStore.HeatmapUpdated)
-                {
-                    PlotHeatmap.Plot.Remove(heatmap);
-                    heatmap = PlotHeatmap.Plot.Add.Heatmap(DataStore.Heatmap);
-                    ConfigureHeatmapPlot(heatmap);
-
-                    PlotHeatmap.Refresh();
-                    DataStore.HeatmapUpdated = false;
-                }
-            };
-
-            timer.Start();
         }
 
         public void ConfigureHeatmapPlot(ScottPlot.Plottables.Heatmap plot)
         {
             plot.Colormap = new ScottPlot.Colormaps.Plasma();
+            if(colorbar != null)
+            {
+                PlotHeatmap.Plot.Remove(colorbar);
+            }
+            colorbar = PlotHeatmap.Plot.Add.ColorBar(heatmap);
+            Console.WriteLine("Tipo Colorbar: " + colorbar.GetType());
+            colorbar.Label = "Amplitude";
+            colorbar.Axis.TickGenerator = new ScottPlot.TickGenerators.NumericAutomatic();
             //Ajusta escala para milimetros
-            heatmap.Extent = new ScottPlot.CoordinateRect(
+            //heatmap.Extent = new ScottPlot.CoordinateRect(
+            plot.Extent = new ScottPlot.CoordinateRect(
                 0,
                 (DataStore.HeatmapCols-1) * Scan.getStepX(),
                 0,
@@ -87,6 +81,44 @@ namespace FAST_Scan.MVVM.View
             );
             //heatmap.Smooth = true;
             
+        }
+
+        private void OnHeatmapChanged()
+        {
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                heatmap.Update();
+                //ConfigureHeatmapPlot(heatmap);
+                PlotHeatmap.Refresh();
+            });
+        }
+
+        private void OnNewHeatmapChanged()
+        {
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                PlotHeatmap.Plot.Remove(heatmap);
+                heatmap = PlotHeatmap.Plot.Add.Heatmap(DataStore.Heatmap);
+                ConfigureHeatmapPlot(heatmap);
+                PlotHeatmap.Refresh();
+            });
+        }
+
+        private void OnLoaded(object sender, RoutedEventArgs e)
+        {
+            // evita duplicação de inscrição
+            DataStore.HeatmapChanged -= OnHeatmapChanged;
+            DataStore.HeatmapChanged += OnHeatmapChanged;
+
+            Console.WriteLine("INSCRITA: " + GetHashCode());
+            DataStore.NotifyHeatmapChanged();
+        }
+
+        private void OnUnloaded(object sender, RoutedEventArgs e)
+        {
+            DataStore.HeatmapChanged -= OnHeatmapChanged;
+
+            Console.WriteLine("REMOVIDA: " + GetHashCode());
         }
     }
 }

@@ -95,8 +95,6 @@ C:\Users\Vinícius\OneDrive\Desktop\PIBIC\FAST_Scan\FAST_Scan\bin\Debug\System.B
 C:\Users\Vinícius\OneDrive\Desktop\PIBIC\FAST_Scan\FAST_Scan\bin\Debug\System.Memory.xml
 C:\Users\Vinícius\OneDrive\Desktop\PIBIC\FAST_Scan\FAST_Scan\bin\Debug\System.Numerics.Vectors.xml
 C:\Users\Vinícius\OneDrive\Desktop\PIBIC\FAST_Scan\FAST_Scan\bin\Debug\System.Runtime.CompilerServices.Unsafe.xml
-C:\Users\Vinícius\OneDrive\Desktop\PIBIC\FAST_Scan\FAST_Scan\obj\Debug\GraphWindow.g.cs
-C:\Users\Vinícius\OneDrive\Desktop\PIBIC\FAST_Scan\FAST_Scan\obj\Debug\GraphWindow.baml
 C:\Users\Vinícius\OneDrive\Desktop\PIBIC\FAST_Scan\FAST_Scan\obj\Debug\MVVM\View\WaveformPlotView.g.cs
 C:\Users\Vinícius\OneDrive\Desktop\PIBIC\FAST_Scan\FAST_Scan\obj\Debug\MVVM\View\WaveformPlotView.baml
 C:\Users\Vinícius\OneDrive\Desktop\PIBIC\FAST_Scan\FAST_Scan\obj\Debug\MVVM\View\HeatmapPlotView.g.cs
@@ -107,3 +105,5 @@ C:\Users\Vinícius\OneDrive\Desktop\PIBIC\FAST_Scan\FAST_Scan\obj\Debug\MVVM\Vie
 C:\Users\Vinícius\OneDrive\Desktop\PIBIC\FAST_Scan\FAST_Scan\obj\Debug\MVVM\View\FocalPlotView.baml
 C:\Users\Vinícius\OneDrive\Desktop\PIBIC\FAST_Scan\FAST_Scan\obj\Debug\MVVM\View\ScanTabControlView.g.cs
 C:\Users\Vinícius\OneDrive\Desktop\PIBIC\FAST_Scan\FAST_Scan\obj\Debug\MVVM\View\ScanTabControlView.baml
+C:\Users\Vinícius\OneDrive\Desktop\PIBIC\FAST_Scan\FAST_Scan\obj\Debug\GraphExpandedWindow.g.cs
+C:\Users\Vinícius\OneDrive\Desktop\PIBIC\FAST_Scan\FAST_Scan\obj\Debug\GraphExpandedWindow.baml

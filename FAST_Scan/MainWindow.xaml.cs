@@ -24,9 +24,13 @@ namespace FAST_Scan
         public MainWindow()
         {
             InitializeComponent();
+
             HommingStateManager.SetIsHomed(HommingStateManager.Servo.X, false);
             HommingStateManager.SetIsHomed(HommingStateManager.Servo.Y, false);
             HommingStateManager.SetIsHomed(HommingStateManager.Servo.Z, false);
+
+            DataStore.FocalPlotCreate(1, 0);
+            DataStore.HeatmapCreate(1, 1);
 
             TestModeText.Visibility = Scan.isTestMode() == true ? Visibility.Visible : Visibility.Collapsed;
         }

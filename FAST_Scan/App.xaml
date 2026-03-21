@@ -4,7 +4,8 @@
              xmlns:local="clr-namespace:FAST_Scan"
              xmlns:viewModel="clr-namespace:FAST_Scan.MVVM.ViewModel"
              xmlns:view="clr-namespace:FAST_Scan.MVVM.View"
-             StartupUri="MainWindow.xaml">
+             StartupUri="MainWindow.xaml"
+             ShutdownMode="OnMainWindowClose">
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>

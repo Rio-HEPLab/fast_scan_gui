@@ -29,7 +29,8 @@
                     MaxWidth="150"
                     Height="30"
                     HorizontalAlignment="Stretch"
-                    Margin="10"/>
+                    Margin="10"
+                    Command="{Binding ExpandWindowCommand}"/>
 
             <Button Name="SaveImageButton"
                     Content="Save Image" 

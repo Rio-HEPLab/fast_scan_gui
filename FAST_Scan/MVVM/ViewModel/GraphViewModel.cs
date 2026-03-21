@@ -12,6 +12,10 @@ namespace FAST_Scan.MVVM.ViewModel
     {
         public GraphContainerViewModel GraphContainerVM { get; set; }
 
+        public WaveformPlotViewModel WaveformPlotVM { get; set; }
+        public HeatmapPlotViewModel HeatmapPlotVM { get; set; }
+        public FocalPlotViewModel FocalPlotVM { get; set; }
+        public GraphType Type { get; private set; }
 
         private object _currentView;
         public object CurrentView
@@ -26,9 +30,26 @@ namespace FAST_Scan.MVVM.ViewModel
 
         public GraphViewModel(GraphType graphType)
         {
+            //GraphContainerVM = new GraphContainerViewModel(graphType);
+            //CurrentView = GraphContainerVM;
+            Type = graphType;
 
-            GraphContainerVM = new GraphContainerViewModel(graphType);
-            CurrentView = GraphContainerVM;
+            if (graphType == GraphType.Waveform)
+            {
+                WaveformPlotVM = new WaveformPlotViewModel();
+                CurrentView = WaveformPlotVM;
+            }
+            if (graphType == GraphType.FocalPlot)
+            {
+                FocalPlotVM = new FocalPlotViewModel();
+                CurrentView = FocalPlotVM;
+            }
+            if (graphType == GraphType.Heatmap)
+            {
+                HeatmapPlotVM = new HeatmapPlotViewModel();
+                CurrentView = HeatmapPlotVM;
+            }
+
         }
 
     }
