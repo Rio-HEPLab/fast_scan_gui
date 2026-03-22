@@ -1,4 +1,7 @@
 ﻿using FAST_Scan.Core;
+using FAST_Scan.Interfaces;
+using FAST_Scan.MVVM.ViewModel;
+using Microsoft.Win32;
 using ScottPlot;
 using ScottPlot.Panels;
 using ScottPlot.Plottables;
@@ -106,12 +109,18 @@ namespace FAST_Scan.MVVM.View
 
         private void OnLoaded(object sender, RoutedEventArgs e)
         {
-            // evita duplicação de inscrição
+            // evita duplicação de inscrição da view
             DataStore.HeatmapChanged -= OnHeatmapChanged;
             DataStore.HeatmapChanged += OnHeatmapChanged;
 
             Console.WriteLine("INSCRITA: " + GetHashCode());
             DataStore.NotifyHeatmapChanged();
+
+            //Quando botão de salvar é pressionado, salva plot
+            if (DataContext is HeatmapPlotViewModel vm)
+            {
+                vm.SaveImageAction = SaveImage;
+            }
         }
 
         private void OnUnloaded(object sender, RoutedEventArgs e)
@@ -119,6 +128,22 @@ namespace FAST_Scan.MVVM.View
             DataStore.HeatmapChanged -= OnHeatmapChanged;
 
             Console.WriteLine("REMOVIDA: " + GetHashCode());
+        }
+
+        public void SaveImage()
+        {
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            saveFileDialog.Filter = "PNG Image (*.png)|*.png";
+            bool? success = saveFileDialog.ShowDialog();
+            if (success == true)
+            {
+                string path = saveFileDialog.FileName;
+                PlotHeatmap.Plot.SavePng(path, 800, 600);
+            }
+            else
+            {
+                //não selecionou nada
+            };
         }
     }
 }

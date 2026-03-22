@@ -191,6 +191,8 @@
     <Compile Include="GraphExpandedWindow.xaml.cs">
       <DependentUpon>GraphExpandedWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Interfaces\IGraphActions.cs" />
+    <Compile Include="Interfaces\IGraphSavable.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>

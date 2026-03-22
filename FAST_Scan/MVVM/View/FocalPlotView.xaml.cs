@@ -1,4 +1,6 @@
 ﻿using FAST_Scan.Core;
+using FAST_Scan.MVVM.ViewModel;
+using Microsoft.Win32;
 using ScottPlot.Plottables;
 using System;
 using System.Collections.Generic;
@@ -85,6 +87,12 @@ namespace FAST_Scan.MVVM.View
             Console.WriteLine("INSCRITA: " + GetHashCode());
             //Atualizar quando a view reaparecer na tela
             DataStore.NotifyFocalPlotChanged();
+
+            //Quando botão de salvar é pressionado, salva plot
+            if (DataContext is FocalPlotViewModel vm)
+            {
+                vm.SaveImageAction = SaveImage;
+            }
         }
 
         private void OnUnloaded(object sender, RoutedEventArgs e)
@@ -98,6 +106,22 @@ namespace FAST_Scan.MVVM.View
         {
             PlotFocal.Plot.Axes.AutoScaleY();
             PlotFocal.Plot.Axes.SetLimitsX(0, (DataStore.NumPoints - 1) * DataStore.StepValue);
+        }
+
+        public void SaveImage()
+        {
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            saveFileDialog.Filter = "PNG Image (*.png)|*.png";
+            bool? success = saveFileDialog.ShowDialog();
+            if (success == true)
+            {
+                string path = saveFileDialog.FileName;
+                PlotFocal.Plot.SavePng(path, 800, 600);
+            }
+            else
+            {
+                //não selecionou nada
+            };
         }
     }
 }
