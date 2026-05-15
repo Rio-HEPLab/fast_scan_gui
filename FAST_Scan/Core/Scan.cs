@@ -1,4 +1,4 @@
-﻿#define TEST_MODE
+﻿//#define TEST_MODE
 
 using System;
 using System.IO;
@@ -665,6 +665,8 @@ namespace FAST_Scan.Core
             decimal PositionY;
             int amplitude=0;
 
+            DataStore.HeatmapCreate(numStepsX + 1, numStepsY + 1);
+
             //Move os servos para a posição inicial
             statusMessage.CreateStatusMessage("Moving to initial position...");
             Logger.Instance.Log("Moving to initial position...", LogType.Info);
@@ -699,14 +701,18 @@ namespace FAST_Scan.Core
                         {
                             //Se o pulso é negativo pega valor minimo, se positivo pega o valor máximo
                             if (polarity == PulsePolarity.NEGATVE)
-                                amplitude = Digitizer.GetAvgMinValueInterval(digitizerSamples, intervalBinStart, intervalBinEnd);
+                                amplitude = Digitizer.GetMinAvgFromWaveform(DataStore.Waveform, 0, digitizerSamples, intervalBinStart, intervalBinEnd, 100);
+                            //amplitude = Digitizer.GetAvgMinValueInterval(digitizerSamples, intervalBinStart, intervalBinEnd);
                             else if (polarity == PulsePolarity.POSITIVE)
-                                amplitude = Digitizer.GetAvgMaxValueInterval(digitizerSamples, intervalBinStart, intervalBinEnd);
+                                amplitude = Digitizer.GetMaxAvgFromWaveform(DataStore.Waveform, 0, digitizerSamples, intervalBinStart, intervalBinEnd, 100);
+                            //amplitude = Digitizer.GetAvgMaxValueInterval(digitizerSamples, intervalBinStart, intervalBinEnd);
 
                             PositionX = j * stepX;
 
                             statusMessage.CreateStatusMessage("Amplitude: " + amplitude.ToString() + "\tPosicao X: " + PositionX.ToString() + "\tPosicao Y: " + PositionY.ToString());
                             Logger.Instance.Log("Amplitude: " + amplitude.ToString() + "\tPosicao X: " + PositionX.ToString() + "\tPosicao Y: " + PositionY.ToString(), LogType.Data);
+
+                            DataStore.HeatmapAddPoint(i, j, amplitude);
 
                             //escreve amplitude no outputFile
                             sw.Write(amplitude.ToString());
@@ -773,6 +779,9 @@ namespace FAST_Scan.Core
                     }
             }
 
+            //Pontos para fazer plot em tempo real
+            DataStore.FocalPlotCreate(numSteps + 1, (double)step);
+
             //Move os servos para a posição inicial
             statusMessage.CreateStatusMessage("Moving to initial position...");
             Logger.Instance.Log("Moving to initial position...", LogType.Info);
@@ -808,14 +817,18 @@ namespace FAST_Scan.Core
                     {
                         //Se o pulso é negativo pega valor minimo, se positivo pega o valor máximo
                         if (polarity == PulsePolarity.NEGATVE)
-                            amplitude = Digitizer.GetAvgMinValueInterval(digitizerSamples, intervalBinStart, intervalBinEnd);
+                            amplitude = Digitizer.GetMinAvgFromWaveform(DataStore.Waveform, 0, digitizerSamples, intervalBinStart, intervalBinEnd, 100);
+                            //amplitude = Digitizer.GetAvgMinValueInterval(digitizerSamples, intervalBinStart, intervalBinEnd);
                         else if (polarity == PulsePolarity.POSITIVE)
-                            amplitude = Digitizer.GetAvgMaxValueInterval(digitizerSamples, intervalBinStart, intervalBinEnd);
+                            amplitude = Digitizer.GetMaxAvgFromWaveform(DataStore.Waveform, 0, digitizerSamples, intervalBinStart, intervalBinEnd, 100);
+                            //amplitude = Digitizer.GetAvgMaxValueInterval(digitizerSamples, intervalBinStart, intervalBinEnd);
 
                         Position = j * step;
 
                         statusMessage.CreateStatusMessage("Amplitude: " + amplitude.ToString() + "\tPosition: " + Position.ToString());
                         Logger.Instance.Log("Amplitude: " + amplitude.ToString() + "\tPosition: " + Position.ToString(), LogType.Data);
+
+                        DataStore.FocalPlotAddPoint(j, amplitude);
 
 
                         //escreve amplitude no outputFile
@@ -835,6 +848,10 @@ namespace FAST_Scan.Core
                     }
                 }               
             }
+            double[] Sparams = new double[] { 0.1, 20, 10, 100 };
+            (double sigma, double x0, double I, double C)  = CurveFit.SCurve(DataStore.FocalData_x, DataStore.FocalData_y, Sparams);
+
+            Logger.Instance.Log("Beam Spot = " + sigma, LogType.Data);
         }
 
         public void Set_1D_Axis(Axis axis)

@@ -24,29 +24,48 @@
             <ColumnDefinition Width="200"/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
+        <Grid Background="AliceBlue">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="5*"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <StackPanel Grid.Column="0"
+                        >
 
-        <StackPanel Grid.Column="0"
-                    Background="AliceBlue">
+                <Image Source="/Images/FAST_SCAN_Logo.png"
+                       Width="180"
+                       Margin="10"/>
 
-            <Image Source="/Images/FAST_SCAN_Logo.png"
-                   Width="180"
-                   Margin="10"/>
-            
-            <RadioButton Content="2D Scan"
-                         FontFamily="BahnSchrift Bold"
+                <RadioButton Content="2D Scan"
+                             FontFamily="BahnSchrift Bold"
+                             Height="50"
+                             Style="{StaticResource MenuButtonTheme}"
+                             Command="{Binding Scan2DCommand}"/>
+
+                <RadioButton Content="1D Scan"
+                             Height="50"
+                             Style="{StaticResource MenuButtonTheme}"
+                             Command="{Binding Scan1DCommand}"/>
+
+                <RadioButton Content="Focal Analysis"
+                             Height="50"
+                             Style="{StaticResource MenuButtonTheme}"/>
+
+                <RadioButton Content="Waveform Plot"
+                             Height="50"
+                             Style="{StaticResource MenuButtonTheme}"/>
+
+                <RadioButton Content="Open Scan File"
+                             Height="50"
+                             Style="{StaticResource MenuButtonTheme}"/>
+            </StackPanel>
+            <RadioButton Content="Configurations"
+                         Grid.Row="1"
                          Height="50"
-                         Style="{StaticResource MenuButtonTheme}"
-                         Command="{Binding Scan2DCommand}"/>
-
-            <RadioButton Content="1D Scan"
-                         Height="50"
-                         Style="{StaticResource MenuButtonTheme}"
-                         Command="{Binding Scan1DCommand}"/>
-
-            <RadioButton Content="Focal Analysis"
-                         Height="50"
+                         VerticalAlignment="Bottom"
                          Style="{StaticResource MenuButtonTheme}"/>
-        </StackPanel>
+        </Grid>
+        
 
         <Grid Grid.Column="1"
               Background="White">

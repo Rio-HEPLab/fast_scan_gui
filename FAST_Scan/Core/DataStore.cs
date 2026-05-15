@@ -9,13 +9,6 @@ using ScottPlot;
 
 namespace FAST_Scan.Core
 {
-    enum GraphType
-    {
-        Waveform,
-        Heatmap,
-        FocalPlot
-    }
-
     //Classe que armazena valores globais para variaveis utilizadas em plots
     public static class DataStore
     {
