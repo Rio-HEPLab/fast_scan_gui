@@ -140,7 +140,7 @@
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
                           </Grid.RowDefinitions>
-                          <TextBlock Grid.Row="0" Grid.Column="0" Text="Limiar sobre a baseline (mV)" Style="{StaticResource FieldLabel}"/>
+                          <TextBlock Grid.Row="0" Grid.Column="0" Text="Portão de detecção / limiar fixo (mV)" Style="{StaticResource FieldLabel}"/>
                           <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding ThresholdMvText, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource FieldBox}"/>
                           <TextBlock Grid.Row="1" Grid.Column="0" Text="Baseline: início (ns)" Style="{StaticResource FieldLabel}"/>
                           <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding BaselineStartText, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource FieldBox}"/>
@@ -153,9 +153,23 @@
                           <TextBlock Grid.Row="5" Grid.Column="0" Text="Busca do trigger: ± (ns)" Style="{StaticResource FieldLabel}"/>
                           <TextBox Grid.Row="5" Grid.Column="1" Text="{Binding TriggerSearchText, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource FieldBox}"/>
                         </Grid>
+                        <TextBlock Text="Ponto de referência do pulso" Style="{StaticResource FieldLabel}" Margin="0,8,0,2"/>
+                        <ComboBox SelectedIndex="{Binding ReferenceModeIndex, Mode=TwoWay}">
+                            <ComboBoxItem Content="Fração da amplitude (CFD)"/>
+                            <ComboBoxItem Content="Limiar fixo"/>
+                        </ComboBox>
+                        <Grid Margin="0,4,0,0">
+                            <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="100"/></Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/></Grid.RowDefinitions>
+                            <TextBlock Grid.Row="0" Grid.Column="0" Text="Fração da amplitude (%)" Style="{StaticResource FieldLabel}"/>
+                            <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding FractionPercentText, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource FieldBox}"/>
+                            <TextBlock Grid.Row="1" Grid.Column="0" Text="Amostras na média do pico (1 = pico absoluto)" Style="{StaticResource FieldLabel}"/>
+                            <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding AmplitudePointsText, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource FieldBox}"/>
+                        </Grid>
                         <CheckBox Content="Pulso negativo" IsChecked="{Binding NegativePulse}" Margin="0,6,0,2"/>
                         <CheckBox Content="Exigir exatamente um pulso (filtro)" IsChecked="{Binding RequireSingleRun}" Margin="0,2"/>
                         <CheckBox Content="Interpolação linear entre amostras" IsChecked="{Binding LinearInterpolation}" Margin="0,2"/>
+                        <CheckBox Content="Rejeitar pulsos que saturam o ADC (sempre avisa)" IsChecked="{Binding RejectSaturated}" Margin="0,2"/>
                     </StackPanel>
                 </GroupBox>
 
@@ -205,7 +219,7 @@
                 <RadioButton x:Name="ShowWaveformRadio" Content="Waveform" IsChecked="True" Margin="0,0,16,0" Checked="OnViewModeChanged"/>
                 <RadioButton x:Name="ShowHistogramRadio" Content="Histograma" Margin="0,0,24,0" Checked="OnViewModeChanged"/>
                 <TextBlock Foreground="Gray" FontSize="11" VerticalAlignment="Center"
-                           Text="Waveform: azul = sinal, cinza = trigger, laranja = limiar, verde = baseline, vermelho = cruzamento"/>
+                           Text="Waveform: azul = sinal, cinza = trigger, laranja = nível de referência, roxo = pico, verde = baseline, vermelho = cruzamento"/>
             </StackPanel>
 
             <Border Grid.Row="1" BorderBrush="LightGray" BorderThickness="1">

@@ -27,6 +27,8 @@ namespace FAST_Scan.MVVM.ViewModel
         public double BaselineEndNs { get; set; }
         public double CrossingNs { get; set; } = double.NaN;
         public double TriggerCrossingNs { get; set; } = double.NaN;
+        public double PeakNs { get; set; } = double.NaN;
+        public double PeakVolts { get; set; } = double.NaN;
         public string WaveformTitle { get; set; }
 
         // ----- Histograma da variante selecionada -----
@@ -40,7 +42,7 @@ namespace FAST_Scan.MVVM.ViewModel
                 TimeNs = TimeNs, Volts = Volts, TriggerVolts = TriggerVolts,
                 LevelVolts = LevelVolts, BaselineVolts = BaselineVolts,
                 BaselineStartNs = BaselineStartNs, BaselineEndNs = BaselineEndNs,
-                CrossingNs = CrossingNs, TriggerCrossingNs = TriggerCrossingNs,
+                CrossingNs = CrossingNs, TriggerCrossingNs = TriggerCrossingNs, PeakNs = PeakNs, PeakVolts = PeakVolts,
                 WaveformTitle = WaveformTitle,
                 Stats = stats, VariantName = variantName
             };
@@ -122,13 +124,17 @@ namespace FAST_Scan.MVVM.ViewModel
         // ---------------- Análise ----------------
         public bool NegativePulse { get; set; } = false;
         public string ThresholdMvText { get; set; } = "30";
+        public int ReferenceModeIndex { get; set; } = 0;   // 0 = fração da amplitude, 1 = limiar fixo
+        public string FractionPercentText { get; set; } = "30";
+        public string AmplitudePointsText { get; set; } = "5";
+        public bool RejectSaturated { get; set; } = false;
         public string BaselineStartText { get; set; } = "-5";
         public string BaselineEndText { get; set; } = "-1";
         public string SearchStartText { get; set; } = "0";
         public string SearchEndText { get; set; } = "40";
         public string TriggerSearchText { get; set; } = "1";
         public bool RequireSingleRun { get; set; } = true;
-        public bool LinearInterpolation { get; set; } = false;
+        public bool LinearInterpolation { get; set; } = true;
 
         // ---------------- Histograma ----------------
         public string BinsText { get; set; } = "100";
@@ -183,6 +189,8 @@ namespace FAST_Scan.MVVM.ViewModel
         private TimeResolutionDisplay _lastDisplay;
         private double _gridStepNs;       // passo da grade de amostragem (ns); 0 = desconhecido
         private double _gridOriginNs;     // tempo da amostra 0 relativo ao trigger nominal (ns)
+        private bool _fixedMode;         // modo de limiar fixo (Δt quantizado na grade se não houver interpolação)
+        private DateTime _lastSaturationWarning = DateTime.MinValue;
         private bool _interpolated;       // com interpolação, os Δt deixam de ser quantizados
         private readonly object _displayLock = new object();
 
@@ -338,9 +346,9 @@ namespace FAST_Scan.MVVM.ViewModel
 
                         double seconds = clock.Elapsed.TotalSeconds;
                         CountersText = string.Format(CultureInfo.InvariantCulture,
-                            "Blocos: {0}\nFrames capturados: {1} ({2:0} frames/s)\nEventos válidos: {3} de {4} analisados\nRejeitados: {5}\nÚltimo bloco: captura {6:0} ms | XZero {7:0} ms | CURVe? {8:0} ms | transf. {9:0} ms",
+                            "Blocos: {0}\nFrames capturados: {1} ({2:0} frames/s)\nEventos válidos: {3} de {4} analisados\nRejeitados: {5}\nAmplitude média: {10:0.0} mV\nÚltimo bloco: captura {6:0} ms | XZero {7:0} ms | CURVe? {8:0} ms | transf. {9:0} ms",
                             blocks, frames, frames / seconds, acc.ValidEvents, acc.FramesAnalyzed,
-                            acc.RejectSummary(), block.CaptureMs, block.XZeroMs, block.CurveMs, block.TransferMs);
+                            acc.RejectSummary(), block.CaptureMs, block.XZeroMs, block.CurveMs, block.TransferMs, acc.MeanAmplitudeVolts * 1000);
                     }
                 }
                 catch (OperationCanceledException)
@@ -380,6 +388,8 @@ namespace FAST_Scan.MVVM.ViewModel
             _gridStepNs = dtNs;
             _gridOriginNs = PulseTimingAnalyzer.IndexToNs(0, block);
             _interpolated = timing.LinearInterpolation;
+            _fixedMode = timing.ReferenceMode == PulseReferenceMode.FixedThreshold;
+            int saturatedInBlock = 0;
             double[] buffer = new double[n];
             double[] triggerBuffer = block.HasTriggerData ? new double[n] : null;
 
@@ -391,6 +401,11 @@ namespace FAST_Scan.MVVM.ViewModel
             {
                 block.GetFrameVolts(f, buffer);
                 PulseTimingResult r = PulseTimingAnalyzer.AnalyzePulse(buffer, block, timing);
+                if (r.Saturated)
+                {
+                    acc.AddSaturated();
+                    saturatedInBlock++;
+                }
 
                 if (!r.Valid)
                 {
@@ -420,7 +435,14 @@ namespace FAST_Scan.MVVM.ViewModel
                 }
 
                 acc.AddEvent(dts);
+                acc.AddAmplitude(r.AmplitudeVolts);
                 shownFrame = f; shownResult = r; shownIsValid = true;
+            }
+
+            if (saturatedInBlock > 0 && (DateTime.Now - _lastSaturationWarning).TotalSeconds > 5)
+            {
+                _lastSaturationWarning = DateTime.Now;
+                Logger.Instance.Log("AVISO: " + saturatedInBlock + " pulso(s) saturaram o ADC neste bloco; a amplitude (e o ponto de fração) fica incorreta. Aumente a escala vertical (mV/div).", LogType.Warning);
             }
 
             // Waveform mostrada: o último evento válido do bloco (ou o último rejeitado).
@@ -433,12 +455,16 @@ namespace FAST_Scan.MVVM.ViewModel
             if (shownFrame >= 0)
             {
                 display.Volts = block.GetFrameVolts(shownFrame);
-                display.LevelVolts = shownResult.LevelVolts;
+                display.LevelVolts = shownResult.ReferenceVolts;
                 display.BaselineVolts = shownResult.BaselineVolts;
                 if (shownResult.Valid)
                 {
                     display.CrossingNs = PulseTimingAnalyzer.IndexToNs(shownResult.CrossingIndex, block);
-                    display.WaveformTitle = "Evento válido (frame " + (shownFrame + 1) + " do último bloco)";
+                    display.PeakNs = PulseTimingAnalyzer.IndexToNs(shownResult.PeakIndex, block);
+                    display.PeakVolts = display.Volts[shownResult.PeakIndex];
+                    display.WaveformTitle = "Evento válido (frame " + (shownFrame + 1) + " do último bloco), amplitude " +
+                        (shownResult.AmplitudeVolts * 1000).ToString("0.0", CultureInfo.InvariantCulture) + " mV" +
+                        (shownResult.Saturated ? " - SATURADO" : "");
                 }
                 else
                 {
@@ -467,7 +493,7 @@ namespace FAST_Scan.MVVM.ViewModel
             for (int v = 0; v < all.Length; v++)
             {
                 // Sem correção e trigger digitalizado (sem interpolação) só assumem valores múltiplos do passo.
-                bool quantized = !_interpolated && (v == (int)TimingVariant.NoCorrection || v == (int)TimingVariant.DigitizedTrigger);
+                bool quantized = _fixedMode && !_interpolated && (v == (int)TimingVariant.NoCorrection || v == (int)TimingVariant.DigitizedTrigger);
                 all[v] = acc.ComputeStats(v, h.AutoRange, h.Min, h.Max, h.Bins, quantized ? _gridStepNs : 0, _gridOriginNs);
             }
 
@@ -545,6 +571,8 @@ namespace FAST_Scan.MVVM.ViewModel
 
             int channel, triggerChannel, frames, recordLength, target;
             double rateGs, scaleMv, levelMv, positionPercent, triggerScaleMv;
+            double fractionPercent;
+            int amplitudePoints;
             double thresholdMv, baseStart, baseEnd, searchStart, searchEnd, triggerSearch;
 
             if (!TryInt(ScopeChannelText, 1, 4, out channel)) { error = "Canal medido deve ser um inteiro de 1 a 4."; return null; }
@@ -558,6 +586,8 @@ namespace FAST_Scan.MVVM.ViewModel
             if (!TryDouble(TriggerPositionText, out positionPercent)) { error = "Posição do trigger inválida (%)."; return null; }
             if (!TryDouble(TriggerScaleMvText, out triggerScaleMv) || triggerScaleMv <= 0) { error = "Escala vertical do canal do trigger inválida (mV/div)."; return null; }
             if (!TryDouble(ThresholdMvText, out thresholdMv) || thresholdMv <= 0) { error = "Limiar inválido (mV, positivo)."; return null; }
+            if (!TryDouble(FractionPercentText, out fractionPercent) || fractionPercent <= 0 || fractionPercent >= 100) { error = "Fração da amplitude inválida (entre 0 e 100 %, exclusive)."; return null; }
+            if (!TryInt(AmplitudePointsText, 1, 1000, out amplitudePoints)) { error = "Amostras da média da amplitude devem ser um inteiro de 1 a 1000 (1 = pico absoluto; 0 não é aceito)."; return null; }
             if (!TryDouble(BaselineStartText, out baseStart) || !TryDouble(BaselineEndText, out baseEnd)) { error = "Janela da baseline inválida (ns)."; return null; }
             if (!TryDouble(SearchStartText, out searchStart) || !TryDouble(SearchEndText, out searchEnd)) { error = "Janela de busca inválida (ns)."; return null; }
             if (!TryDouble(TriggerSearchText, out triggerSearch)) { error = "Meia-largura da busca do trigger inválida (ns)."; return null; }
@@ -595,6 +625,10 @@ namespace FAST_Scan.MVVM.ViewModel
                 BaselineEndNs = baseEnd,
                 SearchStartNs = searchStart,
                 SearchEndNs = searchEnd,
+                ReferenceMode = ReferenceModeIndex == 1 ? PulseReferenceMode.FixedThreshold : PulseReferenceMode.ConstantFraction,
+                FractionOfAmplitude = fractionPercent / 100.0,
+                AmplitudeAveragePoints = amplitudePoints,
+                RejectSaturated = RejectSaturated,
                 RequireSingleRun = RequireSingleRun,
                 LinearInterpolation = LinearInterpolation,
                 TriggerFalling = TriggerFalling,

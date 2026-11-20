@@ -74,6 +74,11 @@ namespace FAST_Scan.Core.Oscilloscope
             }
         }
 
+        // Tensões dos códigos 126 e -127 do ADC de 8 bits (quase fundo de escala):
+        // amostras além delas indicam sinal saturado.
+        public double SaturationHighVolts { get { return YZero + YMultiplier * (126 - YOffset); } }
+        public double SaturationLowVolts { get { return YZero + YMultiplier * (-127 - YOffset); } }
+
         // Eixo de tempo nominal em ns, com 0 na amostra do trigger.
         // Não aplica o XZero (ordem de ps): serve para exibir, não para medir jitter.
         public double[] GetTimeAxisNanoseconds()

@@ -10,7 +10,8 @@ namespace FAST_Scan.Core.Analysis
         MultiplePulses,     // mais de uma região contínua acima do limiar
         StartsAbove,        // já estava acima do limiar no início da janela (cruzamento não observado)
         BadBaselineWindow,  // janela da baseline fora do frame
-        BadSearchWindow     // janela de busca fora do frame
+        BadSearchWindow,    // janela de busca fora do frame
+        Saturated           // pulso saturou o ADC (só rejeita se a opção estiver ligada)
     }
 
     public class PulseTimingResult
@@ -19,8 +20,11 @@ namespace FAST_Scan.Core.Analysis
         public RejectReason Reason { get; set; }
         public double CrossingIndex { get; set; }   // índice (fracionário, se interpolado) do cruzamento
         public double BaselineVolts { get; set; } = double.NaN;
-        public double LevelVolts { get; set; } = double.NaN;   // baseline +/- limiar
-        public double PeakVolts { get; set; }                  // amplitude do pico acima da baseline (módulo)
+        public double LevelVolts { get; set; } = double.NaN;       // portão de detecção: baseline +/- limiar
+        public double ReferenceVolts { get; set; } = double.NaN;   // nível onde o cruzamento foi medido
+        public double AmplitudeVolts { get; set; }                 // amplitude (média em torno do pico), módulo
+        public int PeakIndex { get; set; } = -1;                   // índice da amostra do pico
+        public bool Saturated { get; set; }                        // o pulso tocou o fundo de escala do ADC
     }
 
     // Análise de um evento. Funções puras: não guardam estado, podem rodar em qualquer thread.
@@ -61,20 +65,19 @@ namespace FAST_Scan.Core.Analysis
             }
 
             double pol = s.Polarity == PulsePolarity.Positive ? 1.0 : -1.0;
-            double level = baseline + pol * s.ThresholdVolts;
-            result.LevelVolts = level;
+            double gate = baseline + pol * s.ThresholdVolts;
+            result.LevelVolts = gate;
+            result.ReferenceVolts = gate;
 
-            // Conta as regiões contínuas acima do limiar e guarda o início da primeira.
+            // Conta as regiões contínuas acima do portão e guarda início e fim da primeira.
             int runs = 0;
             int first = -1;
+            int firstEnd = -1;
             bool startsAbove = false;
             bool previous = false;
-            double peak = double.NegativeInfinity;
             for (int i = j0; i <= j1; i++)
             {
-                double rel = pol * (v[i] - baseline);
-                if (rel > peak) peak = rel;
-                bool above = pol * (v[i] - level) > 0;
+                bool above = pol * (v[i] - gate) > 0;
                 if (above && !previous)
                 {
                     runs++;
@@ -84,15 +87,62 @@ namespace FAST_Scan.Core.Analysis
                         if (i == j0) startsAbove = true;
                     }
                 }
+                else if (!above && previous && runs == 1 && firstEnd < 0)
+                {
+                    firstEnd = i - 1;
+                }
                 previous = above;
             }
-            result.PeakVolts = peak;
+            if (runs == 1 && firstEnd < 0) firstEnd = j1;
 
             if (runs == 0) { result.Reason = RejectReason.NoPulse; return result; }
             if (runs > 1 && s.RequireSingleRun) { result.Reason = RejectReason.MultiplePulses; return result; }
             if (startsAbove) { result.Reason = RejectReason.StartsAbove; return result; }
 
-            result.CrossingIndex = s.LinearInterpolation ? Interpolate(v[first - 1], v[first], level, first - 1) : first;
+            // Pico, saturação e amplitude (média de N amostras em torno do pico).
+            int peakIndex = first;
+            double peakRel = double.NegativeInfinity;
+            bool saturated = false;
+            for (int i = first; i <= firstEnd; i++)
+            {
+                double rel = pol * (v[i] - baseline);
+                if (rel > peakRel) { peakRel = rel; peakIndex = i; }
+                if (pol > 0 ? v[i] >= block.SaturationHighVolts : v[i] <= block.SaturationLowVolts)
+                    saturated = true;
+            }
+            int points = Math.Min(Math.Max(1, s.AmplitudeAveragePoints), n);
+            int windowStart = peakIndex - points / 2;
+            if (windowStart < 0) windowStart = 0;
+            if (windowStart + points > n) windowStart = n - points;
+            double sumAmplitude = 0;
+            for (int k = windowStart; k < windowStart + points; k++)
+                sumAmplitude += pol * (v[k] - baseline);
+
+            result.PeakIndex = peakIndex;
+            result.AmplitudeVolts = sumAmplitude / points;
+            result.Saturated = saturated;
+
+            if (saturated && s.RejectSaturated) { result.Reason = RejectReason.Saturated; return result; }
+
+            if (s.ReferenceMode == PulseReferenceMode.FixedThreshold)
+            {
+                result.CrossingIndex = s.LinearInterpolation ? Interpolate(v[first - 1], v[first], gate, first - 1) : first;
+            }
+            else
+            {
+                // Fração constante: a partir do pico, anda para trás até a última amostra
+                // que não está acima do nível de referência (a subida do pulso).
+                double level = baseline + pol * s.FractionOfAmplitude * result.AmplitudeVolts;
+                result.ReferenceVolts = level;
+                int below = -1;
+                for (int i = peakIndex - 1; i >= j0; i--)
+                {
+                    if (pol * (v[i] - level) <= 0) { below = i; break; }
+                }
+                if (below < 0) { result.Reason = RejectReason.StartsAbove; return result; }
+                result.CrossingIndex = s.LinearInterpolation ? Interpolate(v[below], v[below + 1], level, below) : below + 1;
+            }
+
             result.Valid = true;
             result.Reason = RejectReason.None;
             return result;

@@ -112,6 +112,13 @@ namespace FAST_Scan.MVVM.View
                 AddLine(xMin, d.LevelVolts, xMax, d.LevelVolts, Colors.Orange, 1.5f);   // limiar
             if (!double.IsNaN(d.BaselineVolts))
                 AddLine(d.BaselineStartNs, d.BaselineVolts, d.BaselineEndNs, d.BaselineVolts, Colors.Green, 3f);   // janela da baseline
+            if (!double.IsNaN(d.PeakNs) && !double.IsNaN(d.PeakVolts))
+            {
+                var peak = MainPlot.Plot.Add.Scatter(new double[] { d.PeakNs }, new double[] { d.PeakVolts });
+                peak.Color = Colors.Purple;
+                peak.MarkerSize = 9;
+                peak.LineWidth = 0;
+            }
             if (!double.IsNaN(d.CrossingNs) && !double.IsNaN(d.LevelVolts))
                 AddLine(d.CrossingNs, d.LevelVolts - 0.02, d.CrossingNs, d.LevelVolts + 0.02, Colors.Red, 2f);     // cruzamento
             if (!double.IsNaN(d.TriggerCrossingNs))

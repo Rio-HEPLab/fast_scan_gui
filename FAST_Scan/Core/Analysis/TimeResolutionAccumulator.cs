@@ -192,6 +192,9 @@ namespace FAST_Scan.Core.Analysis
         private readonly List<double>[] deltas = new List<double>[VariantCount];
         private readonly int[] rejectCounts = new int[Enum.GetValues(typeof(RejectReason)).Length];
         private int triggerMissing;
+        private int saturated;
+        private double amplitudeSum;
+        private int amplitudeCount;
         private int valid;
 
         public TimeResolutionAccumulator()
@@ -219,6 +222,22 @@ namespace FAST_Scan.Core.Analysis
             lock (sync) rejectCounts[(int)reason]++;
         }
 
+        public void AddSaturated()
+        {
+            lock (sync) saturated++;
+        }
+
+        public void AddAmplitude(double volts)
+        {
+            lock (sync) { amplitudeSum += volts; amplitudeCount++; }
+        }
+
+        // Amplitude média dos eventos válidos (V); NaN se ainda não há eventos.
+        public double MeanAmplitudeVolts
+        {
+            get { lock (sync) return amplitudeCount > 0 ? amplitudeSum / amplitudeCount : double.NaN; }
+        }
+
         public void AddTriggerMissing()
         {
             lock (sync) triggerMissing++;
@@ -244,6 +263,7 @@ namespace FAST_Scan.Core.Analysis
                 sb.Append(" | já acima " + rejectCounts[(int)RejectReason.StartsAbove]);
                 int bad = rejectCounts[(int)RejectReason.BadBaselineWindow] + rejectCounts[(int)RejectReason.BadSearchWindow];
                 if (bad > 0) sb.Append(" | janela inválida " + bad);
+                if (saturated > 0) sb.Append(" | SATURADOS " + saturated);
                 if (triggerMissing > 0) sb.Append(" | trigger não achado " + triggerMissing);
                 return sb.ToString();
             }
