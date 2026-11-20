@@ -109,3 +109,5 @@ C:\Users\Vinícius\OneDrive\Desktop\PIBIC\FAST_Scan\FAST_Scan\obj\Debug\GraphExp
 C:\Users\Vinícius\OneDrive\Desktop\PIBIC\FAST_Scan\FAST_Scan\obj\Debug\GraphExpandedWindow.baml
 C:\Users\Vinícius\OneDrive\Desktop\PIBIC\FAST_Scan\FAST_Scan\bin\Debug\MathNet.Numerics.dll
 C:\Users\Vinícius\OneDrive\Desktop\PIBIC\FAST_Scan\FAST_Scan\bin\Debug\MathNet.Numerics.xml
+C:\Users\Vinícius\OneDrive\Desktop\PIBIC\FAST_Scan\FAST_Scan\obj\Debug\ConfigurationsWindow.g.cs
+C:\Users\Vinícius\OneDrive\Desktop\PIBIC\FAST_Scan\FAST_Scan\obj\Debug\ConfigurationsWindow.baml

@@ -35,7 +35,7 @@
         <ListBox Name ="LogsListBox"
                  ItemsSource="{Binding Logs}"
                  Grid.Row="0"
-                 Background="Black"
+                 Background="#070726"
                  Loaded="LogsListBox_Loaded"
                  Grid.ColumnSpan="3"/>
 

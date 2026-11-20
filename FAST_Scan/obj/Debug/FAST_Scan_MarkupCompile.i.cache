@@ -10,11 +10,11 @@ none
 false
 DEBUG;TRACE
 C:\Users\Vinícius\OneDrive\Desktop\PIBIC\FAST_Scan\FAST_Scan\App.xaml
-11-697799529
+121261516788
 11-1230422482
-431722373606
-361514843986
-GraphExpandedWindow.xaml;MainWindow.xaml;MVVM\View\FocalPlotView.xaml;MVVM\View\GraphContainerView.xaml;MVVM\View\HeatmapPlotView.xaml;MVVM\View\Scan1DView.xaml;MVVM\View\Scan2DView.xaml;MVVM\View\ScanTabControlView.xaml;MVVM\View\TerminalView.xaml;MVVM\View\WaveformPlotView.xaml;Theme\MenuButtonTheme.xaml;
+45-240648862
+36-795476720
+ConfigurationsWindow.xaml;GraphExpandedWindow.xaml;MainWindow.xaml;MVVM\View\FocalPlotView.xaml;MVVM\View\GraphContainerView.xaml;MVVM\View\HeatmapPlotView.xaml;MVVM\View\Scan1DView.xaml;MVVM\View\Scan2DView.xaml;MVVM\View\ScanTabControlView.xaml;MVVM\View\TerminalView.xaml;MVVM\View\WaveformPlotView.xaml;Theme\MenuButtonTheme.xaml;
 
-False
+True
 

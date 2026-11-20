@@ -13,21 +13,21 @@
         <Style x:Key="TabItemStyle" TargetType="TabItem">
             <Setter Property="BorderThickness" Value="0"/>
             <Setter Property="BorderBrush" Value="Transparent"/>
-            <Setter Property="Width" Value="150"/>
+            <Setter Property="Width" Value="180"/>
             <Setter Property="HorizontalAlignment" Value="Center"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
             <Setter Property="Padding" Value="10 5"/>
-            <Setter Property="FontWeight" Value="Medium"/>
+            <Setter Property="FontWeight" Value="Normal"/>
+            <Setter Property="FontFamily" Value="Source Sans Variable"/>
 
             <!-- Aqui você estiliza só o HEADER -->
             <Setter Property="HeaderTemplate">
                 <Setter.Value>
                     <DataTemplate>
                         <TextBlock Text="{Binding}"
-                           FontFamily="Bahnschrift"
                            FontWeight="Bold"
                            FontSize="15"
-                           Foreground="DarkSlateGray"
+                           Foreground="#070726"
                            HorizontalAlignment="Center"
                            VerticalAlignment="Center"/>
                     </DataTemplate>
@@ -69,7 +69,7 @@
                                        FontWeight="Bold"
                                        FontSize="25"
                                        Margin="0,0,30,0"
-                                       Foreground="#4053A0"/>
+                                       Foreground="#070726"/>
                         </Grid>
 
                         <!-- Conteúdo -->

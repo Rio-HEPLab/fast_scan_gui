@@ -12,6 +12,8 @@ namespace FAST_Scan.MVVM.ViewModel
     {
         public RelayCommand Scan1DCommand { get; set; }
         public RelayCommand Scan2DCommand { get; set; }
+        public RelayCommand ConfigurationsCommand { get; set; }
+
 
 
         public Scan2DViewModel Scan2DVM { get; set; }
@@ -88,6 +90,22 @@ namespace FAST_Scan.MVVM.ViewModel
 
                 }
             });
+
+            ConfigurationsCommand = new RelayCommand(o =>
+            {
+                Console.WriteLine("Configurations Button Pressed");
+                var vm = new ConfigurationsViewModel();
+                var window = new ConfigurationsWindow
+                {
+                    DataContext = vm,
+                    Owner = Application.Current.MainWindow
+
+                };
+
+                bool? result = window.ShowDialog();
+
+            });
         }
+
     }
 }

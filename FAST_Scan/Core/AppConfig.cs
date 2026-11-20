@@ -8,13 +8,14 @@ using System.Windows.Media.Media3D;
 namespace FAST_Scan.Core
 {
 
-    //Classe que grava os parametros  de scan para salvar no arquivo json
+    //Classe que grava os parametros de scan para salvar no arquivo json
     internal class AppConfig
     {
         public Scan1DParams params1D { get; set; } = new Scan1DParams();
         public Scan2DParams params2D { get; set; } = new Scan2DParams();
         public string PulsePolarity { get; set; } = null;
         public string DigitizerSamples { get; set; } = null;
+        public ServosSerialNumber servosSerialNumber { get; set; } = new ServosSerialNumber();
     }
 
     internal class Scan1DParams
@@ -41,5 +42,12 @@ namespace FAST_Scan.Core
         public string Y_NumberOfSteps { get; set; } = null;
         public string ZPosition { get; set; } = null;
         public bool? SetZ { get; set; } = false;
+    }
+
+    internal class ServosSerialNumber 
+    {
+        public string ServoX { get; set;} = null;
+        public string ServoY { get; set;} = null;
+        public string ServoZ { get; set;} = null;
     }
 }

@@ -3,24 +3,78 @@
   "WorkspaceRootPath": "C:\\Users\\Vin\u00EDcius\\OneDrive\\Desktop\\PIBIC\\FAST_Scan\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{78F19A82-BEED-4D0C-8C68-537DDBB1B29C}|FAST_Scan\\FAST_Scan.csproj|c:\\users\\vin\u00EDcius\\onedrive\\desktop\\pibic\\fast_scan\\fast_scan\\core\\datastore.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{78F19A82-BEED-4D0C-8C68-537DDBB1B29C}|FAST_Scan\\FAST_Scan.csproj|solutionrelative:fast_scan\\core\\datastore.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{78F19A82-BEED-4D0C-8C68-537DDBB1B29C}|FAST_Scan\\FAST_Scan.csproj|c:\\users\\vin\u00EDcius\\onedrive\\desktop\\pibic\\fast_scan\\fast_scan\\mvvm\\view\\scan1dview.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
-      "RelativeMoniker": "D:0:0:{78F19A82-BEED-4D0C-8C68-537DDBB1B29C}|FAST_Scan\\FAST_Scan.csproj|solutionrelative:fast_scan\\mvvm\\view\\scan1dview.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+      "AbsoluteMoniker": "D:0:0:{00000000-0000-0000-0000-000000000000}|\u003CSolution\u003E|FAST_Scan||{04B8AB82-A572-4FEF-95CE-5222444B6B64}|"
     },
     {
       "AbsoluteMoniker": "D:0:0:{78F19A82-BEED-4D0C-8C68-537DDBB1B29C}|FAST_Scan\\FAST_Scan.csproj|c:\\users\\vin\u00EDcius\\onedrive\\desktop\\pibic\\fast_scan\\fast_scan\\core\\scan.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{78F19A82-BEED-4D0C-8C68-537DDBB1B29C}|FAST_Scan\\FAST_Scan.csproj|solutionrelative:fast_scan\\core\\scan.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{78F19A82-BEED-4D0C-8C68-537DDBB1B29C}|FAST_Scan\\FAST_Scan.csproj|c:\\users\\vin\u00EDcius\\onedrive\\desktop\\pibic\\fast_scan\\fast_scan\\core\\curvefit.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{78F19A82-BEED-4D0C-8C68-537DDBB1B29C}|FAST_Scan\\FAST_Scan.csproj|C:\\Users\\Vin\u00EDcius\\OneDrive\\Desktop\\PIBIC\\FAST_Scan\\fast_scan\\mvvm\\view\\scan1dview.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{78F19A82-BEED-4D0C-8C68-537DDBB1B29C}|FAST_Scan\\FAST_Scan.csproj|solutionrelative:fast_scan\\mvvm\\view\\scan1dview.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{78F19A82-BEED-4D0C-8C68-537DDBB1B29C}|FAST_Scan\\FAST_Scan.csproj|C:\\Users\\Vin\u00EDcius\\OneDrive\\Desktop\\PIBIC\\FAST_Scan\\fast_scan\\core\\configmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{78F19A82-BEED-4D0C-8C68-537DDBB1B29C}|FAST_Scan\\FAST_Scan.csproj|solutionrelative:fast_scan\\core\\configmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{78F19A82-BEED-4D0C-8C68-537DDBB1B29C}|FAST_Scan\\FAST_Scan.csproj|C:\\Users\\Vin\u00EDcius\\OneDrive\\Desktop\\PIBIC\\FAST_Scan\\fast_scan\\core\\appconfig.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{78F19A82-BEED-4D0C-8C68-537DDBB1B29C}|FAST_Scan\\FAST_Scan.csproj|solutionrelative:fast_scan\\core\\appconfig.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{78F19A82-BEED-4D0C-8C68-537DDBB1B29C}|FAST_Scan\\FAST_Scan.csproj|C:\\Users\\Vin\u00EDcius\\OneDrive\\Desktop\\PIBIC\\FAST_Scan\\fast_scan\\core\\scanstatemanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{78F19A82-BEED-4D0C-8C68-537DDBB1B29C}|FAST_Scan\\FAST_Scan.csproj|solutionrelative:fast_scan\\core\\scanstatemanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{78F19A82-BEED-4D0C-8C68-537DDBB1B29C}|FAST_Scan\\FAST_Scan.csproj|C:\\Users\\Vin\u00EDcius\\OneDrive\\Desktop\\PIBIC\\FAST_Scan\\fast_scan\\core\\hommingstatemanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{78F19A82-BEED-4D0C-8C68-537DDBB1B29C}|FAST_Scan\\FAST_Scan.csproj|solutionrelative:fast_scan\\core\\hommingstatemanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{78F19A82-BEED-4D0C-8C68-537DDBB1B29C}|FAST_Scan\\FAST_Scan.csproj|C:\\Users\\Vin\u00EDcius\\OneDrive\\Desktop\\PIBIC\\FAST_Scan\\fast_scan\\configurationswindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{78F19A82-BEED-4D0C-8C68-537DDBB1B29C}|FAST_Scan\\FAST_Scan.csproj|solutionrelative:fast_scan\\configurationswindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{78F19A82-BEED-4D0C-8C68-537DDBB1B29C}|FAST_Scan\\FAST_Scan.csproj|C:\\Users\\Vin\u00EDcius\\OneDrive\\Desktop\\PIBIC\\FAST_Scan\\fast_scan\\mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{78F19A82-BEED-4D0C-8C68-537DDBB1B29C}|FAST_Scan\\FAST_Scan.csproj|solutionrelative:fast_scan\\mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{78F19A82-BEED-4D0C-8C68-537DDBB1B29C}|FAST_Scan\\FAST_Scan.csproj|C:\\Users\\Vin\u00EDcius\\OneDrive\\Desktop\\PIBIC\\FAST_Scan\\fast_scan\\mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{78F19A82-BEED-4D0C-8C68-537DDBB1B29C}|FAST_Scan\\FAST_Scan.csproj|solutionrelative:fast_scan\\mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{78F19A82-BEED-4D0C-8C68-537DDBB1B29C}|FAST_Scan\\FAST_Scan.csproj|C:\\Users\\Vin\u00EDcius\\OneDrive\\Desktop\\PIBIC\\FAST_Scan\\fast_scan\\mvvm\\viewmodel\\mainviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{78F19A82-BEED-4D0C-8C68-537DDBB1B29C}|FAST_Scan\\FAST_Scan.csproj|solutionrelative:fast_scan\\mvvm\\viewmodel\\mainviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{78F19A82-BEED-4D0C-8C68-537DDBB1B29C}|FAST_Scan\\FAST_Scan.csproj|C:\\Users\\Vin\u00EDcius\\OneDrive\\Desktop\\PIBIC\\FAST_Scan\\fast_scan\\mvvm\\viewmodel\\configurationsviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{78F19A82-BEED-4D0C-8C68-537DDBB1B29C}|FAST_Scan\\FAST_Scan.csproj|solutionrelative:fast_scan\\mvvm\\viewmodel\\configurationsviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{78F19A82-BEED-4D0C-8C68-537DDBB1B29C}|FAST_Scan\\FAST_Scan.csproj|C:\\Users\\Vin\u00EDcius\\OneDrive\\Desktop\\PIBIC\\FAST_Scan\\fast_scan\\core\\curvefit.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{78F19A82-BEED-4D0C-8C68-537DDBB1B29C}|FAST_Scan\\FAST_Scan.csproj|solutionrelative:fast_scan\\core\\curvefit.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{78F19A82-BEED-4D0C-8C68-537DDBB1B29C}|FAST_Scan\\FAST_Scan.csproj|C:\\Users\\Vin\u00EDcius\\OneDrive\\Desktop\\PIBIC\\FAST_Scan\\fast_scan\\mvvm\\view\\scantabcontrolview.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{78F19A82-BEED-4D0C-8C68-537DDBB1B29C}|FAST_Scan\\FAST_Scan.csproj|solutionrelative:fast_scan\\mvvm\\view\\scantabcontrolview.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{78F19A82-BEED-4D0C-8C68-537DDBB1B29C}|FAST_Scan\\FAST_Scan.csproj|C:\\Users\\Vin\u00EDcius\\OneDrive\\Desktop\\PIBIC\\FAST_Scan\\fast_scan\\theme\\menubuttontheme.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{78F19A82-BEED-4D0C-8C68-537DDBB1B29C}|FAST_Scan\\FAST_Scan.csproj|solutionrelative:fast_scan\\theme\\menubuttontheme.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{78F19A82-BEED-4D0C-8C68-537DDBB1B29C}|FAST_Scan\\FAST_Scan.csproj|C:\\Users\\Vin\u00EDcius\\OneDrive\\Desktop\\PIBIC\\FAST_Scan\\fast_scan\\core\\datastore.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{78F19A82-BEED-4D0C-8C68-537DDBB1B29C}|FAST_Scan\\FAST_Scan.csproj|solutionrelative:fast_scan\\core\\datastore.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{78F19A82-BEED-4D0C-8C68-537DDBB1B29C}|FAST_Scan\\FAST_Scan.csproj|C:\\Users\\Vin\u00EDcius\\OneDrive\\Desktop\\PIBIC\\FAST_Scan\\fast_scan\\mvvm\\view\\scan1dview.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{78F19A82-BEED-4D0C-8C68-537DDBB1B29C}|FAST_Scan\\FAST_Scan.csproj|solutionrelative:fast_scan\\mvvm\\view\\scan1dview.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{78F19A82-BEED-4D0C-8C68-537DDBB1B29C}|FAST_Scan\\FAST_Scan.csproj|C:\\Users\\Vin\u00EDcius\\OneDrive\\Desktop\\PIBIC\\FAST_Scan\\fast_scan\\core\\digitizer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{78F19A82-BEED-4D0C-8C68-537DDBB1B29C}|FAST_Scan\\FAST_Scan.csproj|solutionrelative:fast_scan\\core\\digitizer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{78F19A82-BEED-4D0C-8C68-537DDBB1B29C}|FAST_Scan\\FAST_Scan.csproj|c:\\users\\vin\u00EDcius\\onedrive\\desktop\\pibic\\fast_scan\\fast_scan\\||{B270807C-D8C6-49EB-8EBE-8E8D566637A1}|5e9a8ac2-4f34-4521-858f-4c248ba31532"
     }
   ],
   "DocumentGroupContainers": [
@@ -30,25 +84,177 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 1,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 15,
               "Title": "DataStore.cs",
               "DocumentMoniker": "C:\\Users\\Vin\u00EDcius\\OneDrive\\Desktop\\PIBIC\\FAST_Scan\\FAST_Scan\\Core\\DataStore.cs",
               "RelativeDocumentMoniker": "FAST_Scan\\Core\\DataStore.cs",
               "ToolTip": "C:\\Users\\Vin\u00EDcius\\OneDrive\\Desktop\\PIBIC\\FAST_Scan\\FAST_Scan\\Core\\DataStore.cs",
               "RelativeToolTip": "FAST_Scan\\Core\\DataStore.cs",
-              "ViewState": "AQIAAAkAAAAAAAAAAAAAABEAAAA1AAAA",
+              "ViewState": "AQIAAAkAAAAAAAAAAAAAAA0AAAAFAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-05-15T13:36:58.903Z",
-              "IsPinned": true,
+              "IsPinned": true
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "FAST_Scan",
+              "DocumentMoniker": "C:\\Users\\Vin\u00EDcius\\OneDrive\\Desktop\\PIBIC\\FAST_Scan\\FAST_Scan\\FAST_Scan.csproj",
+              "RelativeDocumentMoniker": "FAST_Scan\\FAST_Scan.csproj",
+              "ToolTip": "C:\\Users\\Vin\u00EDcius\\OneDrive\\Desktop\\PIBIC\\FAST_Scan\\FAST_Scan\\FAST_Scan.csproj",
+              "RelativeToolTip": "FAST_Scan\\FAST_Scan.csproj",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
+              "WhenOpened": "2026-10-28T02:08:03.814Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 5,
+              "Title": "ScanStateManager.cs",
+              "DocumentMoniker": "C:\\Users\\Vin\u00EDcius\\OneDrive\\Desktop\\PIBIC\\FAST_Scan\\FAST_Scan\\Core\\ScanStateManager.cs",
+              "RelativeDocumentMoniker": "FAST_Scan\\Core\\ScanStateManager.cs",
+              "ToolTip": "C:\\Users\\Vin\u00EDcius\\OneDrive\\Desktop\\PIBIC\\FAST_Scan\\FAST_Scan\\Core\\ScanStateManager.cs",
+              "RelativeToolTip": "FAST_Scan\\Core\\ScanStateManager.cs",
+              "ViewState": "AQIAAAYAAAAAAAAAAAAAAAgAAAAjAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-16T17:53:59.156Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "HommingStateManager.cs",
+              "DocumentMoniker": "C:\\Users\\Vin\u00EDcius\\OneDrive\\Desktop\\PIBIC\\FAST_Scan\\FAST_Scan\\Core\\HommingStateManager.cs",
+              "RelativeDocumentMoniker": "FAST_Scan\\Core\\HommingStateManager.cs",
+              "ToolTip": "C:\\Users\\Vin\u00EDcius\\OneDrive\\Desktop\\PIBIC\\FAST_Scan\\FAST_Scan\\Core\\HommingStateManager.cs",
+              "RelativeToolTip": "FAST_Scan\\Core\\HommingStateManager.cs",
+              "ViewState": "AQIAABYAAAAAAAAAAAAkwBEAAAA8AAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-16T17:53:47.907Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "AppConfig.cs",
+              "DocumentMoniker": "C:\\Users\\Vin\u00EDcius\\OneDrive\\Desktop\\PIBIC\\FAST_Scan\\FAST_Scan\\Core\\AppConfig.cs",
+              "RelativeDocumentMoniker": "FAST_Scan\\Core\\AppConfig.cs",
+              "ToolTip": "C:\\Users\\Vin\u00EDcius\\OneDrive\\Desktop\\PIBIC\\FAST_Scan\\FAST_Scan\\Core\\AppConfig.cs",
+              "RelativeToolTip": "FAST_Scan\\Core\\AppConfig.cs",
+              "ViewState": "AQIAAAYAAAAAAAAAAAAAAA0AAABIAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-16T17:44:59.825Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "ConfigManager.cs",
+              "DocumentMoniker": "C:\\Users\\Vin\u00EDcius\\OneDrive\\Desktop\\PIBIC\\FAST_Scan\\FAST_Scan\\Core\\ConfigManager.cs",
+              "RelativeDocumentMoniker": "FAST_Scan\\Core\\ConfigManager.cs",
+              "ToolTip": "C:\\Users\\Vin\u00EDcius\\OneDrive\\Desktop\\PIBIC\\FAST_Scan\\FAST_Scan\\Core\\ConfigManager.cs",
+              "RelativeToolTip": "FAST_Scan\\Core\\ConfigManager.cs",
+              "ViewState": "AQIAABkAAAAAAAAAAAAQwA0AAAAFAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-16T17:44:27.507Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Scan1DView.xaml.cs",
+              "DocumentMoniker": "C:\\Users\\Vin\u00EDcius\\OneDrive\\Desktop\\PIBIC\\FAST_Scan\\FAST_Scan\\MVVM\\View\\Scan1DView.xaml.cs",
+              "RelativeDocumentMoniker": "FAST_Scan\\MVVM\\View\\Scan1DView.xaml.cs",
+              "ToolTip": "C:\\Users\\Vin\u00EDcius\\OneDrive\\Desktop\\PIBIC\\FAST_Scan\\FAST_Scan\\MVVM\\View\\Scan1DView.xaml.cs",
+              "RelativeToolTip": "FAST_Scan\\MVVM\\View\\Scan1DView.xaml.cs",
+              "ViewState": "AQIAAFEAAAAAAAAAAAD4vzIBAAA1AAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-16T16:46:11.955Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "ConfigurationsViewModel.cs",
+              "DocumentMoniker": "C:\\Users\\Vin\u00EDcius\\OneDrive\\Desktop\\PIBIC\\FAST_Scan\\FAST_Scan\\MVVM\\ViewModel\\ConfigurationsViewModel.cs",
+              "RelativeDocumentMoniker": "FAST_Scan\\MVVM\\ViewModel\\ConfigurationsViewModel.cs",
+              "ToolTip": "C:\\Users\\Vin\u00EDcius\\OneDrive\\Desktop\\PIBIC\\FAST_Scan\\FAST_Scan\\MVVM\\ViewModel\\ConfigurationsViewModel.cs",
+              "RelativeToolTip": "FAST_Scan\\MVVM\\ViewModel\\ConfigurationsViewModel.cs",
+              "ViewState": "AQIAAAUAAAAAAAAAAAAIwA4AAAAPAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-16T03:08:44.507Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "ConfigurationsWindow.xaml",
+              "DocumentMoniker": "C:\\Users\\Vin\u00EDcius\\OneDrive\\Desktop\\PIBIC\\FAST_Scan\\FAST_Scan\\ConfigurationsWindow.xaml",
+              "RelativeDocumentMoniker": "FAST_Scan\\ConfigurationsWindow.xaml",
+              "ToolTip": "C:\\Users\\Vin\u00EDcius\\OneDrive\\Desktop\\PIBIC\\FAST_Scan\\FAST_Scan\\ConfigurationsWindow.xaml",
+              "RelativeToolTip": "FAST_Scan\\ConfigurationsWindow.xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2026-05-16T02:16:16.071Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "MainViewModel.cs",
+              "DocumentMoniker": "C:\\Users\\Vin\u00EDcius\\OneDrive\\Desktop\\PIBIC\\FAST_Scan\\FAST_Scan\\MVVM\\ViewModel\\MainViewModel.cs",
+              "RelativeDocumentMoniker": "FAST_Scan\\MVVM\\ViewModel\\MainViewModel.cs",
+              "ToolTip": "C:\\Users\\Vin\u00EDcius\\OneDrive\\Desktop\\PIBIC\\FAST_Scan\\FAST_Scan\\MVVM\\ViewModel\\MainViewModel.cs",
+              "RelativeToolTip": "FAST_Scan\\MVVM\\ViewModel\\MainViewModel.cs",
+              "ViewState": "AQIAAFMAAAAAAAAAAAAmwGAAAAA0AAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-16T01:46:19.728Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "ScanTabControlView.xaml",
+              "DocumentMoniker": "C:\\Users\\Vin\u00EDcius\\OneDrive\\Desktop\\PIBIC\\FAST_Scan\\FAST_Scan\\MVVM\\View\\ScanTabControlView.xaml",
+              "RelativeDocumentMoniker": "FAST_Scan\\MVVM\\View\\ScanTabControlView.xaml",
+              "ToolTip": "C:\\Users\\Vin\u00EDcius\\OneDrive\\Desktop\\PIBIC\\FAST_Scan\\FAST_Scan\\MVVM\\View\\ScanTabControlView.xaml",
+              "RelativeToolTip": "FAST_Scan\\MVVM\\View\\ScanTabControlView.xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2026-05-16T01:10:49.912Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "MenuButtonTheme.xaml",
+              "DocumentMoniker": "C:\\Users\\Vin\u00EDcius\\OneDrive\\Desktop\\PIBIC\\FAST_Scan\\FAST_Scan\\Theme\\MenuButtonTheme.xaml",
+              "RelativeDocumentMoniker": "FAST_Scan\\Theme\\MenuButtonTheme.xaml",
+              "ToolTip": "C:\\Users\\Vin\u00EDcius\\OneDrive\\Desktop\\PIBIC\\FAST_Scan\\FAST_Scan\\Theme\\MenuButtonTheme.xaml",
+              "RelativeToolTip": "FAST_Scan\\Theme\\MenuButtonTheme.xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2026-05-16T00:33:32.062Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "MainWindow.xaml",
+              "DocumentMoniker": "C:\\Users\\Vin\u00EDcius\\OneDrive\\Desktop\\PIBIC\\FAST_Scan\\FAST_Scan\\MainWindow.xaml",
+              "RelativeDocumentMoniker": "FAST_Scan\\MainWindow.xaml",
+              "ToolTip": "C:\\Users\\Vin\u00EDcius\\OneDrive\\Desktop\\PIBIC\\FAST_Scan\\FAST_Scan\\MainWindow.xaml",
+              "RelativeToolTip": "FAST_Scan\\MainWindow.xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2026-05-15T23:12:41.504Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "MainWindow.xaml.cs",
+              "DocumentMoniker": "C:\\Users\\Vin\u00EDcius\\OneDrive\\Desktop\\PIBIC\\FAST_Scan\\FAST_Scan\\MainWindow.xaml.cs",
+              "RelativeDocumentMoniker": "FAST_Scan\\MainWindow.xaml.cs",
+              "ToolTip": "C:\\Users\\Vin\u00EDcius\\OneDrive\\Desktop\\PIBIC\\FAST_Scan\\FAST_Scan\\MainWindow.xaml.cs",
+              "RelativeToolTip": "FAST_Scan\\MainWindow.xaml.cs",
+              "ViewState": "AQIAAA8AAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-15T23:12:38.298Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 16,
               "Title": "Scan1DView.xaml",
               "DocumentMoniker": "C:\\Users\\Vin\u00EDcius\\OneDrive\\Desktop\\PIBIC\\FAST_Scan\\FAST_Scan\\MVVM\\View\\Scan1DView.xaml",
               "RelativeDocumentMoniker": "FAST_Scan\\MVVM\\View\\Scan1DView.xaml",
@@ -60,20 +266,20 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 1,
               "Title": "Scan.cs",
               "DocumentMoniker": "C:\\Users\\Vin\u00EDcius\\OneDrive\\Desktop\\PIBIC\\FAST_Scan\\FAST_Scan\\Core\\Scan.cs",
               "RelativeDocumentMoniker": "FAST_Scan\\Core\\Scan.cs",
               "ToolTip": "C:\\Users\\Vin\u00EDcius\\OneDrive\\Desktop\\PIBIC\\FAST_Scan\\FAST_Scan\\Core\\Scan.cs",
               "RelativeToolTip": "FAST_Scan\\Core\\Scan.cs",
-              "ViewState": "AQIAAEcDAAAAAAAAAAAAwFIDAABBAAAA",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAARAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-05-15T13:39:34.534Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 12,
               "Title": "CurveFit.cs",
               "DocumentMoniker": "C:\\Users\\Vin\u00EDcius\\OneDrive\\Desktop\\PIBIC\\FAST_Scan\\FAST_Scan\\Core\\CurveFit.cs",
               "RelativeDocumentMoniker": "FAST_Scan\\Core\\CurveFit.cs",
@@ -81,12 +287,11 @@
               "RelativeToolTip": "FAST_Scan\\Core\\CurveFit.cs",
               "ViewState": "AQIAAAYAAAAAAAAAAAAuwBYAAAA9AAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-05-10T18:57:00.633Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-05-10T18:57:00.633Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 17,
               "Title": "Digitizer.cs",
               "DocumentMoniker": "C:\\Users\\Vin\u00EDcius\\OneDrive\\Desktop\\PIBIC\\FAST_Scan\\FAST_Scan\\Core\\Digitizer.cs",
               "RelativeDocumentMoniker": "FAST_Scan\\Core\\Digitizer.cs",
@@ -94,8 +299,7 @@
               "RelativeToolTip": "FAST_Scan\\Core\\Digitizer.cs",
               "ViewState": "AQIAAEMAAAAAAAAAAAAkwCsAAACEAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-04-23T14:10:02.105Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-04-23T14:10:02.105Z"
             }
           ]
         }
