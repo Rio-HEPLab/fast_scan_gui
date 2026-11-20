@@ -71,14 +71,14 @@ namespace FAST_Scan.Core.Analysis
         public List<string> Validate()
         {
             var problems = new List<string>();
-            if (ThresholdVolts <= 0) problems.Add("Limiar deve ser positivo.");
+            if (ThresholdVolts <= 0) problems.Add("Threshold must be positive.");
             if (ReferenceMode == PulseReferenceMode.ConstantFraction && (FractionOfAmplitude <= 0 || FractionOfAmplitude >= 1))
-                problems.Add("A fração da amplitude deve estar entre 0 e 100 % (exclusive).");
+                problems.Add("The amplitude fraction must be between 0 and 100 % (exclusive).");
             if (AmplitudeAveragePoints < 1)
-                problems.Add("A média da amplitude deve usar pelo menos 1 amostra (1 = pico absoluto).");
-            if (BaselineEndNs <= BaselineStartNs) problems.Add("Janela da baseline inválida (fim deve ser maior que início).");
-            if (SearchEndNs <= SearchStartNs) problems.Add("Janela de busca do pulso inválida (fim deve ser maior que início).");
-            if (TriggerSearchHalfWidthNs <= 0) problems.Add("Meia-largura da busca do trigger deve ser positiva.");
+                problems.Add("The amplitude average must use at least 1 sample (1 = absolute peak).");
+            if (BaselineEndNs <= BaselineStartNs) problems.Add("Invalid baseline window (end must be greater than start).");
+            if (SearchEndNs <= SearchStartNs) problems.Add("Invalid pulse search window (end must be greater than start).");
+            if (TriggerSearchHalfWidthNs <= 0) problems.Add("Trigger search half-width must be positive.");
             return problems;
         }
     }

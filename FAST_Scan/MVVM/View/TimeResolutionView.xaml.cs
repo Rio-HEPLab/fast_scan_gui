@@ -90,7 +90,7 @@ namespace FAST_Scan.MVVM.View
         {
             if (d.Volts == null)
             {
-                MainPlot.Plot.Title("Aguardando eventos...");
+                MainPlot.Plot.Title("Waiting for events...");
                 return;
             }
 
@@ -125,8 +125,8 @@ namespace FAST_Scan.MVVM.View
                 AddLine(d.TriggerCrossingNs, -0.05, d.TriggerCrossingNs, 0.05, Colors.Black, 2f);                   // trigger digitalizado
 
             MainPlot.Plot.Title(d.WaveformTitle ?? "Waveform");
-            MainPlot.Plot.XLabel("Tempo relativo ao trigger (ns)");
-            MainPlot.Plot.YLabel("Tensão (V)");
+            MainPlot.Plot.XLabel("Time relative to trigger (ns)");
+            MainPlot.Plot.YLabel("Voltage (V)");
         }
 
         private void DrawHistogram(TimeResolutionDisplay d)
@@ -134,7 +134,7 @@ namespace FAST_Scan.MVVM.View
             VariantStats s = d.Stats;
             if (s == null || s.Count == 0 || s.Counts == null)
             {
-                MainPlot.Plot.Title("Sem dados para: " + d.VariantName);
+                MainPlot.Plot.Title("No data for: " + d.VariantName);
                 return;
             }
 
@@ -156,7 +156,7 @@ namespace FAST_Scan.MVVM.View
             outline.LineWidth = 1.5f;
             outline.MarkerSize = 0;
 
-            string title = d.VariantName + ": N = " + s.Count + ", média = " + s.Mean.ToString("0.000") + " ns, std = " + (s.Std * 1000).ToString("0.0") + " ps";
+            string title = d.VariantName + ": N = " + s.Count + ", mean = " + s.Mean.ToString("0.000") + " ns, std = " + (s.Std * 1000).ToString("0.0") + " ps";
             if (s.Fit != null && s.Fit.Ok && s.CurveX != null)
             {
                 var curve = MainPlot.Plot.Add.Scatter(s.CurveX, s.CurveY);
@@ -167,8 +167,8 @@ namespace FAST_Scan.MVVM.View
             }
 
             MainPlot.Plot.Title(title);
-            MainPlot.Plot.XLabel("Δt = pulso - trigger (ns)");
-            MainPlot.Plot.YLabel("Contagens");
+            MainPlot.Plot.XLabel("Δt = pulse - trigger (ns)");
+            MainPlot.Plot.YLabel("Counts");
         }
 
         private void OnSaveCsvClick(object sender, RoutedEventArgs e)
@@ -177,7 +177,7 @@ namespace FAST_Scan.MVVM.View
             string csv = viewModel.BuildCsv();
             if (csv == null)
             {
-                MessageBox.Show("Ainda não há eventos válidos para salvar.", "Salvar Δt", MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show("There are no valid events to save yet.", "Save Δt", MessageBoxButton.OK, MessageBoxImage.Information);
                 return;
             }
 

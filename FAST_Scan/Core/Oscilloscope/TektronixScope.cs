@@ -68,13 +68,13 @@ namespace FAST_Scan.Core.Oscilloscope
 
             List<string> problems = settings.Validate();
             if (problems.Count > 0)
-                throw new ScopeException("Configuração inválida: " + string.Join(" ", problems));
+                throw new ScopeException("Invalid configuration: " + string.Join(" ", problems));
 
             try
             {
                 session = GlobalResourceManager.Open(settings.VisaResource) as IMessageBasedSession;
                 if (session == null)
-                    throw new ScopeException("O recurso VISA não é um instrumento de mensagens.");
+                    throw new ScopeException("The VISA resource is not a message-based instrument.");
 
                 session.TimeoutMilliseconds = settings.IoTimeoutMs;
 
@@ -87,11 +87,11 @@ namespace FAST_Scan.Core.Oscilloscope
 
                 Idn = Query("*IDN?");
                 if (!Idn.StartsWith("TEKTRONIX", StringComparison.OrdinalIgnoreCase))
-                    Warnings.Add("Instrumento não identificado como Tektronix: " + Idn);
-                Raise("Conectado a: " + Idn);
+                    Warnings.Add("Instrument not identified as Tektronix: " + Idn);
+                Raise("Connected to: " + Idn);
 
                 SaveOriginalState();
-                CheckErrors("abrir a sessão e guardar a configuração original");
+                CheckErrors("open the session and save the original configuration");
             }
             catch (ScopeException)
             {
@@ -101,7 +101,7 @@ namespace FAST_Scan.Core.Oscilloscope
             catch (Exception ex)
             {
                 CloseSession();
-                throw new ScopeException("Não foi possível abrir " + settings.VisaResource + ": " + ex.Message, ex);
+                throw new ScopeException("Could not open " + settings.VisaResource + ": " + ex.Message, ex);
             }
         }
 
@@ -131,7 +131,7 @@ namespace FAST_Scan.Core.Oscilloscope
             CloseSession();
             session = GlobalResourceManager.Open(settings.VisaResource) as IMessageBasedSession;
             if (session == null)
-                throw new ScopeException("O recurso VISA não é um instrumento de mensagens.");
+                throw new ScopeException("The VISA resource is not a message-based instrument.");
             session.TimeoutMilliseconds = settings.IoTimeoutMs;
             session.Clear();
             SendCommand("*CLS");
@@ -189,7 +189,7 @@ namespace FAST_Scan.Core.Oscilloscope
             Remember("ACQuire:STOPAfter", "ACQuire:STOPAfter?");
             originalAcquireState = Query("ACQuire:STATE?");
 
-            Raise("Configuração original do osciloscópio guardada.");
+            Raise("Original oscilloscope configuration saved.");
         }
 
         private void RestoreOriginalState()
@@ -207,11 +207,11 @@ namespace FAST_Scan.Core.Oscilloscope
                 try
                 {
                     Reconnect();
-                    Raise("Conexão perdida: sessão reaberta para restaurar a configuração original.");
+                    Raise("Connection lost: session reopened to restore the original configuration.");
                 }
                 catch (Exception ex)
                 {
-                    Raise("Atenção: conexão perdida e não foi possível reconectar (" + ex.Message + "). Restaure o osciloscópio manualmente.");
+                    Raise("Warning: connection lost and could not reconnect (" + ex.Message + "). Restore the oscilloscope manually.");
                     return;
                 }
             }
@@ -230,9 +230,9 @@ namespace FAST_Scan.Core.Oscilloscope
             try { SendCommand("*CLS"); } catch { }
 
             if (failures.Count > 0)
-                Raise("Atenção: falha ao restaurar: " + string.Join("; ", failures));
+                Raise("Warning: failed to restore: " + string.Join("; ", failures));
             else
-                Raise("Configuração original restaurada.");
+                Raise("Original configuration restored.");
         }
 
         private void TrySend(string command, List<string> failures)
@@ -252,7 +252,7 @@ namespace FAST_Scan.Core.Oscilloscope
 
             List<string> problems = settings.Validate();
             if (problems.Count > 0)
-                throw new ScopeException("Configuração inválida: " + string.Join(" ", problems));
+                throw new ScopeException("Invalid configuration: " + string.Join(" ", problems));
 
             Warnings.Clear();
             string ch = "CH" + settings.Channel;
@@ -270,7 +270,7 @@ namespace FAST_Scan.Core.Oscilloscope
                 SendCommand("SELect:CH" + i + (on ? " ON" : " OFF"));
             }
 
-            CheckErrors("parar a aquisição e ligar/desligar canais");
+            CheckErrors("stop the acquisition and switch channels on/off");
 
             // 3) Vertical.
             SendCommand(ch + ":SCAle " + Num(settings.VerticalScaleVoltsPerDiv));
@@ -279,7 +279,7 @@ namespace FAST_Scan.Core.Oscilloscope
                 SendCommand(trigCh + ":SCAle " + Num(settings.TriggerVerticalScaleVoltsPerDiv));
             SendCommand("ACQuire:MODe SAMple");
 
-            CheckErrors("configurar o vertical");
+            CheckErrors("configure the vertical settings");
 
             // 4) Horizontal manual.
             SendCommand("HORizontal:MODE MANual");
@@ -287,7 +287,7 @@ namespace FAST_Scan.Core.Oscilloscope
             SendCommand("HORizontal:MODE:RECOrdlength " + settings.RecordLength.ToString(CultureInfo.InvariantCulture));
             SendCommand("HORizontal:POSition " + Num(settings.TriggerPositionPercent));
 
-            CheckErrors("configurar o horizontal");
+            CheckErrors("configure the horizontal settings");
 
             // 5) Trigger.
             SendCommand("TRIGger:A:EDGe:SOUrce " + trigCh);
@@ -295,7 +295,7 @@ namespace FAST_Scan.Core.Oscilloscope
             SendCommand("TRIGger:A:LEVel " + Num(settings.TriggerLevelVolts));
             SendCommand("TRIGger:A:MODe NORMal");
 
-            CheckErrors("configurar o trigger");
+            CheckErrors("configure the trigger");
 
             // 6) FastFrame: cada captura é uma sequência única de FrameCount frames.
             SendCommand("ACQuire:STOPAfter SEQuence");
@@ -304,12 +304,12 @@ namespace FAST_Scan.Core.Oscilloscope
             var effective = new ScopeEffectiveSettings();
             effective.MaxFrames = QueryInt("HORizontal:FASTframe:MAXFRames?");
             if (settings.FrameCount > effective.MaxFrames)
-                throw new ScopeException("Número de frames (" + settings.FrameCount + ") acima do máximo do osciloscópio para este comprimento (" + effective.MaxFrames + ").");
+                throw new ScopeException("Frame count (" + settings.FrameCount + ") exceeds the oscilloscope maximum for this record length (" + effective.MaxFrames + ").");
 
             SendCommand("HORizontal:FASTframe:COUNt " + settings.FrameCount.ToString(CultureInfo.InvariantCulture));
             SendCommand("HORizontal:FASTframe:SEQuence FIRst");
 
-            CheckErrors("configurar o FastFrame");
+            CheckErrors("configure FastFrame");
 
             // 7) Lê de volta o que valeu.
             effective.SampleRateHz = QueryDouble("HORizontal:MODE:SAMPLERate?");
@@ -329,18 +329,18 @@ namespace FAST_Scan.Core.Oscilloscope
             SendCommand("DATa:FRAMESTARt 1");
             SendCommand("DATa:FRAMESTOP " + effective.FrameCount.ToString(CultureInfo.InvariantCulture));
 
-            CheckErrors("aplicar configuração");
+            CheckErrors("apply configuration");
 
             // 9) Avisos quando o osciloscópio ajustou algo importante.
             if (Differs(effective.SampleRateHz, settings.SampleRateHz))
-                Warnings.Add("Taxa de amostragem ajustada pelo osciloscópio: pedido " + settings.SampleRateHz + " Hz, efetivo " + effective.SampleRateHz + " Hz.");
+                Warnings.Add("Sample rate adjusted by the oscilloscope: requested " + settings.SampleRateHz + " Hz, actual " + effective.SampleRateHz + " Hz.");
             if (effective.RecordLength != settings.RecordLength)
-                Warnings.Add("Comprimento ajustado: pedido " + settings.RecordLength + ", efetivo " + effective.RecordLength + ".");
+                Warnings.Add("Record length adjusted: requested " + settings.RecordLength + ", actual " + effective.RecordLength + ".");
             if (Differs(effective.VerticalScaleVoltsPerDiv, settings.VerticalScaleVoltsPerDiv))
-                Warnings.Add("Escala vertical ajustada: pedido " + settings.VerticalScaleVoltsPerDiv + " V/div, efetivo " + effective.VerticalScaleVoltsPerDiv + " V/div.");
+                Warnings.Add("Vertical scale adjusted: requested " + settings.VerticalScaleVoltsPerDiv + " V/div, actual " + effective.VerticalScaleVoltsPerDiv + " V/div.");
 
-            foreach (string w in Warnings) Raise("AVISO: " + w);
-            Raise("Configuração aplicada: " + effective.FrameCount + " frames de " + effective.RecordLength + " pontos a " + (effective.SampleRateHz / 1e9).ToString("0.###", CultureInfo.InvariantCulture) + " GS/s.");
+            foreach (string w in Warnings) Raise("WARNING: " + w);
+            Raise("Configuration applied: " + effective.FrameCount + " frames of " + effective.RecordLength + " points at " + (effective.SampleRateHz / 1e9).ToString("0.###", CultureInfo.InvariantCulture) + " GS/s.");
         }
 
         // ------------------------------------------------------------------
@@ -351,7 +351,7 @@ namespace FAST_Scan.Core.Oscilloscope
         {
             RequireOpen();
             try { session.RawIO.Write(command + "\n"); RaiseTrace(">> " + command); }
-            catch (Exception ex) { throw new ScopeException("Falha ao enviar \"" + command + "\": " + ex.Message, ex); }
+            catch (Exception ex) { throw new ScopeException("Failed to send \"" + command + "\": " + ex.Message, ex); }
         }
 
         internal string Query(string command)
@@ -363,7 +363,7 @@ namespace FAST_Scan.Core.Oscilloscope
                 RaiseTrace("<< " + response);
                 return response;
             }
-            catch (Exception ex) { throw new ScopeException("Falha ao ler resposta de \"" + command + "\": " + ex.Message, ex); }
+            catch (Exception ex) { throw new ScopeException("Failed to read response to \"" + command + "\": " + ex.Message, ex); }
         }
 
         internal double QueryDouble(string command)
@@ -371,7 +371,7 @@ namespace FAST_Scan.Core.Oscilloscope
             string text = Query(command);
             double value;
             if (!double.TryParse(text, NumberStyles.Float, CultureInfo.InvariantCulture, out value))
-                throw new ScopeException("Resposta numérica inválida para \"" + command + "\": \"" + text + "\"");
+                throw new ScopeException("Invalid numeric response to \"" + command + "\": \"" + text + "\"");
             return value;
         }
 
@@ -388,7 +388,7 @@ namespace FAST_Scan.Core.Oscilloscope
             if (esr == 0) return;
 
             string details = Query("ALLEv?");
-            throw new ScopeException("O osciloscópio registrou erro ao " + context + " (ESR=" + esr + "): " + details);
+            throw new ScopeException("The oscilloscope reported an error when trying to " + context + " (ESR=" + esr + "): " + details);
         }
 
         // ------------------------------------------------------------------
@@ -403,7 +403,7 @@ namespace FAST_Scan.Core.Oscilloscope
         {
             RequireOpen();
             if (Effective == null)
-                throw new ScopeException("Chame Apply() antes de capturar.");
+                throw new ScopeException("Call Apply() before capturing.");
             token.ThrowIfCancellationRequested();
 
             var block = new WaveformBlock();
@@ -423,7 +423,7 @@ namespace FAST_Scan.Core.Oscilloscope
                 {
                     // Sem trigger a captura nunca termina: aborta e limpa a comunicação.
                     try { session.Clear(); SendCommand("ACQuire:STATE OFF"); } catch { }
-                    throw new ScopeException("Tempo esgotado esperando o bloco. Há sinal de trigger em CH" + settings.TriggerChannel + " e o nível está correto?", ex);
+                    throw new ScopeException("Timed out waiting for the block. Is there a trigger signal on CH" + settings.TriggerChannel + " and is the level correct?", ex);
                 }
                 throw;
             }
@@ -458,10 +458,10 @@ namespace FAST_Scan.Core.Oscilloscope
             block.CurveMs = curveWatch.Elapsed.TotalMilliseconds;
             long expected = (long)block.FrameCount * block.PointsPerFrame;
             if (raw.Length != expected)
-                throw new ScopeException("Bloco com tamanho inesperado: recebidos " + raw.Length + " bytes, esperados " + expected + ".");
+                throw new ScopeException("Block with unexpected size: received " + raw.Length + " bytes, expected " + expected + ".");
             block.RawData = raw;
 
-            // 5) Canal do trigger digitalizado (opcional): troca a fonte, lê preâmbulo e dados, volta.
+            // 5) Digitized trigger channel (opcional): troca a fonte, lê preâmbulo e dados, volta.
             if (settings.DigitizeTriggerChannel)
             {
                 SendCommand("DATa:SOUrce CH" + settings.TriggerChannel);
@@ -471,13 +471,13 @@ namespace FAST_Scan.Core.Oscilloscope
                 SendCommand("CURVe?");
                 byte[] triggerRaw = ReadBinaryBlock();
                 if (triggerRaw.Length != expected)
-                    throw new ScopeException("Bloco do trigger com tamanho inesperado: recebidos " + triggerRaw.Length + " bytes, esperados " + expected + ".");
+                    throw new ScopeException("Trigger block with unexpected size: received " + triggerRaw.Length + " bytes, expected " + expected + ".");
                 block.TriggerRawData = triggerRaw;
                 SendCommand("DATa:SOUrce CH" + settings.Channel);
                 block.CurveMs = curveWatch.Elapsed.TotalMilliseconds;
             }
 
-            CheckErrors("capturar bloco");
+            CheckErrors("capture block");
             block.TransferMs = watch.Elapsed.TotalMilliseconds;
             return block;
         }
@@ -496,7 +496,7 @@ namespace FAST_Scan.Core.Oscilloscope
 
                 MatchCollection matches = Regex.Matches(text, "\"\\s*\\d+\\s*:\\s*([^\"]+?)\\s*\"");
                 if (matches.Count != last - first + 1)
-                    throw new ScopeException("XZero: esperados " + (last - first + 1) + " valores, recebidos " + matches.Count + ".");
+                    throw new ScopeException("XZero: expected " + (last - first + 1) + " values, received " + matches.Count + ".");
 
                 for (int k = 0; k < matches.Count; k++)
                     result[first - 1 + k] = double.Parse(matches[k].Groups[1].Value, NumberStyles.Float, CultureInfo.InvariantCulture);
@@ -528,7 +528,7 @@ namespace FAST_Scan.Core.Oscilloscope
             {
                 byte[] header = ReadBytes(2);
                 if (header[0] != (byte)'#')
-                    throw new ScopeException("A resposta não começa com '#': não é um bloco binário.");
+                    throw new ScopeException("The response does not start with '#': not a binary block.");
                 int digitCount = header[1] - (byte)'0';
                 int length = int.Parse(Encoding.ASCII.GetString(ReadBytes(digitCount)), CultureInfo.InvariantCulture);
                 byte[] data = ReadBytes(length);
@@ -536,7 +536,7 @@ namespace FAST_Scan.Core.Oscilloscope
                 return data;
             }
             catch (ScopeException) { throw; }
-            catch (Exception ex) { throw new ScopeException("Falha ao ler o bloco binário: " + ex.Message, ex); }
+            catch (Exception ex) { throw new ScopeException("Failed to read the binary block: " + ex.Message, ex); }
         }
 
         // ------------------------------------------------------------------
@@ -556,7 +556,7 @@ namespace FAST_Scan.Core.Oscilloscope
 
         private void RequireOpen()
         {
-            if (!IsOpen) throw new ScopeException("A sessão com o osciloscópio não está aberta.");
+            if (!IsOpen) throw new ScopeException("The oscilloscope session is not open.");
         }
 
         private void RaiseTrace(string text)

@@ -48,15 +48,15 @@
                 <TextBlock Text="{Binding CountersText}" TextWrapping="Wrap"
                            FontFamily="Consolas" FontSize="12" Margin="0,0,0,8"/>
 
-                <GroupBox Header="Fonte" IsEnabled="{Binding CanEdit}" Margin="0,0,0,8">
+                <GroupBox Header="Source" IsEnabled="{Binding CanEdit}" Margin="0,0,0,8">
                     <StackPanel Margin="5">
-                        <RadioButton Content="Osciloscópio (Tektronix)" IsChecked="{Binding IsOscilloscope, Mode=TwoWay}" Margin="0,2"/>
-                        <RadioButton Content="Simulador (sem instrumento)" IsChecked="{Binding IsSimulated, Mode=TwoWay}" Margin="0,2"/>
-                        <RadioButton Content="Digitizer (CAEN) - em breve" IsEnabled="False" Margin="0,2"/>
+                        <RadioButton Content="Oscilloscope (Tektronix)" IsChecked="{Binding IsOscilloscope, Mode=TwoWay}" Margin="0,2"/>
+                        <RadioButton Content="Simulator (no instrument)" IsChecked="{Binding IsSimulated, Mode=TwoWay}" Margin="0,2"/>
+                        <RadioButton Content="Digitizer (CAEN) - coming soon" IsEnabled="False" Margin="0,2"/>
                     </StackPanel>
                 </GroupBox>
 
-                <GroupBox Header="Osciloscópio" IsEnabled="{Binding CanEdit}" Margin="0,0,0,8">
+                <GroupBox Header="Oscilloscope" IsEnabled="{Binding CanEdit}" Margin="0,0,0,8">
                     <StackPanel Margin="5">
                         <Grid>
                           <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="100"/></Grid.ColumnDefinitions>
@@ -72,36 +72,36 @@
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
                           </Grid.RowDefinitions>
-                          <TextBlock Grid.Row="0" Grid.Column="0" Text="Endereço VISA" Style="{StaticResource FieldLabel}"/>
+                          <TextBlock Grid.Row="0" Grid.Column="0" Text="VISA address" Style="{StaticResource FieldLabel}"/>
                           <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding VisaResource, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource FieldBox}"/>
-                          <TextBlock Grid.Row="1" Grid.Column="0" Text="Canal medido (1-4)" Style="{StaticResource FieldLabel}"/>
+                          <TextBlock Grid.Row="1" Grid.Column="0" Text="Measured channel (1-4)" Style="{StaticResource FieldLabel}"/>
                           <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding ScopeChannelText, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource FieldBox}"/>
-                          <TextBlock Grid.Row="2" Grid.Column="0" Text="Canal do trigger (1-4)" Style="{StaticResource FieldLabel}"/>
+                          <TextBlock Grid.Row="2" Grid.Column="0" Text="Trigger channel (1-4)" Style="{StaticResource FieldLabel}"/>
                           <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding TriggerChannelText, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource FieldBox}"/>
-                          <TextBlock Grid.Row="3" Grid.Column="0" Text="Frames por bloco" Style="{StaticResource FieldLabel}"/>
+                          <TextBlock Grid.Row="3" Grid.Column="0" Text="Frames per block" Style="{StaticResource FieldLabel}"/>
                           <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding FrameCountText, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource FieldBox}"/>
-                          <TextBlock Grid.Row="4" Grid.Column="0" Text="Pontos por frame" Style="{StaticResource FieldLabel}"/>
+                          <TextBlock Grid.Row="4" Grid.Column="0" Text="Points per frame" Style="{StaticResource FieldLabel}"/>
                           <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding RecordLengthText, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource FieldBox}"/>
-                          <TextBlock Grid.Row="5" Grid.Column="0" Text="Taxa (GS/s)" Style="{StaticResource FieldLabel}"/>
+                          <TextBlock Grid.Row="5" Grid.Column="0" Text="Sample rate (GS/s)" Style="{StaticResource FieldLabel}"/>
                           <TextBox Grid.Row="5" Grid.Column="1" Text="{Binding SampleRateGsText, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource FieldBox}"/>
-                          <TextBlock Grid.Row="6" Grid.Column="0" Text="Escala vertical (mV/div)" Style="{StaticResource FieldLabel}"/>
+                          <TextBlock Grid.Row="6" Grid.Column="0" Text="Vertical scale (mV/div)" Style="{StaticResource FieldLabel}"/>
                           <TextBox Grid.Row="6" Grid.Column="1" Text="{Binding VerticalScaleMvText, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource FieldBox}"/>
-                          <TextBlock Grid.Row="7" Grid.Column="0" Text="Nível do trigger (mV)" Style="{StaticResource FieldLabel}"/>
+                          <TextBlock Grid.Row="7" Grid.Column="0" Text="Trigger level (mV)" Style="{StaticResource FieldLabel}"/>
                           <TextBox Grid.Row="7" Grid.Column="1" Text="{Binding TriggerLevelMvText, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource FieldBox}"/>
-                          <TextBlock Grid.Row="8" Grid.Column="0" Text="Posição do trigger (%)" Style="{StaticResource FieldLabel}"/>
+                          <TextBlock Grid.Row="8" Grid.Column="0" Text="Trigger position (%)" Style="{StaticResource FieldLabel}"/>
                           <TextBox Grid.Row="8" Grid.Column="1" Text="{Binding TriggerPositionText, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource FieldBox}"/>
-                          <TextBlock Grid.Row="9" Grid.Column="0" Text="Escala do canal do trigger (mV/div)" Style="{StaticResource FieldLabel}"/>
+                          <TextBlock Grid.Row="9" Grid.Column="0" Text="Trigger channel scale (mV/div)" Style="{StaticResource FieldLabel}"/>
                           <TextBox Grid.Row="9" Grid.Column="1" Text="{Binding TriggerScaleMvText, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource FieldBox}"/>
                         </Grid>
-                        <CheckBox Content="Trigger em borda de descida" IsChecked="{Binding TriggerFalling}" Margin="0,6,0,2"/>
-                        <CheckBox Content="Terminação 50 Ω" IsChecked="{Binding Termination50}" Margin="0,2"/>
-                        <CheckBox Content="Ler XZero de cada frame" IsChecked="{Binding ReadXZero}" Margin="0,2"/>
-                        <CheckBox Content="Digitalizar o canal do trigger (mais lento)" IsChecked="{Binding DigitizeTrigger}" Margin="0,2"/>
-                        <CheckBox Content="Log detalhado dos comandos (diagnóstico)" IsChecked="{Binding VerboseLog}" Margin="0,2"/>
+                        <CheckBox Content="Trigger on falling edge" IsChecked="{Binding TriggerFalling}" Margin="0,6,0,2"/>
+                        <CheckBox Content="50 Ω termination" IsChecked="{Binding Termination50}" Margin="0,2"/>
+                        <CheckBox Content="Read XZero of each frame" IsChecked="{Binding ReadXZero}" Margin="0,2"/>
+                        <CheckBox Content="Digitize the trigger channel (slower)" IsChecked="{Binding DigitizeTrigger}" Margin="0,2"/>
+                        <CheckBox Content="Verbose command log (diagnostics)" IsChecked="{Binding VerboseLog}" Margin="0,2"/>
                     </StackPanel>
                 </GroupBox>
 
-                <GroupBox Header="Simulador" IsEnabled="{Binding CanEdit}" Margin="0,0,0,8"
+                <GroupBox Header="Simulator" IsEnabled="{Binding CanEdit}" Margin="0,0,0,8"
                           Visibility="{Binding IsSimulated, Converter={StaticResource BoolToVis}}">
                     <StackPanel Margin="5">
                         <Grid>
@@ -113,22 +113,22 @@
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
                           </Grid.RowDefinitions>
-                          <TextBlock Grid.Row="0" Grid.Column="0" Text="Atraso do pulso (ns)" Style="{StaticResource FieldLabel}"/>
+                          <TextBlock Grid.Row="0" Grid.Column="0" Text="Pulse delay (ns)" Style="{StaticResource FieldLabel}"/>
                           <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding SimDelayNsText, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource FieldBox}"/>
-                          <TextBlock Grid.Row="1" Grid.Column="0" Text="Jitter do pulso σ (ps)" Style="{StaticResource FieldLabel}"/>
+                          <TextBlock Grid.Row="1" Grid.Column="0" Text="Pulse jitter σ (ps)" Style="{StaticResource FieldLabel}"/>
                           <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding SimJitterPsText, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource FieldBox}"/>
-                          <TextBlock Grid.Row="2" Grid.Column="0" Text="Ruído rms (mV)" Style="{StaticResource FieldLabel}"/>
+                          <TextBlock Grid.Row="2" Grid.Column="0" Text="RMS noise (mV)" Style="{StaticResource FieldLabel}"/>
                           <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding SimNoiseMvText, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource FieldBox}"/>
-                          <TextBlock Grid.Row="3" Grid.Column="0" Text="Amplitude (divisões)" Style="{StaticResource FieldLabel}"/>
+                          <TextBlock Grid.Row="3" Grid.Column="0" Text="Amplitude (divisions)" Style="{StaticResource FieldLabel}"/>
                           <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding SimAmplitudeDivText, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource FieldBox}"/>
-                          <TextBlock Grid.Row="4" Grid.Column="0" Text="Frames sem pulso (%)" Style="{StaticResource FieldLabel}"/>
+                          <TextBlock Grid.Row="4" Grid.Column="0" Text="Frames without pulse (%)" Style="{StaticResource FieldLabel}"/>
                           <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding SimEmptyPercentText, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource FieldBox}"/>
                         </Grid>
-                        <CheckBox Content="XZero verdadeiro com sinal + (desmarcado: -)" IsChecked="{Binding SimXZeroPlus}" Margin="0,6,0,2"/>
+                        <CheckBox Content="True XZero with + sign (unchecked: -)" IsChecked="{Binding SimXZeroPlus}" Margin="0,6,0,2"/>
                     </StackPanel>
                 </GroupBox>
 
-                <GroupBox Header="Análise do pulso" IsEnabled="{Binding CanEdit}" Margin="0,0,0,8">
+                <GroupBox Header="Pulse analysis" IsEnabled="{Binding CanEdit}" Margin="0,0,0,8">
                     <StackPanel Margin="5">
                         <Grid>
                           <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="100"/></Grid.ColumnDefinitions>
@@ -140,40 +140,40 @@
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
                           </Grid.RowDefinitions>
-                          <TextBlock Grid.Row="0" Grid.Column="0" Text="Portão de detecção / limiar fixo (mV)" Style="{StaticResource FieldLabel}"/>
+                          <TextBlock Grid.Row="0" Grid.Column="0" Text="Detection gate / fixed threshold (mV)" Style="{StaticResource FieldLabel}"/>
                           <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding ThresholdMvText, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource FieldBox}"/>
-                          <TextBlock Grid.Row="1" Grid.Column="0" Text="Baseline: início (ns)" Style="{StaticResource FieldLabel}"/>
+                          <TextBlock Grid.Row="1" Grid.Column="0" Text="Baseline: start (ns)" Style="{StaticResource FieldLabel}"/>
                           <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding BaselineStartText, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource FieldBox}"/>
-                          <TextBlock Grid.Row="2" Grid.Column="0" Text="Baseline: fim (ns)" Style="{StaticResource FieldLabel}"/>
+                          <TextBlock Grid.Row="2" Grid.Column="0" Text="Baseline: end (ns)" Style="{StaticResource FieldLabel}"/>
                           <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding BaselineEndText, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource FieldBox}"/>
-                          <TextBlock Grid.Row="3" Grid.Column="0" Text="Busca do pulso: início (ns)" Style="{StaticResource FieldLabel}"/>
+                          <TextBlock Grid.Row="3" Grid.Column="0" Text="Pulse search: start (ns)" Style="{StaticResource FieldLabel}"/>
                           <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding SearchStartText, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource FieldBox}"/>
-                          <TextBlock Grid.Row="4" Grid.Column="0" Text="Busca do pulso: fim (ns)" Style="{StaticResource FieldLabel}"/>
+                          <TextBlock Grid.Row="4" Grid.Column="0" Text="Pulse search: end (ns)" Style="{StaticResource FieldLabel}"/>
                           <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding SearchEndText, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource FieldBox}"/>
-                          <TextBlock Grid.Row="5" Grid.Column="0" Text="Busca do trigger: ± (ns)" Style="{StaticResource FieldLabel}"/>
+                          <TextBlock Grid.Row="5" Grid.Column="0" Text="Trigger search: ± (ns)" Style="{StaticResource FieldLabel}"/>
                           <TextBox Grid.Row="5" Grid.Column="1" Text="{Binding TriggerSearchText, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource FieldBox}"/>
                         </Grid>
-                        <TextBlock Text="Ponto de referência do pulso" Style="{StaticResource FieldLabel}" Margin="0,8,0,2"/>
+                        <TextBlock Text="Pulse reference point" Style="{StaticResource FieldLabel}" Margin="0,8,0,2"/>
                         <ComboBox SelectedIndex="{Binding ReferenceModeIndex, Mode=TwoWay}">
-                            <ComboBoxItem Content="Fração da amplitude (CFD)"/>
-                            <ComboBoxItem Content="Limiar fixo"/>
+                            <ComboBoxItem Content="Amplitude fraction (CFD)"/>
+                            <ComboBoxItem Content="Fixed threshold"/>
                         </ComboBox>
                         <Grid Margin="0,4,0,0">
                             <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="100"/></Grid.ColumnDefinitions>
                             <Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/></Grid.RowDefinitions>
-                            <TextBlock Grid.Row="0" Grid.Column="0" Text="Fração da amplitude (%)" Style="{StaticResource FieldLabel}"/>
+                            <TextBlock Grid.Row="0" Grid.Column="0" Text="Amplitude fraction (%)" Style="{StaticResource FieldLabel}"/>
                             <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding FractionPercentText, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource FieldBox}"/>
-                            <TextBlock Grid.Row="1" Grid.Column="0" Text="Amostras na média do pico (1 = pico absoluto)" Style="{StaticResource FieldLabel}"/>
+                            <TextBlock Grid.Row="1" Grid.Column="0" Text="Samples in peak average (1 = absolute peak)" Style="{StaticResource FieldLabel}"/>
                             <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding AmplitudePointsText, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource FieldBox}"/>
                         </Grid>
-                        <CheckBox Content="Pulso negativo" IsChecked="{Binding NegativePulse}" Margin="0,6,0,2"/>
-                        <CheckBox Content="Exigir exatamente um pulso (filtro)" IsChecked="{Binding RequireSingleRun}" Margin="0,2"/>
-                        <CheckBox Content="Interpolação linear entre amostras" IsChecked="{Binding LinearInterpolation}" Margin="0,2"/>
-                        <CheckBox Content="Rejeitar pulsos que saturam o ADC (sempre avisa)" IsChecked="{Binding RejectSaturated}" Margin="0,2"/>
+                        <CheckBox Content="Negative pulse" IsChecked="{Binding NegativePulse}" Margin="0,6,0,2"/>
+                        <CheckBox Content="Require exactly one pulse (filter)" IsChecked="{Binding RequireSingleRun}" Margin="0,2"/>
+                        <CheckBox Content="Linear interpolation between samples" IsChecked="{Binding LinearInterpolation}" Margin="0,2"/>
+                        <CheckBox Content="Reject pulses that saturate the ADC (always warns)" IsChecked="{Binding RejectSaturated}" Margin="0,2"/>
                     </StackPanel>
                 </GroupBox>
 
-                <GroupBox Header="Histograma e meta" Margin="0,0,0,8">
+                <GroupBox Header="Histogram and target" Margin="0,0,0,8">
                     <StackPanel Margin="5">
                         <Grid>
                           <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="100"/></Grid.ColumnDefinitions>
@@ -185,23 +185,23 @@
                           </Grid.RowDefinitions>
                           <TextBlock Grid.Row="0" Grid.Column="0" Text="Bins" Style="{StaticResource FieldLabel}"/>
                           <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding BinsText, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource FieldBox}"/>
-                          <TextBlock Grid.Row="1" Grid.Column="0" Text="Faixa mín. (ns)" Style="{StaticResource FieldLabel}"/>
+                          <TextBlock Grid.Row="1" Grid.Column="0" Text="Range min. (ns)" Style="{StaticResource FieldLabel}"/>
                           <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding RangeMinText, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource FieldBox}"/>
-                          <TextBlock Grid.Row="2" Grid.Column="0" Text="Faixa máx. (ns)" Style="{StaticResource FieldLabel}"/>
+                          <TextBlock Grid.Row="2" Grid.Column="0" Text="Range max. (ns)" Style="{StaticResource FieldLabel}"/>
                           <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding RangeMaxText, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource FieldBox}"/>
-                          <TextBlock Grid.Row="3" Grid.Column="0" Text="Meta de eventos válidos (0 = sem limite)" Style="{StaticResource FieldLabel}"/>
+                          <TextBlock Grid.Row="3" Grid.Column="0" Text="Target valid events (0 = no limit)" Style="{StaticResource FieldLabel}"/>
                           <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding TargetEventsText, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource FieldBox}"/>
                         </Grid>
-                        <CheckBox Content="Faixa automática (média ± 5σ; bins na grade de amostragem se quantizado)" IsChecked="{Binding AutoRange}" Margin="0,6,0,2"/>
-                        <TextBlock Text="Variante mostrada no gráfico" Style="{StaticResource FieldLabel}" Margin="0,6,0,2"/>
+                        <CheckBox Content="Automatic range (mean ± 5σ; bins on the sampling grid if quantized)" IsChecked="{Binding AutoRange}" Margin="0,6,0,2"/>
+                        <TextBlock Text="Variant shown in the plot" Style="{StaticResource FieldLabel}" Margin="0,6,0,2"/>
                         <ComboBox SelectedIndex="{Binding SelectedVariantIndex, Mode=TwoWay}">
-                            <ComboBoxItem Content="Sem correção de XZero"/>
-                            <ComboBoxItem Content="Com +XZero"/>
-                            <ComboBoxItem Content="Com -XZero"/>
-                            <ComboBoxItem Content="Canal do trigger digitalizado"/>
+                            <ComboBoxItem Content="No XZero correction"/>
+                            <ComboBoxItem Content="With +XZero"/>
+                            <ComboBoxItem Content="With -XZero"/>
+                            <ComboBoxItem Content="Digitized trigger channel"/>
                         </ComboBox>
-                        <Button Content="Atualizar histograma" Height="28" Margin="0,8,0,2" Command="{Binding RefreshCommand}"/>
-                        <Button Content="Salvar Δt (CSV)..." Height="28" Margin="0,2" Click="OnSaveCsvClick"/>
+                        <Button Content="Refresh histogram" Height="28" Margin="0,8,0,2" Command="{Binding RefreshCommand}"/>
+                        <Button Content="Save Δt (CSV)..." Height="28" Margin="0,2" Click="OnSaveCsvClick"/>
                     </StackPanel>
                 </GroupBox>
             </StackPanel>
@@ -217,9 +217,9 @@
 
             <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,6">
                 <RadioButton x:Name="ShowWaveformRadio" Content="Waveform" IsChecked="True" Margin="0,0,16,0" Checked="OnViewModeChanged"/>
-                <RadioButton x:Name="ShowHistogramRadio" Content="Histograma" Margin="0,0,24,0" Checked="OnViewModeChanged"/>
+                <RadioButton x:Name="ShowHistogramRadio" Content="Histogram" Margin="0,0,24,0" Checked="OnViewModeChanged"/>
                 <TextBlock Foreground="Gray" FontSize="11" VerticalAlignment="Center"
-                           Text="Waveform: azul = sinal, cinza = trigger, laranja = nível de referência, roxo = pico, verde = baseline, vermelho = cruzamento"/>
+                           Text="Waveform: blue = signal, gray = trigger, orange = reference level, purple = peak, green = baseline, red = crossing"/>
             </StackPanel>
 
             <Border Grid.Row="1" BorderBrush="LightGray" BorderThickness="1">

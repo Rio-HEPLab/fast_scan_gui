@@ -76,10 +76,10 @@ namespace FAST_Scan.MVVM.ViewModel
     {
         private static readonly string[] VariantNames =
         {
-            "Sem correção de XZero",
-            "Com +XZero",
-            "Com -XZero",
-            "Canal do trigger digitalizado"
+            "No XZero correction",
+            "With +XZero",
+            "With -XZero",
+            "Digitized trigger channel"
         };
 
         // ---------------- Fonte ----------------
@@ -168,7 +168,7 @@ namespace FAST_Scan.MVVM.ViewModel
 
         public bool CanEdit { get { return !_isRunning; } }
 
-        private string _statusText = "Pronto.";
+        private string _statusText = "Ready.";
         public string StatusText { get { return _statusText; } private set { _statusText = value; OnPropertyChanged(); } }
 
         private string _countersText = "";
@@ -205,7 +205,7 @@ namespace FAST_Scan.MVVM.ViewModel
         {
             CancellationTokenSource cts = _cts;
             if (cts != null) cts.Cancel();
-            StatusText = "Parando... (aguardando o fim do bloco atual)";
+            StatusText = "Stopping... (waiting for the current block to finish)";
         }
 
         // Relê as opções do histograma e redesenha com os dados já acumulados.
@@ -246,7 +246,7 @@ namespace FAST_Scan.MVVM.ViewModel
 
             CountersText = "";
             StatsText = "";
-            StatusText = "Iniciando...";
+            StatusText = "Starting...";
             IsRunning = true;
             ScanStateManager.SetScanRunning(true);   // bloqueia troca de tela e fechamento do programa
             CommandManager.InvalidateRequerySuggested();
@@ -276,16 +276,16 @@ namespace FAST_Scan.MVVM.ViewModel
             else
             {
                 if (cfg.TargetEvents > 0 && _acc.ValidEvents >= cfg.TargetEvents)
-                    StatusText = "Meta de " + cfg.TargetEvents + " eventos válidos atingida.";
+                    StatusText = "Target of " + cfg.TargetEvents + " valid events reached.";
                 else
-                    StatusText = "Parado.";
-                Logger.Instance.Log("Time Resolution parado. Eventos válidos: " + _acc.ValidEvents + ".", LogType.Info);
+                    StatusText = "Stopped.";
+                Logger.Instance.Log("Time Resolution stopped. Valid events: " + _acc.ValidEvents + ".", LogType.Info);
             }
         }
 
         private void Fail(string message)
         {
-            StatusText = "Erro: " + message;
+            StatusText = "Error: " + message;
             Logger.Instance.Log(message, LogType.Error);
         }
 
@@ -303,12 +303,12 @@ namespace FAST_Scan.MVVM.ViewModel
                 if (cfg.Verbose)
                     source.Trace += text => Logger.Instance.Log(text, LogType.Data);
 
-                StatusText = cfg.Simulated ? "Iniciando simulador..." : "Conectando ao osciloscópio...";
+                StatusText = cfg.Simulated ? "Starting simulator..." : "Connecting to the oscilloscope...";
                 source.Open();
                 source.Apply();
 
-                StatusText = "Adquirindo...";
-                Logger.Instance.Log("Time Resolution: aquisição iniciada.", LogType.Info);
+                StatusText = "Acquiring...";
+                Logger.Instance.Log("Time Resolution: acquisition started.", LogType.Info);
 
                 var queue = new BlockingCollection<WaveformBlock>(3);
                 Exception analysisError = null;
@@ -346,7 +346,7 @@ namespace FAST_Scan.MVVM.ViewModel
 
                         double seconds = clock.Elapsed.TotalSeconds;
                         CountersText = string.Format(CultureInfo.InvariantCulture,
-                            "Blocos: {0}\nFrames capturados: {1} ({2:0} frames/s)\nEventos válidos: {3} de {4} analisados\nRejeitados: {5}\nAmplitude média: {10:0.0} mV\nÚltimo bloco: captura {6:0} ms | XZero {7:0} ms | CURVe? {8:0} ms | transf. {9:0} ms",
+                            "Blocks: {0}\nFrames captured: {1} ({2:0} frames/s)\nValid events: {3} of {4} analyzed\nRejected: {5}\nMean amplitude: {10:0.0} mV\nLast block: capture {6:0} ms | XZero {7:0} ms | CURVe? {8:0} ms | transfer {9:0} ms",
                             blocks, frames, frames / seconds, acc.ValidEvents, acc.FramesAnalyzed,
                             acc.RejectSummary(), block.CaptureMs, block.XZeroMs, block.CurveMs, block.TransferMs, acc.MeanAmplitudeVolts * 1000);
                     }
@@ -367,11 +367,11 @@ namespace FAST_Scan.MVVM.ViewModel
 
                 // Atualiza os contadores finais depois que a análise terminou.
                 CountersText = string.Format(CultureInfo.InvariantCulture,
-                    "Blocos: {0}\nFrames capturados: {1}\nEventos válidos: {2} de {3} analisados\nRejeitados: {4}",
+                    "Blocks: {0}\nFrames captured: {1}\nValid events: {2} of {3} analyzed\nRejected: {4}",
                     blocks, frames, acc.ValidEvents, acc.FramesAnalyzed, acc.RejectSummary());
 
                 if (analysisError != null)
-                    throw new InvalidOperationException("Erro na análise: " + analysisError.Message, analysisError);
+                    throw new InvalidOperationException("Analysis error: " + analysisError.Message, analysisError);
                 if (captureError != null)
                     ExceptionDispatchInfo.Capture(captureError).Throw();
             }
@@ -442,7 +442,7 @@ namespace FAST_Scan.MVVM.ViewModel
             if (saturatedInBlock > 0 && (DateTime.Now - _lastSaturationWarning).TotalSeconds > 5)
             {
                 _lastSaturationWarning = DateTime.Now;
-                Logger.Instance.Log("AVISO: " + saturatedInBlock + " pulso(s) saturaram o ADC neste bloco; a amplitude (e o ponto de fração) fica incorreta. Aumente a escala vertical (mV/div).", LogType.Warning);
+                Logger.Instance.Log("WARNING: " + saturatedInBlock + " pulse(s) saturated the ADC in this block; the amplitude (and the fraction point) is incorrect. Increase the vertical scale (mV/div).", LogType.Warning);
             }
 
             // Waveform mostrada: o último evento válido do bloco (ou o último rejeitado).
@@ -462,13 +462,13 @@ namespace FAST_Scan.MVVM.ViewModel
                     display.CrossingNs = PulseTimingAnalyzer.IndexToNs(shownResult.CrossingIndex, block);
                     display.PeakNs = PulseTimingAnalyzer.IndexToNs(shownResult.PeakIndex, block);
                     display.PeakVolts = display.Volts[shownResult.PeakIndex];
-                    display.WaveformTitle = "Evento válido (frame " + (shownFrame + 1) + " do último bloco), amplitude " +
+                    display.WaveformTitle = "Valid event (frame " + (shownFrame + 1) + " of the last block), amplitude " +
                         (shownResult.AmplitudeVolts * 1000).ToString("0.0", CultureInfo.InvariantCulture) + " mV" +
-                        (shownResult.Saturated ? " - SATURADO" : "");
+                        (shownResult.Saturated ? " - SATURATED" : "");
                 }
                 else
                 {
-                    display.WaveformTitle = "Evento rejeitado (" + shownResult.Reason + ")";
+                    display.WaveformTitle = "Rejected event (" + shownResult.Reason + ")";
                 }
 
                 if (block.HasTriggerData)
@@ -512,7 +512,7 @@ namespace FAST_Scan.MVVM.ViewModel
         private static string FormatStats(VariantStats[] all, int selected)
         {
             var sb = new StringBuilder();
-            sb.AppendLine("  " + "Variante".PadRight(30) + "N".PadLeft(6) + "média(ns)".PadLeft(11) + "std(ps)".PadLeft(9) + "fit σ(ps)".PadLeft(10) + " ± erro");
+            sb.AppendLine("  " + "Variant".PadRight(30) + "N".PadLeft(6) + "mean(ns)".PadLeft(11) + "std(ps)".PadLeft(9) + "fit σ(ps)".PadLeft(10) + " ± error");
             for (int v = 0; v < all.Length; v++)
             {
                 VariantStats s = all[v];
@@ -520,7 +520,7 @@ namespace FAST_Scan.MVVM.ViewModel
                 sb.Append(VariantNames[v].PadRight(30));
                 if (s.Count == 0)
                 {
-                    sb.AppendLine("  (sem dados)");
+                    sb.AppendLine("  (no data)");
                     continue;
                 }
                 sb.Append(s.Count.ToString(CultureInfo.InvariantCulture).PadLeft(6));
@@ -530,10 +530,10 @@ namespace FAST_Scan.MVVM.ViewModel
                     sb.Append((s.Fit.Sigma * 1000).ToString("0.0", CultureInfo.InvariantCulture).PadLeft(10) +
                               " ± " + (s.Fit.SigmaError * 1000).ToString("0.0", CultureInfo.InvariantCulture));
                 else
-                    sb.Append("(sem ajuste)".PadLeft(10));
+                    sb.Append("(no fit)".PadLeft(10));
                 sb.AppendLine();
             }
-            sb.Append("O menor sigma indica a convenção de XZero correta (com pulsos reais).");
+            sb.Append("The lowest sigma indicates the correct XZero convention (with real pulses).");
             return sb.ToString();
         }
 
@@ -553,12 +553,12 @@ namespace FAST_Scan.MVVM.ViewModel
             error = null;
             int bins;
             double min = 0, max = 0;
-            if (!TryInt(BinsText, 5, 2000, out bins)) { error = "Número de bins deve ser um inteiro entre 5 e 2000."; return null; }
+            if (!TryInt(BinsText, 5, 2000, out bins)) { error = "Number of bins must be an integer between 5 and 2000."; return null; }
             if (!AutoRange)
             {
                 if (!TryDouble(RangeMinText, out min) || !TryDouble(RangeMaxText, out max) || max <= min)
                 {
-                    error = "Faixa do histograma inválida (mínimo deve ser menor que o máximo, em ns).";
+                    error = "Invalid histogram range (minimum must be less than maximum, in ns).";
                     return null;
                 }
             }
@@ -575,23 +575,23 @@ namespace FAST_Scan.MVVM.ViewModel
             int amplitudePoints;
             double thresholdMv, baseStart, baseEnd, searchStart, searchEnd, triggerSearch;
 
-            if (!TryInt(ScopeChannelText, 1, 4, out channel)) { error = "Canal medido deve ser um inteiro de 1 a 4."; return null; }
-            if (!TryInt(TriggerChannelText, 1, 4, out triggerChannel)) { error = "Canal do trigger deve ser um inteiro de 1 a 4."; return null; }
-            if (channel == triggerChannel) { error = "Canal medido e canal do trigger devem ser diferentes."; return null; }
-            if (!TryInt(FrameCountText, 1, 1000000, out frames)) { error = "Frames por bloco deve ser um inteiro positivo."; return null; }
-            if (!TryInt(RecordLengthText, 2, 100000000, out recordLength)) { error = "Pontos por frame deve ser um inteiro positivo."; return null; }
-            if (!TryDouble(SampleRateGsText, out rateGs) || rateGs <= 0) { error = "Taxa de amostragem inválida (GS/s)."; return null; }
-            if (!TryDouble(VerticalScaleMvText, out scaleMv) || scaleMv <= 0) { error = "Escala vertical inválida (mV/div)."; return null; }
-            if (!TryDouble(TriggerLevelMvText, out levelMv)) { error = "Nível do trigger inválido (mV)."; return null; }
-            if (!TryDouble(TriggerPositionText, out positionPercent)) { error = "Posição do trigger inválida (%)."; return null; }
-            if (!TryDouble(TriggerScaleMvText, out triggerScaleMv) || triggerScaleMv <= 0) { error = "Escala vertical do canal do trigger inválida (mV/div)."; return null; }
-            if (!TryDouble(ThresholdMvText, out thresholdMv) || thresholdMv <= 0) { error = "Limiar inválido (mV, positivo)."; return null; }
-            if (!TryDouble(FractionPercentText, out fractionPercent) || fractionPercent <= 0 || fractionPercent >= 100) { error = "Fração da amplitude inválida (entre 0 e 100 %, exclusive)."; return null; }
-            if (!TryInt(AmplitudePointsText, 1, 1000, out amplitudePoints)) { error = "Amostras da média da amplitude devem ser um inteiro de 1 a 1000 (1 = pico absoluto; 0 não é aceito)."; return null; }
-            if (!TryDouble(BaselineStartText, out baseStart) || !TryDouble(BaselineEndText, out baseEnd)) { error = "Janela da baseline inválida (ns)."; return null; }
-            if (!TryDouble(SearchStartText, out searchStart) || !TryDouble(SearchEndText, out searchEnd)) { error = "Janela de busca inválida (ns)."; return null; }
-            if (!TryDouble(TriggerSearchText, out triggerSearch)) { error = "Meia-largura da busca do trigger inválida (ns)."; return null; }
-            if (!TryInt(TargetEventsText, 0, 100000000, out target)) { error = "Meta de eventos deve ser um inteiro (0 = sem limite)."; return null; }
+            if (!TryInt(ScopeChannelText, 1, 4, out channel)) { error = "Measured channel must be an integer from 1 to 4."; return null; }
+            if (!TryInt(TriggerChannelText, 1, 4, out triggerChannel)) { error = "Trigger channel must be an integer from 1 to 4."; return null; }
+            if (channel == triggerChannel) { error = "Measured channel and trigger channel must be different."; return null; }
+            if (!TryInt(FrameCountText, 1, 1000000, out frames)) { error = "Frames per block must be a positive integer."; return null; }
+            if (!TryInt(RecordLengthText, 2, 100000000, out recordLength)) { error = "Points per frame must be a positive integer."; return null; }
+            if (!TryDouble(SampleRateGsText, out rateGs) || rateGs <= 0) { error = "Invalid sample rate (GS/s)."; return null; }
+            if (!TryDouble(VerticalScaleMvText, out scaleMv) || scaleMv <= 0) { error = "Invalid vertical scale (mV/div)."; return null; }
+            if (!TryDouble(TriggerLevelMvText, out levelMv)) { error = "Invalid trigger level (mV)."; return null; }
+            if (!TryDouble(TriggerPositionText, out positionPercent)) { error = "Invalid trigger position (%)."; return null; }
+            if (!TryDouble(TriggerScaleMvText, out triggerScaleMv) || triggerScaleMv <= 0) { error = "Invalid trigger channel vertical scale (mV/div)."; return null; }
+            if (!TryDouble(ThresholdMvText, out thresholdMv) || thresholdMv <= 0) { error = "Invalid threshold (mV, positive)."; return null; }
+            if (!TryDouble(FractionPercentText, out fractionPercent) || fractionPercent <= 0 || fractionPercent >= 100) { error = "Invalid amplitude fraction (between 0 and 100 %, exclusive)."; return null; }
+            if (!TryInt(AmplitudePointsText, 1, 1000, out amplitudePoints)) { error = "Samples in the amplitude average must be an integer from 1 to 1000 (1 = absolute peak; 0 is not accepted)."; return null; }
+            if (!TryDouble(BaselineStartText, out baseStart) || !TryDouble(BaselineEndText, out baseEnd)) { error = "Invalid baseline window (ns)."; return null; }
+            if (!TryDouble(SearchStartText, out searchStart) || !TryDouble(SearchEndText, out searchEnd)) { error = "Invalid search window (ns)."; return null; }
+            if (!TryDouble(TriggerSearchText, out triggerSearch)) { error = "Invalid trigger search half-width (ns)."; return null; }
+            if (!TryInt(TargetEventsText, 0, 100000000, out target)) { error = "Target events must be an integer (0 = no limit)."; return null; }
 
             HistogramSettings hist = ParseHistogram(out error);
             if (hist == null) return null;
@@ -646,7 +646,7 @@ namespace FAST_Scan.MVVM.ViewModel
                     !TryDouble(SimNoiseMvText, out noise) || !TryDouble(SimAmplitudeDivText, out amp) ||
                     !TryDouble(SimEmptyPercentText, out empty) || jitter < 0 || noise < 0 || amp <= 0 || empty < 0 || empty > 100)
                 {
-                    error = "Parâmetros do simulador inválidos.";
+                    error = "Invalid simulator parameters.";
                     return null;
                 }
                 simulation.DelayNs = delay;

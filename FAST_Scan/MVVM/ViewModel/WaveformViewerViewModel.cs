@@ -88,7 +88,7 @@ namespace FAST_Scan.MVVM.ViewModel
 
         public bool CanEdit { get { return !_isRunning; } }
 
-        private string _statusText = "Pronto.";
+        private string _statusText = "Ready.";
         public string StatusText { get { return _statusText; } private set { _statusText = value; OnPropertyChanged(); } }
 
         private string _countersText = "";
@@ -112,7 +112,7 @@ namespace FAST_Scan.MVVM.ViewModel
         {
             CancellationTokenSource cts = _cts;
             if (cts != null) cts.Cancel();
-            StatusText = "Parando... (aguardando o fim do bloco atual)";
+            StatusText = "Stopping... (waiting for the current block to finish)";
         }
 
         // ------------------------------------------------------------------
@@ -145,7 +145,7 @@ namespace FAST_Scan.MVVM.ViewModel
                 if (!TryInt(DigitizerChannelText, 0, 63, out digitizerChannel) ||
                     !TryInt(BaselinePointsText, 1, 100000, out baselinePoints))
                 {
-                    Fail("Parâmetros do digitizer inválidos (canal e pontos de baseline devem ser inteiros).");
+                    Fail("Invalid digitizer parameters (channel and baseline points must be integers).");
                     return;
                 }
             }
@@ -154,7 +154,7 @@ namespace FAST_Scan.MVVM.ViewModel
             CancellationToken token = _cts.Token;
 
             CountersText = "";
-            StatusText = "Iniciando...";
+            StatusText = "Starting...";
             IsRunning = true;
             ScanStateManager.SetScanRunning(true);   // bloqueia troca de tela e fechamento do programa
             CommandManager.InvalidateRequerySuggested();
@@ -186,14 +186,14 @@ namespace FAST_Scan.MVVM.ViewModel
                 Fail(failure.Message);
             else
             {
-                StatusText = "Parado.";
-                Logger.Instance.Log("Visualizador de waveform parado.", LogType.Info);
+                StatusText = "Stopped.";
+                Logger.Instance.Log("Waveform viewer stopped.", LogType.Info);
             }
         }
 
         private void Fail(string message)
         {
-            StatusText = "Erro: " + message;
+            StatusText = "Error: " + message;
             Logger.Instance.Log(message, LogType.Error);
         }
 
@@ -209,12 +209,12 @@ namespace FAST_Scan.MVVM.ViewModel
                 if (verbose)
                     scope.Trace += text => Logger.Instance.Log(text, LogType.Data);   // diagnóstico: cada comando e resposta
 
-                StatusText = "Conectando ao osciloscópio...";
+                StatusText = "Connecting to the oscilloscope...";
                 scope.Open();
                 scope.Apply();
 
-                StatusText = "Adquirindo...";
-                Logger.Instance.Log("Visualizador: aquisição do osciloscópio iniciada.", LogType.Info);
+                StatusText = "Acquiring...";
+                Logger.Instance.Log("Viewer: oscilloscope acquisition started.", LogType.Info);
 
                 var clock = Stopwatch.StartNew();
                 int blocks = 0;
@@ -228,7 +228,7 @@ namespace FAST_Scan.MVVM.ViewModel
 
                     double seconds = clock.Elapsed.TotalSeconds;
                     CountersText = string.Format(CultureInfo.InvariantCulture,
-                        "Blocos: {0}\nEventos: {1}\nTaxa média: {2:0} eventos/s\nÚltimo bloco: captura {3:0} ms | XZero {4:0} ms | CURVe? {5:0} ms | total transf. {6:0} ms",
+                        "Blocks: {0}\nEvents: {1}\nMean rate: {2:0} events/s\nLast block: capture {3:0} ms | XZero {4:0} ms | CURVe? {5:0} ms | total transfer {6:0} ms",
                         blocks, events, events / seconds, block.CaptureMs, block.XZeroMs, block.CurveMs, block.TransferMs);
 
                     PublishOscilloscope(block, overlay);
@@ -236,7 +236,7 @@ namespace FAST_Scan.MVVM.ViewModel
             }
         }
 
-        // Converte só os últimos 'overlay' frames do bloco para volts (barato) e envia à View.
+        // Converte só os últimos 'overlay' frames of the block para volts (barato) e envia à View.
         private void PublishOscilloscope(WaveformBlock block, int overlay)
         {
             int count = Math.Min(overlay, block.FrameCount);
@@ -246,9 +246,9 @@ namespace FAST_Scan.MVVM.ViewModel
 
             Raise(new WaveformDisplay
             {
-                Title = "Osciloscópio: últimos " + count + " frames do bloco",
-                XLabel = "Tempo relativo ao trigger (ns)",
-                YLabel = "Tensão (V)",
+                Title = "Oscilloscope: last " + count + " frames of the block",
+                XLabel = "Time relative to trigger (ns)",
+                YLabel = "Voltage (V)",
                 X = block.GetTimeAxisNanoseconds(),
                 Frames = frames
             });
@@ -265,17 +265,17 @@ namespace FAST_Scan.MVVM.ViewModel
 
             Action acquireOne;
 #if !TEST_MODE
-            StatusText = "Configurando o digitizer...";
+            StatusText = "Configuring the digitizer...";
             if (Convert.ToBoolean(Digitizer.Configure()))
-                throw new InvalidOperationException("Não foi possível configurar o digitizer.");
+                throw new InvalidOperationException("Could not configure the digitizer.");
             acquireOne = () => Digitizer.GetWaveform(buffer, channel, baselinePoints);
 #else
             acquireOne = () => { Digitizer.GenerateWaveform_Sim(buffer); Thread.Sleep(20); };
 #endif
             try
             {
-                StatusText = "Adquirindo...";
-                Logger.Instance.Log("Visualizador: aquisição do digitizer iniciada.", LogType.Info);
+                StatusText = "Acquiring...";
+                Logger.Instance.Log("Viewer: digitizer acquisition started.", LogType.Info);
 
                 var clock = Stopwatch.StartNew();
                 long waveforms = 0;
@@ -289,12 +289,12 @@ namespace FAST_Scan.MVVM.ViewModel
                     for (int i = 0; i < samples.Length; i++) samples[i] = buffer[i];
 
                     CountersText = string.Format(CultureInfo.InvariantCulture,
-                        "Waveforms: {0}\nTaxa média: {1:0.0} waveforms/s",
+                        "Waveforms: {0}\nMean rate: {1:0.0} waveforms/s",
                         waveforms, waveforms / clock.Elapsed.TotalSeconds);
 
                     Raise(new WaveformDisplay
                     {
-                        Title = "Digitizer: última waveform",
+                        Title = "Digitizer: last waveform",
                         XLabel = "Bin",
                         YLabel = "Amplitude (ADC)",
                         X = bins,
@@ -329,14 +329,14 @@ namespace FAST_Scan.MVVM.ViewModel
             int channel, frames, recordLength;
             double rateGs, scaleMv, levelMv, positionPercent;
 
-            if (!TryInt(ScopeChannelText, 1, 4, out channel)) { error = "Canal deve ser um inteiro de 1 a 4."; return null; }
-            if (!TryInt(FrameCountText, 1, 1000000, out frames)) { error = "Número de frames deve ser um inteiro positivo."; return null; }
-            if (!TryInt(OverlayFramesText, 1, 1000, out overlay)) { error = "Frames sobrepostos deve ser um inteiro entre 1 e 1000."; return null; }
-            if (!TryInt(RecordLengthText, 2, 100000000, out recordLength)) { error = "Pontos por frame deve ser um inteiro positivo."; return null; }
-            if (!TryDouble(SampleRateGsText, out rateGs) || rateGs <= 0) { error = "Taxa de amostragem inválida (GS/s)."; return null; }
-            if (!TryDouble(VerticalScaleMvText, out scaleMv) || scaleMv <= 0) { error = "Escala vertical inválida (mV/div)."; return null; }
-            if (!TryDouble(TriggerLevelMvText, out levelMv)) { error = "Nível do trigger inválido (mV)."; return null; }
-            if (!TryDouble(TriggerPositionText, out positionPercent)) { error = "Posição do trigger inválida (%)."; return null; }
+            if (!TryInt(ScopeChannelText, 1, 4, out channel)) { error = "Channel must be an integer from 1 to 4."; return null; }
+            if (!TryInt(FrameCountText, 1, 1000000, out frames)) { error = "Frame count must be a positive integer."; return null; }
+            if (!TryInt(OverlayFramesText, 1, 1000, out overlay)) { error = "Overlaid frames must be an integer between 1 and 1000."; return null; }
+            if (!TryInt(RecordLengthText, 2, 100000000, out recordLength)) { error = "Points per frame must be a positive integer."; return null; }
+            if (!TryDouble(SampleRateGsText, out rateGs) || rateGs <= 0) { error = "Invalid sample rate (GS/s)."; return null; }
+            if (!TryDouble(VerticalScaleMvText, out scaleMv) || scaleMv <= 0) { error = "Invalid vertical scale (mV/div)."; return null; }
+            if (!TryDouble(TriggerLevelMvText, out levelMv)) { error = "Invalid trigger level (mV)."; return null; }
+            if (!TryDouble(TriggerPositionText, out positionPercent)) { error = "Invalid trigger position (%)."; return null; }
 
             // Não mostra mais frames do que o bloco tem.
             if (overlay > frames) overlay = frames;

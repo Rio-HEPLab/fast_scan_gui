@@ -258,13 +258,13 @@ namespace FAST_Scan.Core.Analysis
             lock (sync)
             {
                 var sb = new StringBuilder();
-                sb.Append("sem pulso " + rejectCounts[(int)RejectReason.NoPulse]);
-                sb.Append(" | múltiplos " + rejectCounts[(int)RejectReason.MultiplePulses]);
-                sb.Append(" | já acima " + rejectCounts[(int)RejectReason.StartsAbove]);
+                sb.Append("no pulse " + rejectCounts[(int)RejectReason.NoPulse]);
+                sb.Append(" | multiple " + rejectCounts[(int)RejectReason.MultiplePulses]);
+                sb.Append(" | already above " + rejectCounts[(int)RejectReason.StartsAbove]);
                 int bad = rejectCounts[(int)RejectReason.BadBaselineWindow] + rejectCounts[(int)RejectReason.BadSearchWindow];
-                if (bad > 0) sb.Append(" | janela inválida " + bad);
-                if (saturated > 0) sb.Append(" | SATURADOS " + saturated);
-                if (triggerMissing > 0) sb.Append(" | trigger não achado " + triggerMissing);
+                if (bad > 0) sb.Append(" | invalid window " + bad);
+                if (saturated > 0) sb.Append(" | SATURATED " + saturated);
+                if (triggerMissing > 0) sb.Append(" | trigger not found " + triggerMissing);
                 return sb.ToString();
             }
         }
@@ -398,7 +398,7 @@ namespace FAST_Scan.Core.Analysis
             lock (sync)
             {
                 var sb = new StringBuilder();
-                sb.AppendLine("evento,dt_sem_correcao_ns,dt_xzero_mais_ns,dt_xzero_menos_ns,dt_trigger_digitalizado_ns");
+                sb.AppendLine("event,dt_no_correction_ns,dt_xzero_plus_ns,dt_xzero_minus_ns,dt_digitized_trigger_ns");
                 for (int e = 0; e < valid; e++)
                 {
                     sb.Append((e + 1).ToString(CultureInfo.InvariantCulture));

@@ -5,99 +5,49 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:FAST_Scan.MVVM.View"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800" 
+             d:DesignHeight="700" d:DesignWidth="800" 
              Background="White">
-    <UserControl.Resources>
-        <!-- Start: Styles-->
-        <!-- Start: TabItem Style-->
-        <Style x:Key="TabItemStyle" TargetType="TabItem">
-            <Setter Property="BorderThickness" Value="0"/>
-            <Setter Property="BorderBrush" Value="Transparent"/>
-            <Setter Property="Width" Value="180"/>
-            <Setter Property="HorizontalAlignment" Value="Center"/>
-            <Setter Property="VerticalAlignment" Value="Center"/>
-            <Setter Property="Padding" Value="10 5"/>
-            <Setter Property="FontWeight" Value="Normal"/>
-            <Setter Property="FontFamily" Value="Source Sans Variable"/>
 
-            <!-- Aqui você estiliza só o HEADER -->
-            <Setter Property="HeaderTemplate">
-                <Setter.Value>
-                    <DataTemplate>
-                        <TextBlock Text="{Binding}"
-                           FontWeight="Bold"
-                           FontSize="15"
-                           Foreground="#070726"
-                           HorizontalAlignment="Center"
-                           VerticalAlignment="Center"/>
-                    </DataTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-        <!-- Start: TabItem Style-->
-        <!-- End: Styles-->
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVis"/>
     </UserControl.Resources>
 
     <Grid Margin="10">
-        <TabControl Tag="{Binding Title}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="360"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
 
-            <TabControl.Template>
-                <ControlTemplate TargetType="TabControl">
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="*"/>
-                        </Grid.RowDefinitions>
-
-                        <!-- Header -->
-                        <Grid Grid.Row="0">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto"/>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="Auto"/>
-                            </Grid.ColumnDefinitions>
-
-                            <!-- Tabs -->
-                            <TabPanel Grid.Column="0"
-                              IsItemsHost="True"
-                              VerticalAlignment="Center"/>
-
-                            <!-- Título -->
-                            <TextBlock Grid.Column="2"
-                                       Text="{TemplateBinding Tag}"
-                                       VerticalAlignment="Center"
-                                       FontWeight="Bold"
-                                       FontSize="25"
-                                       Margin="0,0,30,0"
-                                       Foreground="#070726"/>
-                        </Grid>
-
-                        <!-- Conteúdo -->
-                        <ContentPresenter Grid.Row="1"
-                                  ContentSource="SelectedContent"/>
-                    </Grid>
-                </ControlTemplate>
-            </TabControl.Template>
-
-            <!-- Suas abas -->
-            <TabItem Header="Configurations" Style="{DynamicResource TabItemStyle}">
+        <!-- Painel de configuração e ações -->
+        <ScrollViewer Grid.Column="0" VerticalScrollBarVisibility="Auto">
+            <StackPanel Margin="0,0,10,0">
+                <TextBlock Text="{Binding Title}"
+                           FontSize="25" FontWeight="Bold"
+                           Foreground="#070726" Margin="0,0,0,10"/>
                 <ContentControl Content="{Binding ScanConfigurationsView}"/>
-            </TabItem>
-            <TabItem Header="Graphs" Style="{DynamicResource TabItemStyle}">
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition/>
-                        <ColumnDefinition/>
-                    </Grid.ColumnDefinitions>
+            </StackPanel>
+        </ScrollViewer>
 
-                    <ContentControl Grid.Column="0"
-                                   Content="{Binding WaveformGraphView}"/>
-                    <ContentControl Grid.Column="1"
-                                   Content="{Binding ScanGraphView}"/>
+        <!-- Gráficos: um de cada vez (waveform ou gráfico do scan) -->
+        <Grid Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
 
-                </Grid>
-            </TabItem>
+            <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,6">
+                <RadioButton x:Name="ShowWaveformRadio" Content="Waveform" IsChecked="True" Margin="0,0,16,0"/>
+                <RadioButton x:Name="ShowScanPlotRadio" Content="Scan plot"/>
+            </StackPanel>
 
-        </TabControl>
+            <Border Grid.Row="1" BorderBrush="LightGray" BorderThickness="1"
+                    Visibility="{Binding IsChecked, ElementName=ShowWaveformRadio, Converter={StaticResource BoolToVis}}">
+                <ContentControl Content="{Binding WaveformGraphView}"/>
+            </Border>
+            <Border Grid.Row="1" BorderBrush="LightGray" BorderThickness="1"
+                    Visibility="{Binding IsChecked, ElementName=ShowScanPlotRadio, Converter={StaticResource BoolToVis}}">
+                <ContentControl Content="{Binding ScanGraphView}"/>
+            </Border>
+        </Grid>
     </Grid>
 </UserControl>

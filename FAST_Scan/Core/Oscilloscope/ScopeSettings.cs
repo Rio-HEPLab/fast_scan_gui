@@ -58,27 +58,27 @@ namespace FAST_Scan.Core.Oscilloscope
             var problems = new List<string>();
 
             if (string.IsNullOrWhiteSpace(VisaResource))
-                problems.Add("Endereço VISA vazio.");
+                problems.Add("VISA address is empty.");
             if (Channel < 1 || Channel > 4)
-                problems.Add("Canal de medida deve estar entre 1 e 4.");
+                problems.Add("Measurement channel must be between 1 and 4.");
             if (TriggerChannel < 1 || TriggerChannel > 4)
-                problems.Add("Canal de trigger deve estar entre 1 e 4.");
+                problems.Add("Trigger channel must be between 1 and 4.");
             if (DigitizeTriggerChannel && Channel == TriggerChannel)
-                problems.Add("Para digitalizar o trigger, o canal de medida e o do trigger devem ser diferentes.");
+                problems.Add("To digitize the trigger, the measurement channel and the trigger channel must be different.");
             if (DigitizeTriggerChannel && TriggerVerticalScaleVoltsPerDiv <= 0)
-                problems.Add("Escala vertical do canal do trigger deve ser positiva.");
+                problems.Add("Trigger channel vertical scale must be positive.");
             if (VerticalScaleVoltsPerDiv <= 0)
-                problems.Add("Escala vertical deve ser positiva.");
+                problems.Add("Vertical scale must be positive.");
             if (SampleRateHz <= 0)
-                problems.Add("Taxa de amostragem deve ser positiva.");
+                problems.Add("Sample rate must be positive.");
             if (RecordLength < 2)
-                problems.Add("Comprimento do frame deve ter pelo menos 2 pontos.");
+                problems.Add("Frame length must have at least 2 points.");
             if (TriggerPositionPercent < 0 || TriggerPositionPercent > 100)
-                problems.Add("Posição do trigger deve estar entre 0 e 100 %.");
+                problems.Add("Trigger position must be between 0 and 100 %.");
             if (FrameCount < 1)
-                problems.Add("Número de frames deve ser pelo menos 1.");
+                problems.Add("Frame count must be at least 1.");
             if (IoTimeoutMs < 1000 || CaptureTimeoutMs < 1000)
-                problems.Add("Timeouts devem ser de pelo menos 1000 ms.");
+                problems.Add("Timeouts must be at least 1000 ms.");
 
             return problems;
         }

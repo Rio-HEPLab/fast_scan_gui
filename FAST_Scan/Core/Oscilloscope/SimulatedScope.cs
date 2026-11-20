@@ -39,13 +39,13 @@ namespace FAST_Scan.Core.Oscilloscope
         public void Open()
         {
             opened = true;
-            Raise("SIMULAÇÃO: nenhum instrumento real está sendo usado.");
+            Raise("SIMULATION: no real instrument is being used.");
         }
 
         public void Apply()
         {
-            if (!opened) throw new ScopeException("O simulador não foi aberto.");
-            Raise("SIMULAÇÃO: " + settings.FrameCount + " frames de " + settings.RecordLength + " pontos a " +
+            if (!opened) throw new ScopeException("The simulator has not been opened.");
+            Raise("SIMULATION: " + settings.FrameCount + " frames of " + settings.RecordLength + " points at " +
                   (settings.SampleRateHz / 1e9).ToString("0.###", System.Globalization.CultureInfo.InvariantCulture) + " GS/s.");
         }
 
@@ -71,7 +71,7 @@ namespace FAST_Scan.Core.Oscilloscope
 
         public WaveformBlock CaptureBlock(CancellationToken token)
         {
-            if (!opened) throw new ScopeException("O simulador não foi aberto.");
+            if (!opened) throw new ScopeException("The simulator has not been opened.");
             token.ThrowIfCancellationRequested();
 
             // Emula o tempo de captura do osciloscópio real (~2,5 ms por frame).
