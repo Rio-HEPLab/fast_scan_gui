@@ -37,7 +37,16 @@
                  Grid.Row="0"
                  Background="#070726"
                  Loaded="LogsListBox_Loaded"
-                 Grid.ColumnSpan="3"/>
+                 SelectionMode="Extended"
+                 PreviewKeyDown="LogsListBox_PreviewKeyDown"
+                 Grid.ColumnSpan="3">
+            <ListBox.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Header="Copy selected" Click="CopySelected_Click"/>
+                    <MenuItem Header="Copy all" Click="CopyAll_Click"/>
+                </ContextMenu>
+            </ListBox.ContextMenu>
+        </ListBox>
 
         <!-- Botão de limpar logs -->
         <Button Content="Clear Logs"
@@ -49,6 +58,16 @@
                 Command="{Binding ClearLogsCommand}" 
                 Grid.Row="1"
                 Grid.Column="1"/>
+
+        <!-- Botão de copiar todos os logs para a área de transferência -->
+        <Button Content="Copy Logs"
+                Margin="10"
+                MinWidth="100"
+                MaxWidth="200"
+                Height="25"
+                Click="CopyAll_Click"
+                Grid.Row="1"
+                Grid.Column="0"/>
     </Grid>
 
 </UserControl>

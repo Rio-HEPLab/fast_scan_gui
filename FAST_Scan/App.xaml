@@ -24,6 +24,14 @@
                 <view:TerminalView/>
             </DataTemplate>
 
+            <DataTemplate DataType="{x:Type viewModel:WaveformViewerViewModel}">
+                <view:WaveformViewerView/>
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type viewModel:TimeResolutionViewModel}">
+                <view:TimeResolutionView/>
+            </DataTemplate>
+
             <DataTemplate DataType="{x:Type viewModel:WaveformPlotViewModel}">
                 <view:WaveformPlotView/>
             </DataTemplate>

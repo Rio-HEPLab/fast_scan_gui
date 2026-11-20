@@ -80,6 +80,7 @@
     <Reference Include="HarfBuzzSharp, Version=1.0.0.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
       <HintPath>..\packages\HarfBuzzSharp.8.3.1.1\lib\net462\HarfBuzzSharp.dll</HintPath>
     </Reference>
+    <Reference Include="Ivi.Visa, Version=5.11.0.0, Culture=neutral, PublicKeyToken=a128c98f1d7717c1, processorArchitecture=MSIL" />
     <Reference Include="MathNet.Numerics, Version=5.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\MathNet.Numerics.5.0.0\lib\net461\MathNet.Numerics.dll</HintPath>
     </Reference>
@@ -194,6 +195,14 @@
     <Compile Include="Core\LogMessage.cs" />
     <Compile Include="Core\LogTypeToBrushConverter.cs" />
     <Compile Include="Core\ObservebleObject.cs" />
+    <Compile Include="Core\Analysis\PulseTimingAnalyzer.cs" />
+    <Compile Include="Core\Analysis\PulseTimingSettings.cs" />
+    <Compile Include="Core\Analysis\TimeResolutionAccumulator.cs" />
+    <Compile Include="Core\Oscilloscope\IBlockSource.cs" />
+    <Compile Include="Core\Oscilloscope\ScopeSettings.cs" />
+    <Compile Include="Core\Oscilloscope\SimulatedScope.cs" />
+    <Compile Include="Core\Oscilloscope\TektronixScope.cs" />
+    <Compile Include="Core\Oscilloscope\WaveformBlock.cs" />
     <Compile Include="Core\RelayCommand.cs" />
     <Compile Include="Core\ScanAnalysis.cs" />
     <Compile Include="Core\Scan.cs" />
@@ -241,6 +250,14 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="MVVM\View\TimeResolutionView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="MVVM\View\WaveformViewerView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Theme\MenuButtonTheme.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -258,6 +275,8 @@
     <Compile Include="MVVM\ViewModel\ScanTabControlViewModel.cs" />
     <Compile Include="MVVM\ViewModel\TerminalViewModel.cs" />
     <Compile Include="MVVM\ViewModel\WaveformPlotViewModel.cs" />
+    <Compile Include="MVVM\ViewModel\TimeResolutionViewModel.cs" />
+    <Compile Include="MVVM\ViewModel\WaveformViewerViewModel.cs" />
     <Compile Include="MVVM\View\FocalPlotView.xaml.cs">
       <DependentUpon>FocalPlotView.xaml</DependentUpon>
     </Compile>
@@ -281,6 +300,12 @@
     </Compile>
     <Compile Include="MVVM\View\WaveformPlotView.xaml.cs">
       <DependentUpon>WaveformPlotView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MVVM\View\WaveformViewerView.xaml.cs">
+      <DependentUpon>WaveformViewerView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MVVM\View\TimeResolutionView.xaml.cs">
+      <DependentUpon>TimeResolutionView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>

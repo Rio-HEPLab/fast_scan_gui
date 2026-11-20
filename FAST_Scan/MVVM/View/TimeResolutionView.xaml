@@ -1,0 +1,220 @@
+﻿<UserControl x:Class="FAST_Scan.MVVM.View.TimeResolutionView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:FAST_Scan.MVVM.View"
+             xmlns:scottPlot="http://schemas.scottplot.net/2008/xaml/presentation"
+             mc:Ignorable="d"
+             d:DesignHeight="700" d:DesignWidth="1100"
+             Background="White">
+
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVis"/>
+
+        <Style x:Key="FieldLabel" TargetType="TextBlock">
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="0,3,6,3"/>
+            <Setter Property="Foreground" Value="#070726"/>
+            <Setter Property="TextWrapping" Value="Wrap"/>
+        </Style>
+        <Style x:Key="FieldBox" TargetType="TextBox">
+            <Setter Property="Margin" Value="0,3"/>
+            <Setter Property="Padding" Value="3"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+        </Style>
+    </UserControl.Resources>
+
+    <Grid Margin="10">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="350"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- Painel de configuração -->
+        <ScrollViewer Grid.Column="0" VerticalScrollBarVisibility="Auto">
+            <StackPanel Margin="0,0,10,0">
+
+                <TextBlock Text="Time Resolution"
+                           FontSize="25" FontWeight="Bold"
+                           Foreground="#070726" Margin="0,0,0,10"/>
+
+                <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
+                    <Button Content="Start" Width="100" Height="32" Margin="0,0,10,0" Command="{Binding StartCommand}"/>
+                    <Button Content="Stop" Width="100" Height="32" Command="{Binding StopCommand}"/>
+                </StackPanel>
+                <TextBlock Text="{Binding StatusText}" TextWrapping="Wrap"
+                           FontWeight="Bold" Foreground="#070726" Margin="0,0,0,6"/>
+                <TextBlock Text="{Binding CountersText}" TextWrapping="Wrap"
+                           FontFamily="Consolas" FontSize="12" Margin="0,0,0,8"/>
+
+                <GroupBox Header="Fonte" IsEnabled="{Binding CanEdit}" Margin="0,0,0,8">
+                    <StackPanel Margin="5">
+                        <RadioButton Content="Osciloscópio (Tektronix)" IsChecked="{Binding IsOscilloscope, Mode=TwoWay}" Margin="0,2"/>
+                        <RadioButton Content="Simulador (sem instrumento)" IsChecked="{Binding IsSimulated, Mode=TwoWay}" Margin="0,2"/>
+                        <RadioButton Content="Digitizer (CAEN) - em breve" IsEnabled="False" Margin="0,2"/>
+                    </StackPanel>
+                </GroupBox>
+
+                <GroupBox Header="Osciloscópio" IsEnabled="{Binding CanEdit}" Margin="0,0,0,8">
+                    <StackPanel Margin="5">
+                        <Grid>
+                          <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="100"/></Grid.ColumnDefinitions>
+                          <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                          </Grid.RowDefinitions>
+                          <TextBlock Grid.Row="0" Grid.Column="0" Text="Endereço VISA" Style="{StaticResource FieldLabel}"/>
+                          <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding VisaResource, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource FieldBox}"/>
+                          <TextBlock Grid.Row="1" Grid.Column="0" Text="Canal medido (1-4)" Style="{StaticResource FieldLabel}"/>
+                          <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding ScopeChannelText, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource FieldBox}"/>
+                          <TextBlock Grid.Row="2" Grid.Column="0" Text="Canal do trigger (1-4)" Style="{StaticResource FieldLabel}"/>
+                          <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding TriggerChannelText, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource FieldBox}"/>
+                          <TextBlock Grid.Row="3" Grid.Column="0" Text="Frames por bloco" Style="{StaticResource FieldLabel}"/>
+                          <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding FrameCountText, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource FieldBox}"/>
+                          <TextBlock Grid.Row="4" Grid.Column="0" Text="Pontos por frame" Style="{StaticResource FieldLabel}"/>
+                          <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding RecordLengthText, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource FieldBox}"/>
+                          <TextBlock Grid.Row="5" Grid.Column="0" Text="Taxa (GS/s)" Style="{StaticResource FieldLabel}"/>
+                          <TextBox Grid.Row="5" Grid.Column="1" Text="{Binding SampleRateGsText, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource FieldBox}"/>
+                          <TextBlock Grid.Row="6" Grid.Column="0" Text="Escala vertical (mV/div)" Style="{StaticResource FieldLabel}"/>
+                          <TextBox Grid.Row="6" Grid.Column="1" Text="{Binding VerticalScaleMvText, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource FieldBox}"/>
+                          <TextBlock Grid.Row="7" Grid.Column="0" Text="Nível do trigger (mV)" Style="{StaticResource FieldLabel}"/>
+                          <TextBox Grid.Row="7" Grid.Column="1" Text="{Binding TriggerLevelMvText, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource FieldBox}"/>
+                          <TextBlock Grid.Row="8" Grid.Column="0" Text="Posição do trigger (%)" Style="{StaticResource FieldLabel}"/>
+                          <TextBox Grid.Row="8" Grid.Column="1" Text="{Binding TriggerPositionText, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource FieldBox}"/>
+                          <TextBlock Grid.Row="9" Grid.Column="0" Text="Escala do canal do trigger (mV/div)" Style="{StaticResource FieldLabel}"/>
+                          <TextBox Grid.Row="9" Grid.Column="1" Text="{Binding TriggerScaleMvText, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource FieldBox}"/>
+                        </Grid>
+                        <CheckBox Content="Trigger em borda de descida" IsChecked="{Binding TriggerFalling}" Margin="0,6,0,2"/>
+                        <CheckBox Content="Terminação 50 Ω" IsChecked="{Binding Termination50}" Margin="0,2"/>
+                        <CheckBox Content="Ler XZero de cada frame" IsChecked="{Binding ReadXZero}" Margin="0,2"/>
+                        <CheckBox Content="Digitalizar o canal do trigger (mais lento)" IsChecked="{Binding DigitizeTrigger}" Margin="0,2"/>
+                        <CheckBox Content="Log detalhado dos comandos (diagnóstico)" IsChecked="{Binding VerboseLog}" Margin="0,2"/>
+                    </StackPanel>
+                </GroupBox>
+
+                <GroupBox Header="Simulador" IsEnabled="{Binding CanEdit}" Margin="0,0,0,8"
+                          Visibility="{Binding IsSimulated, Converter={StaticResource BoolToVis}}">
+                    <StackPanel Margin="5">
+                        <Grid>
+                          <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="100"/></Grid.ColumnDefinitions>
+                          <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                          </Grid.RowDefinitions>
+                          <TextBlock Grid.Row="0" Grid.Column="0" Text="Atraso do pulso (ns)" Style="{StaticResource FieldLabel}"/>
+                          <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding SimDelayNsText, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource FieldBox}"/>
+                          <TextBlock Grid.Row="1" Grid.Column="0" Text="Jitter do pulso σ (ps)" Style="{StaticResource FieldLabel}"/>
+                          <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding SimJitterPsText, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource FieldBox}"/>
+                          <TextBlock Grid.Row="2" Grid.Column="0" Text="Ruído rms (mV)" Style="{StaticResource FieldLabel}"/>
+                          <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding SimNoiseMvText, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource FieldBox}"/>
+                          <TextBlock Grid.Row="3" Grid.Column="0" Text="Amplitude (divisões)" Style="{StaticResource FieldLabel}"/>
+                          <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding SimAmplitudeDivText, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource FieldBox}"/>
+                          <TextBlock Grid.Row="4" Grid.Column="0" Text="Frames sem pulso (%)" Style="{StaticResource FieldLabel}"/>
+                          <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding SimEmptyPercentText, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource FieldBox}"/>
+                        </Grid>
+                        <CheckBox Content="XZero verdadeiro com sinal + (desmarcado: -)" IsChecked="{Binding SimXZeroPlus}" Margin="0,6,0,2"/>
+                    </StackPanel>
+                </GroupBox>
+
+                <GroupBox Header="Análise do pulso" IsEnabled="{Binding CanEdit}" Margin="0,0,0,8">
+                    <StackPanel Margin="5">
+                        <Grid>
+                          <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="100"/></Grid.ColumnDefinitions>
+                          <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                          </Grid.RowDefinitions>
+                          <TextBlock Grid.Row="0" Grid.Column="0" Text="Limiar sobre a baseline (mV)" Style="{StaticResource FieldLabel}"/>
+                          <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding ThresholdMvText, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource FieldBox}"/>
+                          <TextBlock Grid.Row="1" Grid.Column="0" Text="Baseline: início (ns)" Style="{StaticResource FieldLabel}"/>
+                          <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding BaselineStartText, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource FieldBox}"/>
+                          <TextBlock Grid.Row="2" Grid.Column="0" Text="Baseline: fim (ns)" Style="{StaticResource FieldLabel}"/>
+                          <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding BaselineEndText, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource FieldBox}"/>
+                          <TextBlock Grid.Row="3" Grid.Column="0" Text="Busca do pulso: início (ns)" Style="{StaticResource FieldLabel}"/>
+                          <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding SearchStartText, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource FieldBox}"/>
+                          <TextBlock Grid.Row="4" Grid.Column="0" Text="Busca do pulso: fim (ns)" Style="{StaticResource FieldLabel}"/>
+                          <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding SearchEndText, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource FieldBox}"/>
+                          <TextBlock Grid.Row="5" Grid.Column="0" Text="Busca do trigger: ± (ns)" Style="{StaticResource FieldLabel}"/>
+                          <TextBox Grid.Row="5" Grid.Column="1" Text="{Binding TriggerSearchText, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource FieldBox}"/>
+                        </Grid>
+                        <CheckBox Content="Pulso negativo" IsChecked="{Binding NegativePulse}" Margin="0,6,0,2"/>
+                        <CheckBox Content="Exigir exatamente um pulso (filtro)" IsChecked="{Binding RequireSingleRun}" Margin="0,2"/>
+                        <CheckBox Content="Interpolação linear entre amostras" IsChecked="{Binding LinearInterpolation}" Margin="0,2"/>
+                    </StackPanel>
+                </GroupBox>
+
+                <GroupBox Header="Histograma e meta" Margin="0,0,0,8">
+                    <StackPanel Margin="5">
+                        <Grid>
+                          <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="100"/></Grid.ColumnDefinitions>
+                          <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                          </Grid.RowDefinitions>
+                          <TextBlock Grid.Row="0" Grid.Column="0" Text="Bins" Style="{StaticResource FieldLabel}"/>
+                          <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding BinsText, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource FieldBox}"/>
+                          <TextBlock Grid.Row="1" Grid.Column="0" Text="Faixa mín. (ns)" Style="{StaticResource FieldLabel}"/>
+                          <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding RangeMinText, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource FieldBox}"/>
+                          <TextBlock Grid.Row="2" Grid.Column="0" Text="Faixa máx. (ns)" Style="{StaticResource FieldLabel}"/>
+                          <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding RangeMaxText, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource FieldBox}"/>
+                          <TextBlock Grid.Row="3" Grid.Column="0" Text="Meta de eventos válidos (0 = sem limite)" Style="{StaticResource FieldLabel}"/>
+                          <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding TargetEventsText, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource FieldBox}"/>
+                        </Grid>
+                        <CheckBox Content="Faixa automática (média ± 5σ; bins na grade de amostragem se quantizado)" IsChecked="{Binding AutoRange}" Margin="0,6,0,2"/>
+                        <TextBlock Text="Variante mostrada no gráfico" Style="{StaticResource FieldLabel}" Margin="0,6,0,2"/>
+                        <ComboBox SelectedIndex="{Binding SelectedVariantIndex, Mode=TwoWay}">
+                            <ComboBoxItem Content="Sem correção de XZero"/>
+                            <ComboBoxItem Content="Com +XZero"/>
+                            <ComboBoxItem Content="Com -XZero"/>
+                            <ComboBoxItem Content="Canal do trigger digitalizado"/>
+                        </ComboBox>
+                        <Button Content="Atualizar histograma" Height="28" Margin="0,8,0,2" Command="{Binding RefreshCommand}"/>
+                        <Button Content="Salvar Δt (CSV)..." Height="28" Margin="0,2" Click="OnSaveCsvClick"/>
+                    </StackPanel>
+                </GroupBox>
+            </StackPanel>
+        </ScrollViewer>
+
+        <!-- Gráfico e estatísticas -->
+        <Grid Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,6">
+                <RadioButton x:Name="ShowWaveformRadio" Content="Waveform" IsChecked="True" Margin="0,0,16,0" Checked="OnViewModeChanged"/>
+                <RadioButton x:Name="ShowHistogramRadio" Content="Histograma" Margin="0,0,24,0" Checked="OnViewModeChanged"/>
+                <TextBlock Foreground="Gray" FontSize="11" VerticalAlignment="Center"
+                           Text="Waveform: azul = sinal, cinza = trigger, laranja = limiar, verde = baseline, vermelho = cruzamento"/>
+            </StackPanel>
+
+            <Border Grid.Row="1" BorderBrush="LightGray" BorderThickness="1">
+                <scottPlot:WpfPlot x:Name="MainPlot"/>
+            </Border>
+
+            <TextBox Grid.Row="2" Text="{Binding StatsText, Mode=OneWay}" IsReadOnly="True"
+                     FontFamily="Consolas" FontSize="12" BorderThickness="0" Background="Transparent"
+                     Margin="0,8,0,0" TextWrapping="NoWrap" HorizontalScrollBarVisibility="Auto"/>
+        </Grid>
+    </Grid>
+</UserControl>

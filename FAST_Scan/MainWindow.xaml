@@ -53,7 +53,13 @@
 
                 <RadioButton Content="Waveform Plot"
                              Height="50"
-                             Style="{StaticResource MenuButtonTheme}"/>
+                             Style="{StaticResource MenuButtonTheme}"
+                             Command="{Binding WaveformViewerCommand}"/>
+
+                <RadioButton Content="Time Resolution"
+                             Height="50"
+                             Style="{StaticResource MenuButtonTheme}"
+                             Command="{Binding TimeResolutionCommand}"/>
 
                 <RadioButton Content="Open Scan File"
                              Height="50"

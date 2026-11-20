@@ -13,6 +13,8 @@ namespace FAST_Scan.MVVM.ViewModel
         public RelayCommand Scan1DCommand { get; set; }
         public RelayCommand Scan2DCommand { get; set; }
         public RelayCommand ConfigurationsCommand { get; set; }
+        public RelayCommand WaveformViewerCommand { get; set; }
+        public RelayCommand TimeResolutionCommand { get; set; }
 
 
 
@@ -20,6 +22,8 @@ namespace FAST_Scan.MVVM.ViewModel
         public Scan1DViewModel Scan1DVM { get; set; }
         public TerminalViewModel TerminalVM { get; set; }
         public ScanTabControlViewModel ScanTabControlVM { get; set; }
+        public WaveformViewerViewModel WaveformViewerVM { get; set; }
+        public TimeResolutionViewModel TimeResolutionVM { get; set; }
 
 
         private object _currentView;
@@ -88,6 +92,40 @@ namespace FAST_Scan.MVVM.ViewModel
                     CurrentView = ScanTabControlVM;
                     TerminalView = TerminalVM;
 
+                }
+            });
+
+            WaveformViewerCommand = new RelayCommand(o =>
+            {
+                if (ScanStateManager.ScanRunning == true)
+                {
+                    MessageBox.Show("You cannot change views while an acquisition is running.", "ACQUISITION RUNNING", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                }
+                else
+                {
+                    //Uma única instância: mantém as configurações digitadas ao trocar de tela
+                    if (WaveformViewerVM == null)
+                        WaveformViewerVM = new WaveformViewerViewModel();
+
+                    CurrentView = WaveformViewerVM;
+                    TerminalView = TerminalVM;
+                }
+            });
+
+            TimeResolutionCommand = new RelayCommand(o =>
+            {
+                if (ScanStateManager.ScanRunning == true)
+                {
+                    MessageBox.Show("You cannot change views while an acquisition is running.", "ACQUISITION RUNNING", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                }
+                else
+                {
+                    //Uma única instância: mantém configurações e dados ao trocar de tela
+                    if (TimeResolutionVM == null)
+                        TimeResolutionVM = new TimeResolutionViewModel();
+
+                    CurrentView = TimeResolutionVM;
+                    TerminalView = TerminalVM;
                 }
             });
 

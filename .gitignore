@@ -1,0 +1,25 @@
+# ---------- Visual Studio ----------
+.vs/
+*.user
+*.suo
+*.vsidx
+
+# ---------- Saídas de compilação ----------
+# obj/ é totalmente gerado pelo build.
+obj/
+# bin/ NÃO é ignorada por inteiro: o .csproj referencia DLLs de terceiros
+# (Thorlabs, DigitizerLib, ftd2xx...) direto de bin\Debug via HintPath,
+# então elas precisam continuar versionadas. Ignoramos só o que o build recria.
+[Bb]in/**/FAST_Scan.exe
+[Bb]in/**/FAST_Scan.exe.config
+[Bb]in/**/FAST_Scan.pdb
+[Bb]in/**/*.pdb
+
+# ---------- Python / Jupyter ----------
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+
+# ---------- Diversos ----------
+*.log
+Thumbs.db

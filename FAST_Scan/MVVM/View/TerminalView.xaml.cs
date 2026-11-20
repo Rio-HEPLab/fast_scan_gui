@@ -74,6 +74,60 @@ namespace FAST_Scan.MVVM.View
             }
         }
 
+        //Copia os logs para a área de transferência
+        private void CopyAll_Click(object sender, RoutedEventArgs e)
+        {
+            CopyToClipboard(BuildText(LogsListBox.Items));
+        }
+
+        private void CopySelected_Click(object sender, RoutedEventArgs e)
+        {
+            CopyToClipboard(BuildText(LogsListBox.SelectedItems));
+        }
+
+        //Ctrl+C copia as linhas selecionadas (ou tudo, se nada estiver selecionado)
+        private void LogsListBox_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.C && (Keyboard.Modifiers & ModifierKeys.Control) == ModifierKeys.Control)
+            {
+                if (LogsListBox.SelectedItems.Count > 0)
+                    CopyToClipboard(BuildText(LogsListBox.SelectedItems));
+                else
+                    CopyToClipboard(BuildText(LogsListBox.Items));
+                e.Handled = true;
+            }
+        }
+
+        private string BuildText(System.Collections.IEnumerable items)
+        {
+            var sb = new StringBuilder();
+            foreach (object item in items)
+            {
+                var log = item as Core.LogMessage;
+                if (log != null)
+                {
+                    sb.AppendLine(log.Log);
+                }
+            }
+            return sb.ToString();
+        }
+
+        private void CopyToClipboard(string text)
+        {
+            if (string.IsNullOrEmpty(text))
+            {
+                return;
+            }
+            try
+            {
+                Clipboard.SetText(text);
+            }
+            catch (System.Runtime.InteropServices.COMException)
+            {
+                //área de transferência em uso por outro programa; tente novamente
+            }
+        }
+
         private ScrollViewer GetScrollViewer(DependencyObject dep)
         {
             if(dep is ScrollViewer)
