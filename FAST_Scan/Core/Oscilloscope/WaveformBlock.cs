@@ -24,7 +24,17 @@ namespace FAST_Scan.Core.Oscilloscope
         public double TriggerYMultiplier { get; set; }
         public double TriggerYOffset { get; set; }
         public double TriggerYZero { get; set; }
-        public bool HasTriggerData { get { return TriggerRawData != null; } }
+        public bool HasTriggerData { get { return TriggerRawData != null || TriggerSamples != null; } }
+
+        // Modo float (digitizer): amostras já em unidades de ADC, sem bytes. Se Samples != null,
+        // ele é usado no lugar de RawData; a conversão em volts é a mesma
+        // (YZero + YMultiplier * (valor - YOffset)).
+        public float[] Samples { get; set; }
+        public float[] TriggerSamples { get; set; }
+
+        // Códigos considerados saturados (fundo de escala). Padrão: ADC de 8 bits do osciloscópio.
+        public double SaturationHighCode { get; set; } = 126;
+        public double SaturationLowCode { get; set; } = -127;
 
         // Intervalo entre amostras (s) e índice aproximado da amostra do trigger.
         public double XIncrementSeconds { get; set; }
@@ -50,15 +60,31 @@ namespace FAST_Scan.Core.Oscilloscope
         // Versão sem alocação: escreve em 'destination' (tamanho >= PointsPerFrame).
         public void GetFrameVolts(int frame, double[] destination)
         {
-            Convert(RawData, frame, YMultiplier, YOffset, YZero, destination);
+            if (Samples != null)
+                ConvertFloat(Samples, frame, YMultiplier, YOffset, YZero, destination);
+            else
+                Convert(RawData, frame, YMultiplier, YOffset, YZero, destination);
         }
 
         // Frame do canal do trigger digitalizado.
         public void GetTriggerFrameVolts(int frame, double[] destination)
         {
-            if (TriggerRawData == null)
+            if (!HasTriggerData)
                 throw new InvalidOperationException("O bloco não tem dados do canal do trigger.");
-            Convert(TriggerRawData, frame, TriggerYMultiplier, TriggerYOffset, TriggerYZero, destination);
+            if (TriggerSamples != null)
+                ConvertFloat(TriggerSamples, frame, TriggerYMultiplier, TriggerYOffset, TriggerYZero, destination);
+            else
+                Convert(TriggerRawData, frame, TriggerYMultiplier, TriggerYOffset, TriggerYZero, destination);
+        }
+
+        private void ConvertFloat(float[] raw, int frame, double yMult, double yOff, double yZero, double[] destination)
+        {
+            if (frame < 0 || frame >= FrameCount)
+                throw new ArgumentOutOfRangeException("frame");
+
+            int start = frame * PointsPerFrame;
+            for (int i = 0; i < PointsPerFrame; i++)
+                destination[i] = yZero + yMult * (raw[start + i] - yOff);
         }
 
         private void Convert(byte[] raw, int frame, double yMult, double yOff, double yZero, double[] destination)
@@ -76,8 +102,8 @@ namespace FAST_Scan.Core.Oscilloscope
 
         // Tensões dos códigos 126 e -127 do ADC de 8 bits (quase fundo de escala):
         // amostras além delas indicam sinal saturado.
-        public double SaturationHighVolts { get { return YZero + YMultiplier * (126 - YOffset); } }
-        public double SaturationLowVolts { get { return YZero + YMultiplier * (-127 - YOffset); } }
+        public double SaturationHighVolts { get { return YZero + YMultiplier * (SaturationHighCode - YOffset); } }
+        public double SaturationLowVolts { get { return YZero + YMultiplier * (SaturationLowCode - YOffset); } }
 
         // Eixo de tempo nominal em ns, com 0 na amostra do trigger.
         // Não aplica o XZero (ordem de ps): serve para exibir, não para medir jitter.

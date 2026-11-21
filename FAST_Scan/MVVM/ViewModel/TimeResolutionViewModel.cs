@@ -1,5 +1,6 @@
 ﻿using FAST_Scan.Core;
 using FAST_Scan.Core.Analysis;
+using FAST_Scan.Core.Caen;
 using FAST_Scan.Core.Oscilloscope;
 using System;
 using System.Collections.Concurrent;
@@ -61,6 +62,10 @@ namespace FAST_Scan.MVVM.ViewModel
     internal class TimeResolutionRunConfig
     {
         public bool Simulated { get; set; }
+        public bool UseDigitizer { get; set; }
+        public DigitizerSettings Digitizer { get; set; }
+        public int DigitizerChannel { get; set; }
+        public int DigitizerEventsPerBlock { get; set; }
         public ScopeSettings Scope { get; set; }
         public SimulationSettings Simulation { get; set; }
         public PulseTimingSettings Timing { get; set; }
@@ -84,25 +89,45 @@ namespace FAST_Scan.MVVM.ViewModel
 
         // ---------------- Fonte ----------------
         private bool _isSimulated = true;
+        private bool _isDigitizer = false;
 
         public bool IsOscilloscope
         {
-            get { return !_isSimulated; }
-            set { if (value) SetSimulated(false); }
+            get { return !_isSimulated && !_isDigitizer; }
+            set { if (value) SetSource(false, false); }
         }
 
         public bool IsSimulated
         {
             get { return _isSimulated; }
-            set { if (value) SetSimulated(true); }
+            set { if (value) SetSource(true, false); }
         }
 
-        private void SetSimulated(bool simulated)
+        public bool IsDigitizer
+        {
+            get { return _isDigitizer; }
+            set { if (value) SetSource(false, true); }
+        }
+
+        // O painel do osciloscópio não se aplica ao digitizer.
+        public bool ShowScopePanel { get { return !_isDigitizer; } }
+
+        private void SetSource(bool simulated, bool digitizer)
         {
             _isSimulated = simulated;
+            _isDigitizer = digitizer;
             OnPropertyChanged("IsOscilloscope");
             OnPropertyChanged("IsSimulated");
+            OnPropertyChanged("IsDigitizer");
+            OnPropertyChanged("ShowScopePanel");
         }
+
+        // ---------------- Digitizer (CAEN DT5742) ----------------
+        public string DigChannelText { get; set; } = "0";
+        public string DigEventsText { get; set; } = "500";
+        public string DigPostTriggerText { get; set; } = "50";
+        public string DigTriggerLevelMvText { get; set; } = "-130";
+        public bool DigTriggerFalling { get; set; } = true;
 
         // ---------------- Osciloscópio ----------------
         public string VisaResource { get; set; } = "TCPIP0::152.84.100.65::inst0::INSTR";
@@ -295,15 +320,17 @@ namespace FAST_Scan.MVVM.ViewModel
         private void Run(TimeResolutionRunConfig cfg, TimeResolutionAccumulator acc, CancellationToken userToken)
         {
             using (var runCts = CancellationTokenSource.CreateLinkedTokenSource(userToken))
-            using (IBlockSource source = cfg.Simulated
-                ? (IBlockSource)new SimulatedScope(cfg.Scope, cfg.Simulation)
-                : new TektronixScope(cfg.Scope))
+            using (IBlockSource source = cfg.UseDigitizer
+                ? (IBlockSource)new CaenDigitizerSource(cfg.Digitizer, cfg.DigitizerChannel, cfg.DigitizerEventsPerBlock)
+                : cfg.Simulated
+                    ? (IBlockSource)new SimulatedScope(cfg.Scope, cfg.Simulation)
+                    : new TektronixScope(cfg.Scope))
             {
                 source.Message += text => Logger.Instance.Log(text, LogType.Info);
                 if (cfg.Verbose)
                     source.Trace += text => Logger.Instance.Log(text, LogType.Data);
 
-                StatusText = cfg.Simulated ? "Starting simulator..." : "Connecting to the oscilloscope...";
+                StatusText = cfg.UseDigitizer ? "Connecting to the digitizer..." : cfg.Simulated ? "Starting simulator..." : "Connecting to the oscilloscope...";
                 source.Open();
                 source.Apply();
 
@@ -569,22 +596,35 @@ namespace FAST_Scan.MVVM.ViewModel
         {
             error = null;
 
-            int channel, triggerChannel, frames, recordLength, target;
-            double rateGs, scaleMv, levelMv, positionPercent, triggerScaleMv;
+            // Valores iniciais: no modo digitizer os campos do osciloscópio não são lidos.
+            int channel = 1, triggerChannel = 4, frames = 1000, recordLength = 5000, target;
+            double rateGs = 100, scaleMv = 30, levelMv = -336, positionPercent = 11, triggerScaleMv = 200;
+            int digChannel = 0, digEvents = 500;
+            double digPostTrigger = 50;
             double fractionPercent;
             int amplitudePoints;
             double thresholdMv, baseStart, baseEnd, searchStart, searchEnd, triggerSearch;
 
-            if (!TryInt(ScopeChannelText, 1, 4, out channel)) { error = "Measured channel must be an integer from 1 to 4."; return null; }
-            if (!TryInt(TriggerChannelText, 1, 4, out triggerChannel)) { error = "Trigger channel must be an integer from 1 to 4."; return null; }
-            if (channel == triggerChannel) { error = "Measured channel and trigger channel must be different."; return null; }
-            if (!TryInt(FrameCountText, 1, 1000000, out frames)) { error = "Frames per block must be a positive integer."; return null; }
-            if (!TryInt(RecordLengthText, 2, 100000000, out recordLength)) { error = "Points per frame must be a positive integer."; return null; }
-            if (!TryDouble(SampleRateGsText, out rateGs) || rateGs <= 0) { error = "Invalid sample rate (GS/s)."; return null; }
-            if (!TryDouble(VerticalScaleMvText, out scaleMv) || scaleMv <= 0) { error = "Invalid vertical scale (mV/div)."; return null; }
-            if (!TryDouble(TriggerLevelMvText, out levelMv)) { error = "Invalid trigger level (mV)."; return null; }
-            if (!TryDouble(TriggerPositionText, out positionPercent)) { error = "Invalid trigger position (%)."; return null; }
-            if (!TryDouble(TriggerScaleMvText, out triggerScaleMv) || triggerScaleMv <= 0) { error = "Invalid trigger channel vertical scale (mV/div)."; return null; }
+            if (_isDigitizer)
+            {
+                if (!TryInt(DigChannelText, 0, 15, out digChannel)) { error = "Digitizer channel must be an integer from 0 to 15."; return null; }
+                if (!TryInt(DigEventsText, 1, 100000, out digEvents)) { error = "Events per block must be an integer from 1 to 100000."; return null; }
+                if (!TryDouble(DigPostTriggerText, out digPostTrigger) || digPostTrigger < 0 || digPostTrigger > 100) { error = "Post trigger must be between 0 and 100 %."; return null; }
+                if (!TryDouble(DigTriggerLevelMvText, out levelMv)) { error = "Invalid TR trigger level (mV)."; return null; }
+            }
+            else
+            {
+                if (!TryInt(ScopeChannelText, 1, 4, out channel)) { error = "Measured channel must be an integer from 1 to 4."; return null; }
+                if (!TryInt(TriggerChannelText, 1, 4, out triggerChannel)) { error = "Trigger channel must be an integer from 1 to 4."; return null; }
+                if (channel == triggerChannel) { error = "Measured channel and trigger channel must be different."; return null; }
+                if (!TryInt(FrameCountText, 1, 1000000, out frames)) { error = "Frames per block must be a positive integer."; return null; }
+                if (!TryInt(RecordLengthText, 2, 100000000, out recordLength)) { error = "Points per frame must be a positive integer."; return null; }
+                if (!TryDouble(SampleRateGsText, out rateGs) || rateGs <= 0) { error = "Invalid sample rate (GS/s)."; return null; }
+                if (!TryDouble(VerticalScaleMvText, out scaleMv) || scaleMv <= 0) { error = "Invalid vertical scale (mV/div)."; return null; }
+                if (!TryDouble(TriggerLevelMvText, out levelMv)) { error = "Invalid trigger level (mV)."; return null; }
+                if (!TryDouble(TriggerPositionText, out positionPercent)) { error = "Invalid trigger position (%)."; return null; }
+                if (!TryDouble(TriggerScaleMvText, out triggerScaleMv) || triggerScaleMv <= 0) { error = "Invalid trigger channel vertical scale (mV/div)."; return null; }
+            }
             if (!TryDouble(ThresholdMvText, out thresholdMv) || thresholdMv <= 0) { error = "Invalid threshold (mV, positive)."; return null; }
             if (!TryDouble(FractionPercentText, out fractionPercent) || fractionPercent <= 0 || fractionPercent >= 100) { error = "Invalid amplitude fraction (between 0 and 100 %, exclusive)."; return null; }
             if (!TryInt(AmplitudePointsText, 1, 1000, out amplitudePoints)) { error = "Samples in the amplitude average must be an integer from 1 to 1000 (1 = absolute peak; 0 is not accepted)."; return null; }
@@ -595,6 +635,8 @@ namespace FAST_Scan.MVVM.ViewModel
 
             HistogramSettings hist = ParseHistogram(out error);
             if (hist == null) return null;
+
+            bool triggerFalling = _isDigitizer ? DigTriggerFalling : TriggerFalling;
 
             var scope = new ScopeSettings
             {
@@ -607,14 +649,14 @@ namespace FAST_Scan.MVVM.ViewModel
                 VerticalScaleVoltsPerDiv = scaleMv / 1000.0,
                 TriggerLevelVolts = levelMv / 1000.0,
                 TriggerPositionPercent = positionPercent,
-                Slope = TriggerFalling ? TriggerSlope.Falling : TriggerSlope.Rising,
+                Slope = triggerFalling ? TriggerSlope.Falling : TriggerSlope.Rising,
                 Termination50Ohm = Termination50,
                 ReadXZero = ReadXZero,
                 KeepTriggerChannelOn = false,
                 DigitizeTriggerChannel = DigitizeTrigger,
                 TriggerVerticalScaleVoltsPerDiv = triggerScaleMv / 1000.0
             };
-            List<string> problems = scope.Validate();
+            List<string> problems = _isDigitizer ? new List<string>() : scope.Validate();
             if (problems.Count > 0) { error = string.Join(" ", problems); return null; }
 
             var timing = new PulseTimingSettings
@@ -631,7 +673,7 @@ namespace FAST_Scan.MVVM.ViewModel
                 RejectSaturated = RejectSaturated,
                 RequireSingleRun = RequireSingleRun,
                 LinearInterpolation = LinearInterpolation,
-                TriggerFalling = TriggerFalling,
+                TriggerFalling = triggerFalling,
                 TriggerLevelVolts = levelMv / 1000.0,
                 TriggerSearchHalfWidthNs = triggerSearch
             };
@@ -657,9 +699,29 @@ namespace FAST_Scan.MVVM.ViewModel
                 simulation.XZeroPlusConvention = SimXZeroPlus;
             }
 
+            DigitizerSettings digitizer = null;
+            if (_isDigitizer)
+            {
+                try
+                {
+                    digitizer = DigitizerSettings.CreateDefault();
+                    digitizer.PostTriggerPercent = (int)Math.Round(digPostTrigger);
+                    digitizer.TriggerFallingEdge = DigTriggerFalling;
+                }
+                catch (DigitizerException ex)
+                {
+                    error = ex.Message;
+                    return null;
+                }
+            }
+
             return new TimeResolutionRunConfig
             {
                 Simulated = _isSimulated,
+                UseDigitizer = _isDigitizer,
+                Digitizer = digitizer,
+                DigitizerChannel = digChannel,
+                DigitizerEventsPerBlock = digEvents,
                 Scope = scope,
                 Simulation = simulation,
                 Timing = timing,

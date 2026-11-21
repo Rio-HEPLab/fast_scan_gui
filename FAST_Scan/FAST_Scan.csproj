@@ -190,6 +190,10 @@
     <Compile Include="Core\CurveFit.cs" />
     <Compile Include="Core\DataStore.cs" />
     <Compile Include="Core\Digitizer.cs" />
+    <Compile Include="Core\Caen\CaenDigitizerSource.cs" />
+    <Compile Include="Core\Caen\DgtzDevice.cs" />
+    <Compile Include="Core\Caen\DgtzNative.cs" />
+    <Compile Include="Core\Caen\DigitizerSettings.cs" />
     <Compile Include="Core\HommingStateManager.cs" />
     <Compile Include="Core\Logger.cs" />
     <Compile Include="Core\LogMessage.cs" />

@@ -65,6 +65,13 @@ namespace FAST_Scan.MVVM.View
         {
             WaveformPlot.Plot.Clear();
 
+            if (display.Traces != null)
+            {
+                DrawTraces(display);
+                return;
+            }
+            WaveformPlot.Plot.HideLegend();
+
             for (int i = 0; i < display.Frames.Count; i++)
             {
                 bool isLast = i == display.Frames.Count - 1;
@@ -73,6 +80,32 @@ namespace FAST_Scan.MVVM.View
                 signal.LineWidth = isLast ? 1.5f : 1f;
             }
 
+            WaveformPlot.Plot.Title(display.Title);
+            WaveformPlot.Plot.XLabel(display.XLabel);
+            WaveformPlot.Plot.YLabel(display.YLabel);
+            WaveformPlot.Plot.Axes.AutoScale();
+            WaveformPlot.Refresh();
+        }
+
+        // Cores fixas por posição: a mesma curva mantém a cor entre atualizações.
+        private static readonly string[] TraceColors =
+        {
+            "#D62728", "#1F77B4", "#2CA02C", "#FF7F0E", "#9467BD",
+            "#17BECF", "#E377C2", "#8C564B", "#7F7F7F", "#BCBD22"
+        };
+
+        // Várias curvas do mesmo evento (canais e TR), com legenda.
+        private void DrawTraces(WaveformDisplay display)
+        {
+            for (int i = 0; i < display.Traces.Count; i++)
+            {
+                var signal = WaveformPlot.Plot.Add.SignalXY(display.X, display.Traces[i].Y);
+                signal.Color = Color.FromHex(TraceColors[i % TraceColors.Length]);
+                signal.LineWidth = 1.5f;
+                signal.LegendText = display.Traces[i].Label;
+            }
+
+            WaveformPlot.Plot.ShowLegend(Alignment.UpperRight);
             WaveformPlot.Plot.Title(display.Title);
             WaveformPlot.Plot.XLabel(display.XLabel);
             WaveformPlot.Plot.YLabel(display.YLabel);

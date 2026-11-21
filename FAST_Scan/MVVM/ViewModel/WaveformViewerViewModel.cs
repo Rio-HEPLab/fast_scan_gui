@@ -1,4 +1,5 @@
 ﻿using FAST_Scan.Core;
+using FAST_Scan.Core.Caen;
 using FAST_Scan.Core.Oscilloscope;
 using System;
 using System.Collections.Generic;
@@ -24,6 +25,17 @@ namespace FAST_Scan.MVVM.ViewModel
         public string YLabel { get; set; }
         public double[] X { get; set; }
         public List<double[]> Frames { get; set; }   // o último é destacado
+
+        // Várias curvas de cores diferentes, com legenda (digitizer). Se não for null, a View
+        // desenha estas e ignora Frames.
+        public List<WaveformTrace> Traces { get; set; }
+    }
+
+    // Uma curva rotulada (canal ou TR) do mesmo evento.
+    internal class WaveformTrace
+    {
+        public string Label { get; set; }
+        public double[] Y { get; set; }
     }
 
     // Visualizador de waveform ao vivo: o usuário escolhe a fonte (osciloscópio ou digitizer).
@@ -70,7 +82,9 @@ namespace FAST_Scan.MVVM.ViewModel
         public bool VerboseLog { get; set; } = false;   // registra cada comando/resposta no terminal (diagnóstico; deixa mais lento)
 
         // ---------------- Digitizer ----------------
-        public string DigitizerChannelText { get; set; } = "0";
+        public string DigitizerChannelsText { get; set; } = "0";     // lista, por exemplo "0,1,8"
+        public bool DigitizerShowTr { get; set; } = true;            // mostra o TR de cada grupo usado
+        public bool DigitizerSubtractBaseline { get; set; } = true;  // só nos canais (o TR fica bruto)
         public string BaselinePointsText { get; set; } = "100";
 
         // ---------------- Estado e contadores ----------------
@@ -127,7 +141,9 @@ namespace FAST_Scan.MVVM.ViewModel
             ScopeSettings scopeSettings = null;
             int overlay = 1;
             bool verbose = VerboseLog;
-            int digitizerChannel = 0;
+            uint digitizerMask = 1;
+            bool showTr = DigitizerShowTr;
+            bool subtractBaseline = DigitizerSubtractBaseline;
             int baselinePoints = 100;
 
             if (source == WaveformSource.Oscilloscope)
@@ -142,10 +158,15 @@ namespace FAST_Scan.MVVM.ViewModel
             }
             else
             {
-                if (!TryInt(DigitizerChannelText, 0, 63, out digitizerChannel) ||
-                    !TryInt(BaselinePointsText, 1, 100000, out baselinePoints))
+                string channelError;
+                if (!TryParseChannels(DigitizerChannelsText, out digitizerMask, out channelError))
                 {
-                    Fail("Invalid digitizer parameters (channel and baseline points must be integers).");
+                    Fail(channelError);
+                    return;
+                }
+                if (!TryInt(BaselinePointsText, 1, 100000, out baselinePoints))
+                {
+                    Fail("Baseline points must be an integer between 1 and 100000.");
                     return;
                 }
             }
@@ -165,7 +186,7 @@ namespace FAST_Scan.MVVM.ViewModel
                 if (source == WaveformSource.Oscilloscope)
                     await Task.Run(() => RunOscilloscope(scopeSettings, overlay, verbose, token));
                 else
-                    await Task.Run(() => RunDigitizer(digitizerChannel, baselinePoints, token));
+                    await Task.Run(() => RunDigitizer(digitizerMask, showTr, subtractBaseline, baselinePoints, token));
             }
             catch (OperationCanceledException)
             {
@@ -257,59 +278,165 @@ namespace FAST_Scan.MVVM.ViewModel
         // ------------------------------------------------------------------
         // Digitizer
         // ------------------------------------------------------------------
-        private void RunDigitizer(int channel, int baselinePoints, CancellationToken token)
+        private void RunDigitizer(uint channelMask, bool showTr, bool subtractBaseline, int baselinePoints, CancellationToken token)
         {
-            int[] buffer = new int[1024];   // mesmo tamanho do DataStore.Waveform
+#if TEST_MODE
+            RunDigitizerSimulated(token);
+#else
+            RunDigitizerReal(channelMask, showTr, subtractBaseline, baselinePoints, token);
+#endif
+        }
+
+        // Modo de teste (sem placa): uma curva do gerador de waveform.
+        private void RunDigitizerSimulated(CancellationToken token)
+        {
+            int[] buffer = new int[1024];
             double[] bins = new double[buffer.Length];
             for (int i = 0; i < bins.Length; i++) bins[i] = i;
 
-            Action acquireOne;
-#if !TEST_MODE
-            StatusText = "Configuring the digitizer...";
-            if (Convert.ToBoolean(Digitizer.Configure()))
-                throw new InvalidOperationException("Could not configure the digitizer.");
-            acquireOne = () => Digitizer.GetWaveform(buffer, channel, baselinePoints);
-#else
-            acquireOne = () => { Digitizer.GenerateWaveform_Sim(buffer); Thread.Sleep(20); };
-#endif
-            try
+            StatusText = "Acquiring (simulated)...";
+            while (!token.IsCancellationRequested)
             {
-                StatusText = "Acquiring...";
-                Logger.Instance.Log("Viewer: digitizer acquisition started.", LogType.Info);
+                Digitizer.GenerateWaveform_Sim(buffer);
+                Thread.Sleep(20);
 
-                var clock = Stopwatch.StartNew();
-                long waveforms = 0;
+                double[] samples = new double[buffer.Length];
+                for (int i = 0; i < samples.Length; i++) samples[i] = buffer[i];
 
-                while (!token.IsCancellationRequested)
+                Raise(new WaveformDisplay
                 {
-                    acquireOne();
-                    waveforms++;
+                    Title = "Digitizer (simulated): last waveform",
+                    XLabel = "Bin",
+                    YLabel = "Amplitude (ADC)",
+                    X = bins,
+                    Frames = new List<double[]> { samples }
+                });
+            }
+        }
 
-                    double[] samples = new double[buffer.Length];
-                    for (int i = 0; i < samples.Length; i++) samples[i] = buffer[i];
+        // Leitura contínua: inicia uma vez, lê eventos em lotes e mostra o último evento
+        // com todos os canais escolhidos (e o TR de cada grupo) no mesmo gráfico.
+        private void RunDigitizerReal(uint channelMask, bool showTr, bool subtractBaseline, int baselinePoints, CancellationToken token)
+        {
+            const int eventsPerRead = 50;
+            const int noTriggerTimeoutMs = 5000;
 
-                    CountersText = string.Format(CultureInfo.InvariantCulture,
-                        "Waveforms: {0}\nMean rate: {1:0.0} waveforms/s",
-                        waveforms, waveforms / clock.Elapsed.TotalSeconds);
+            Digitizer.EnsureLogHook();
+            DigitizerSettings settings = DigitizerSettings.CreateDefault();
+            settings.ChannelMask = channelMask;
+            settings.TrDigitize = showTr;
 
-                    Raise(new WaveformDisplay
+            StatusText = "Connecting to the digitizer...";
+            using (DgtzDevice device = DgtzDevice.Open(settings))
+            {
+                DigitizerInfo info = device.Info;
+                int n = info.RecordLength;
+                DigitizerEventBlock block = device.CreateBlock(eventsPerRead);
+
+                var labels = new string[info.SlotCount];
+                var isTr = new bool[info.SlotCount];
+                for (int s = 0; s < info.SlotCount; s++)
+                {
+                    int id = info.SlotIds[s];
+                    isTr[s] = id >= DigitizerInfo.TrSlotBase;
+                    labels[s] = isTr[s] ? "TR group " + (id - DigitizerInfo.TrSlotBase) : "Ch " + id;
+                }
+
+                double[] time = new double[n];
+                for (int i = 0; i < n; i++) time[i] = i * info.SamplePeriodNs;
+                int basePoints = Math.Max(1, Math.Min(baselinePoints, n));
+
+                device.Start();
+                try
+                {
+                    StatusText = "Acquiring...";
+                    Logger.Instance.Log("Viewer: digitizer acquisition started (" + string.Join(", ", labels) + ").", LogType.Info);
+
+                    var clock = Stopwatch.StartNew();
+                    var sinceLastEvent = Stopwatch.StartNew();
+                    long events = 0;
+                    bool waiting = false;
+
+                    while (!token.IsCancellationRequested)
                     {
-                        Title = "Digitizer: last waveform",
-                        XLabel = "Bin",
-                        YLabel = "Amplitude (ADC)",
-                        X = bins,
-                        Frames = new List<double[]> { samples }
-                    });
+                        int count = device.ReadEvents(block, eventsPerRead, 200, token);
+                        if (count < 1)
+                        {
+                            if (sinceLastEvent.ElapsedMilliseconds > noTriggerTimeoutMs)
+                                throw new DigitizerException(DgtzStatus.Timeout, "No trigger received from the digitizer within " + (noTriggerTimeoutMs / 1000) + " s.");
+                            if (!waiting && sinceLastEvent.ElapsedMilliseconds > 1000)
+                            {
+                                waiting = true;
+                                StatusText = "Waiting for trigger...";
+                            }
+                            continue;
+                        }
 
-                    Thread.Sleep(10);   // evita saturar a CPU se a leitura voltar imediatamente
+                        sinceLastEvent.Restart();
+                        if (waiting) { waiting = false; StatusText = "Acquiring..."; }
+                        events += count;
+
+                        // Mostra só o último evento do lote.
+                        int last = count - 1;
+                        var traces = new List<WaveformTrace>(info.SlotCount);
+                        for (int s = 0; s < info.SlotCount; s++)
+                        {
+                            int offset = block.OffsetOf(last, s);
+                            double baseline = 0;
+                            if (subtractBaseline && !isTr[s])
+                            {
+                                for (int i = 0; i < basePoints; i++) baseline += block.Samples[offset + i];
+                                baseline /= basePoints;
+                            }
+
+                            double[] y = new double[n];
+                            for (int i = 0; i < n; i++) y[i] = block.Samples[offset + i] - baseline;
+                            traces.Add(new WaveformTrace { Label = labels[s], Y = y });
+                        }
+
+                        CountersText = string.Format(CultureInfo.InvariantCulture,
+                            "Events: {0}\nMean rate: {1:0} events/s\nSample period: {2:0.###} ns ({3} samples)",
+                            events, events / clock.Elapsed.TotalSeconds, info.SamplePeriodNs, n);
+
+                        Raise(new WaveformDisplay
+                        {
+                            Title = "Digitizer: last event",
+                            XLabel = "Time in the acquisition window (ns)",
+                            YLabel = "Amplitude (ADC codes" + (subtractBaseline ? "; channels minus baseline" : "") + ")",
+                            X = time,
+                            Traces = traces
+                        });
+                    }
+                }
+                finally
+                {
+                    try { if (device.IsRunning) device.Stop(); } catch (DigitizerException) { }
                 }
             }
-            finally
+        }
+
+        // Lê uma lista de canais ("0,1,8" ou "0 1 8") e monta a máscara de bits.
+        private static bool TryParseChannels(string text, out uint mask, out string error)
+        {
+            mask = 0;
+            error = null;
+            string[] parts = (text ?? "").Split(new[] { ',', ';', ' ' }, StringSplitOptions.RemoveEmptyEntries);
+            if (parts.Length == 0)
             {
-#if !TEST_MODE
-                Digitizer.Close();
-#endif
+                error = "Enter at least one digitizer channel (0 to 15), for example: 0,1,8.";
+                return false;
             }
+            foreach (string part in parts)
+            {
+                int channel;
+                if (!TryInt(part, 0, 15, out channel))
+                {
+                    error = "Invalid digitizer channel '" + part + "': use integers from 0 to 15 separated by commas.";
+                    return false;
+                }
+                mask |= 1u << channel;
+            }
+            return true;
         }
 
         private void Raise(WaveformDisplay display)

@@ -52,11 +52,37 @@
                     <StackPanel Margin="5">
                         <RadioButton Content="Oscilloscope (Tektronix)" IsChecked="{Binding IsOscilloscope, Mode=TwoWay}" Margin="0,2"/>
                         <RadioButton Content="Simulator (no instrument)" IsChecked="{Binding IsSimulated, Mode=TwoWay}" Margin="0,2"/>
-                        <RadioButton Content="Digitizer (CAEN) - coming soon" IsEnabled="False" Margin="0,2"/>
+                        <RadioButton Content="Digitizer (CAEN DT5742)" IsChecked="{Binding IsDigitizer, Mode=TwoWay}" Margin="0,2"/>
                     </StackPanel>
                 </GroupBox>
 
-                <GroupBox Header="Oscilloscope" IsEnabled="{Binding CanEdit}" Margin="0,0,0,8">
+                <GroupBox Header="Digitizer (CAEN DT5742)" IsEnabled="{Binding CanEdit}" Margin="0,0,0,8"
+                          Visibility="{Binding IsDigitizer, Converter={StaticResource BoolToVis}}">
+                    <StackPanel Margin="5">
+                        <Grid>
+                          <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="100"/></Grid.ColumnDefinitions>
+                          <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                          </Grid.RowDefinitions>
+                          <TextBlock Grid.Row="0" Grid.Column="0" Text="Measured channel (0-15)" Style="{StaticResource FieldLabel}"/>
+                          <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding DigChannelText, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource FieldBox}"/>
+                          <TextBlock Grid.Row="1" Grid.Column="0" Text="Events per block" Style="{StaticResource FieldLabel}"/>
+                          <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding DigEventsText, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource FieldBox}"/>
+                          <TextBlock Grid.Row="2" Grid.Column="0" Text="Post trigger (%)" Style="{StaticResource FieldLabel}"/>
+                          <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding DigPostTriggerText, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource FieldBox}"/>
+                          <TextBlock Grid.Row="3" Grid.Column="0" Text="TR crossing level (mV, nominal)" Style="{StaticResource FieldLabel}"/>
+                          <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding DigTriggerLevelMvText, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource FieldBox}"/>
+                        </Grid>
+                        <CheckBox Content="TR on falling edge" IsChecked="{Binding DigTriggerFalling}" Margin="0,6,0,2"/>
+                        <CheckBox Content="Verbose log (diagnostics)" IsChecked="{Binding VerboseLog}" Margin="0,2"/>
+                    </StackPanel>
+                </GroupBox>
+
+                <GroupBox Header="Oscilloscope" IsEnabled="{Binding CanEdit}" Margin="0,0,0,8"
+                          Visibility="{Binding ShowScopePanel, Converter={StaticResource BoolToVis}}">
                     <StackPanel Margin="5">
                         <Grid>
                           <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="100"/></Grid.ColumnDefinitions>

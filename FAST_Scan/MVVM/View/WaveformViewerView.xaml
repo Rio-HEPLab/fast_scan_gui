@@ -117,11 +117,13 @@
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
-                    <TextBlock Grid.Row="0" Grid.Column="0" Text="Channel" Style="{StaticResource FieldLabel}"/>
-                    <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding DigitizerChannelText, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource FieldBox}"/>
+                    <TextBlock Grid.Row="0" Grid.Column="0" Text="Channels (0-15, e.g. 0,1,8)" Style="{StaticResource FieldLabel}"/>
+                    <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding DigitizerChannelsText, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource FieldBox}"/>
                     <TextBlock Grid.Row="1" Grid.Column="0" Text="Baseline points" Style="{StaticResource FieldLabel}"/>
                     <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding BaselinePointsText, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource FieldBox}"/>
                 </Grid>
+                        <CheckBox Content="Show the TR of each group in use" IsChecked="{Binding DigitizerShowTr}" Margin="0,6,0,2"/>
+                        <CheckBox Content="Subtract baseline from the channels" IsChecked="{Binding DigitizerSubtractBaseline}" Margin="0,2"/>
                     </StackPanel>
                 </GroupBox>
 
